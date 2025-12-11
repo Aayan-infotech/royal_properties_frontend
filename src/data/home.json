@@ -1,0 +1,54 @@
+[
+  {
+    "_id": "1",
+    "title": "Home",
+    "des": "1020290, RE/MAX Camosun",
+    "sale": 1,
+    "price": 400,
+    "minutes": 400,
+    "address": "Home",
+    "bed": 1,
+    "bath": 1,
+    "garage": 1,
+    "login": true
+  },
+  {
+    "_id": "2",
+    "title": "Luxury Villa",
+    "des": "1034502, Sotheby's International Realty",
+    "sale": 1,
+    "price": 1200,
+    "minutes": 25,
+    "address": "456 Oceanview Drive, Malibu",
+    "bed": 4,
+    "bath": 3,
+    "garage": 2,
+    "login": true
+  },
+  {
+    "_id": "3",
+    "title": "Downtown Penthouse",
+    "des": "1045678, Century 21",
+    "sale": 0,
+    "price": 850,
+    "minutes": 15,
+    "address": "123 Main Street, Suite 4501",
+    "bed": 3,
+    "bath": 2,
+    "garage": 1,
+    "login": false
+  },
+  {
+    "_id": "4",
+    "title": "Country Estate",
+    "des": "1056789, Royal LePage",
+    "sold":1,
+    "price": 650,
+    "minutes": 50,
+    "address": "789 Rural Route, County Line",
+    "bed": 5,
+    "bath": 4,
+    "garage": 3,
+    "login": true
+  }
+]
