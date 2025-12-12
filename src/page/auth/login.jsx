@@ -1,8 +1,11 @@
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link , useParams } from "react-router-dom";
 
 export default function Login() {
+  const {userType} = useParams();
+  console.log(userType);
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-lg">
@@ -72,7 +75,7 @@ export default function Login() {
           <div className="text-center">
             <span className="text-gray-600 text-sm">New User? </span>
             <Link
-              to="/signup"
+              to={`/signup/${userType}`}
               className="text-blue-600 hover:text-blue-800 font-semibold text-sm"
             >
               Sign up here

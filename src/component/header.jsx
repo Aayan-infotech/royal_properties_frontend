@@ -43,7 +43,7 @@ export default function Header() {
           </Link>
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">
-          <Link to="/login">
+          <Link to="/role">
             <Button color="primary" variant="solid">
               Login
             </Button>

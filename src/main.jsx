@@ -8,7 +8,7 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <HeroUIProvider>
+    <HeroUIProvider locale="en-US">
       <App />
     </HeroUIProvider>
   </React.StrictMode>
