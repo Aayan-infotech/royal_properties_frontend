@@ -339,13 +339,13 @@ export default function Home() {
             <br />
             Watch new listings, get notified when they're sold.
           </motion.p>
-          <motion.div className="relative"  style={{ maxWidth: "400px" }}>
+          <motion.div className="relative mt-3"  style={{ maxWidth: "400px" }}>
             <motion.input
               type="text"
               name="text"
               required
               placeholder="Address, Street Name or Listings"
-              className="max-h-[42px] w-full flex-auto rounded-md bg-white px-3.5 border border-gray-300 py-2 text-base text-black outline-1 -outline-offset-1 placeholder:text-white-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6 pr-10" // Added pr-10 for padding
+              className="max-h-[42px] w-full flex-auto rounded-md bg-white px-3.5 border border-gray-300 py-2 text-base text-black placeholder:text-white-500 focus:outline-indigo-500 sm:text-sm/6 pr-10" // Added pr-10 for padding
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
              
