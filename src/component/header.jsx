@@ -4,14 +4,15 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Button,
 } from "@heroui/react";
+import { Button } from '@headlessui/react'
+
 import Logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <Navbar className="bg-[#132141] py-5 px-6">
+    <Navbar className="bg-[#132141] py-4 px-6">
       <NavbarBrand>
         <Link to="/">
           <img src={Logo} alt="Logo" className="cursor-pointer" />
@@ -44,14 +45,14 @@ export default function Header() {
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">
           <Link to="/role">
-            <Button color="primary" variant="solid">
+            <Button className="border border-white rounded-full text-[#fff] px-4 py-2 cursor-pointer">
               Login
             </Button>
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link to="/signup">
-            <Button color="primary" variant="flat">
+          <Link to="/role">
+            <Button className="bg-white rounded-full text-[#132141] px-4 py-2 cursor-pointer">
               Sign Up
             </Button>
           </Link>

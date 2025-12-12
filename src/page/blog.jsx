@@ -200,23 +200,7 @@ const Blog = () => {
       animate="visible"
       variants={containerVariants}
     >
-      <motion.h1 className="text-3xl font-bold mb-10" variants={titleVariants}>
-        Your Go-To Source for
-        <motion.span
-          className="text-[#3B5999] italic"
-          animate={{
-            color: ["#3B5999", "#4A6FDC", "#3B5999"],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          {" "}
-          Real Estate Knowledge{" "}
-        </motion.span>
-      </motion.h1>
+    
       <div className="grid lg:grid-cols-3 grid-cols-1 gap-5">
         <motion.div variants={sectionVariants} className="lg:col-span-2">
           {/* Image */}
