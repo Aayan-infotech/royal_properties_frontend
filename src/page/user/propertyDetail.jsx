@@ -725,7 +725,7 @@ export default function PropertyDetail() {
                         </div>
 
                         {/* School and Rental Info */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
                           <div className="flex items-center gap-2">
                             <span className="text-sm text-gray-600 flex items-center gap-1">
                               School:
@@ -740,7 +740,7 @@ export default function PropertyDetail() {
                               ))}
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 lg:justify-end">
                             <span className="text-sm text-gray-600 flex items-center gap-1">
                               Rental:
                               <IoMdInformationCircle className="w-4 h-4 text-gray-400" />
