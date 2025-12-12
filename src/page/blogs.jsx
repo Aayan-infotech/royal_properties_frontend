@@ -13,6 +13,7 @@ import { GoArrowUpRight } from "react-icons/go";
 import Property from "../assets/property1.png";
 import { LuCalendarDays } from "react-icons/lu";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const Blogs = () => {
   const blogPosts = [
@@ -217,92 +218,91 @@ const Blogs = () => {
         </motion.span>
       </motion.h1>
 
-      <motion.div
-        className="flex flex-col md:flex-row gap-6 mt-5"
-        variants={sectionVariants}
-      >
-        {/* Image */}
-        <motion.div className="w-full md:w-1/2" variants={imageVariants}>
-          <motion.img
-            src={Property}
-            alt="House"
-            className="w-full h-64 md:h-80 object-cover rounded-xl"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.div>
-
-        {/* Content */}
-        <motion.div
-          className="w-full md:w-1/2 flex flex-col gap-3 justify-between"
-          variants={itemVariants}
-        >
-          <div className="">
-            <motion.h2
-              className="text-xl md:text-2xl font-semibold leading-snug"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.5 }}
-            >
-              Downtown Miami: Exploring the Best Neighborhoods for Young
-              Professionals
-            </motion.h2>
-
-            <motion.p
-              className="text-gray-700 text-sm leading-relaxed"
-              variants={paragraphVariants}
-            >
-              Discover why downtown Miami is a hotspot for young professionals.
-              From vibrant nightlife to coworking spaces and luxurious
-              apartments, learn what makes this area the perfect place to live,
-              work, and thrive in a competitive real estate market. Learn about
-              pricing shifts, emerging neighborhoods, and key strategies to make
-              informed decisions in 2025.
-            </motion.p>
-          </div>
-
-          {/* Footer row */}
-          <motion.div
-            className="flex items-center gap-6 text-gray-600 text-sm mb-2"
-            variants={containerVariants}
-          >
-            <motion.span
-              className="flex items-center gap-2"
-              variants={infoItemVariants}
-              whileHover="hover"
-            >
-              <motion.span
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.5 }}
-              >
-                <FaCalendarAlt />
-              </motion.span>
-              January 5, 2025
-            </motion.span>
-
-            <motion.span
-              className="flex items-center gap-2"
-              variants={infoItemVariants}
-              whileHover="hover"
-            >
-              <motion.span
-                whileHover={{ rotate: 180 }}
-                transition={{ duration: 0.5 }}
-              >
-                <FaRegClock />
-              </motion.span>
-              6 minutes
-            </motion.span>
-
-            <motion.span
-              className="ml-auto text-xl cursor-pointer hover:text-gray-800 transition"
-              variants={iconVariants}
-              whileHover="hover"
-            >
-              <GoArrowUpRight />
-            </motion.span>
+      <motion.div variants={sectionVariants}>
+        <Link to={`/blog/1`} className="flex flex-col md:flex-row gap-6 mt-5">
+          {/* Image */}
+          <motion.div className="w-full md:w-1/2" variants={imageVariants}>
+            <motion.img
+              src={Property}
+              alt="House"
+              className="w-full h-64 md:h-80 object-cover rounded-xl"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            />
           </motion.div>
-        </motion.div>
+
+          {/* Content */}
+          <motion.div
+            className="w-full md:w-1/2 flex flex-col gap-3 justify-between"
+            variants={itemVariants}
+          >
+            <div className="">
+              <motion.h2
+                className="text-xl md:text-2xl font-semibold leading-snug"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.5 }}
+              >
+                Downtown Miami: Exploring the Best Neighborhoods for Young
+                Professionals
+              </motion.h2>
+
+              <motion.p
+                className="text-gray-700 text-sm leading-relaxed"
+                variants={paragraphVariants}
+              >
+                Discover why downtown Miami is a hotspot for young
+                professionals. From vibrant nightlife to coworking spaces and
+                luxurious apartments, learn what makes this area the perfect
+                place to live, work, and thrive in a competitive real estate
+                market. Learn about pricing shifts, emerging neighborhoods, and
+                key strategies to make informed decisions in 2025.
+              </motion.p>
+            </div>
+
+            {/* Footer row */}
+            <motion.div
+              className="flex items-center gap-6 text-gray-600 text-sm mb-2"
+              variants={containerVariants}
+            >
+              <motion.span
+                className="flex items-center gap-2"
+                variants={infoItemVariants}
+                whileHover="hover"
+              >
+                <motion.span
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <FaCalendarAlt />
+                </motion.span>
+                January 5, 2025
+              </motion.span>
+
+              <motion.span
+                className="flex items-center gap-2"
+                variants={infoItemVariants}
+                whileHover="hover"
+              >
+                <motion.span
+                  whileHover={{ rotate: 180 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <FaRegClock />
+                </motion.span>
+                6 minutes
+              </motion.span>
+
+              <motion.span
+                className="ml-auto text-xl cursor-pointer hover:text-gray-800 transition"
+                variants={iconVariants}
+                whileHover="hover"
+              >
+                <GoArrowUpRight />
+              </motion.span>
+            </motion.div>
+          </motion.div>
+        </Link>
       </motion.div>
 
       <motion.div
@@ -317,103 +317,88 @@ const Blogs = () => {
           variants={containerVariants}
         >
           {blogPosts.map((post, index) => (
-            <motion.div
-              key={post.id}
-              className="bg-[#e9f0ff] rounded-xl shadow-sm hover:shadow-md transition"
-              variants={gridItemVariants}
-              custom={index}
-              whileHover="hover"
-              initial="initial"
-            >
-              <motion.div variants={cardVariants}>
-                {/* Image */}
-                <motion.img
-                  src={Property}
-                  className="w-full h-48 object-cover rounded-xl mb-4"
-                  alt={post.title}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                />
-                <div className="p-4">
-                  <motion.h3
-                    className="text-lg font-semibold mb-2 leading-snug"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.1 }}
-                  >
-                    {post.title}
-                  </motion.h3>
+            <Link to={`/blog/${post.id}`}>
+              <motion.div
+                key={post.id}
+                className="bg-[#e9f0ff] rounded-xl shadow-sm hover:shadow-md transition"
+                variants={gridItemVariants}
+                custom={index}
+                whileHover="hover"
+                initial="initial"
+              >
+                <motion.div variants={cardVariants}>
+                  {/* Image */}
+                  <motion.img
+                    src={Property}
+                    className="w-full h-48 object-cover rounded-xl mb-4"
+                    alt={post.title}
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <div className="p-4">
+                    <motion.h3
+                      className="text-lg font-semibold mb-2 leading-snug"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      {post.title}
+                    </motion.h3>
 
-                  {/* Icon if exists */}
-                  {post.icon && (
+                    {/* Footer */}
                     <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{
-                        type: "spring",
-                        delay: 0.2,
-                        stiffness: 200,
-                        damping: 15,
-                      }}
-                      className="mb-3"
+                      className="flex items-center justify-between text-gray-600 text-sm mt-4"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
                     >
-                      {post.icon}
+                      <div className="flex items-center gap-6">
+                        <motion.span
+                          className="flex items-center gap-2"
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          <motion.span
+                            whileHover={{ rotate: 360 }}
+                            transition={{ duration: 0.5 }}
+                          >
+                            <LuCalendarDays />
+                          </motion.span>
+                          {post.date}
+                        </motion.span>
+
+                        <motion.span
+                          className="flex items-center gap-2"
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          <motion.span
+                            whileHover={{ rotate: 180 }}
+                            transition={{ duration: 0.5 }}
+                          >
+                            <FaRegClock />
+                          </motion.span>
+                          {post.readTime}
+                        </motion.span>
+                      </div>
+
+                      <motion.span
+                        whileHover={{
+                          rotate: 45,
+                          scale: 1.3,
+                          color: "#3B5999",
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 15,
+                        }}
+                      >
+                        <GoArrowUpRight className="text-lg cursor-pointer hover:text-gray-900" />
+                      </motion.span>
                     </motion.div>
-                  )}
-
-                  {/* Footer */}
-                  <motion.div
-                    className="flex items-center justify-between text-gray-600 text-sm mt-4"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <div className="flex items-center gap-6">
-                      <motion.span
-                        className="flex items-center gap-2"
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        <motion.span
-                          whileHover={{ rotate: 360 }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          <LuCalendarDays />
-                        </motion.span>
-                        {post.date}
-                      </motion.span>
-
-                      <motion.span
-                        className="flex items-center gap-2"
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        <motion.span
-                          whileHover={{ rotate: 180 }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          <FaRegClock />
-                        </motion.span>
-                        {post.readTime}
-                      </motion.span>
-                    </div>
-
-                    <motion.span
-                      whileHover={{
-                        rotate: 45,
-                        scale: 1.3,
-                        color: "#3B5999",
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 15,
-                      }}
-                    >
-                      <GoArrowUpRight className="text-lg cursor-pointer hover:text-gray-900" />
-                    </motion.span>
-                  </motion.div>
-                </div>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
+            </Link>
           ))}
         </motion.div>
       </motion.div>

@@ -13,6 +13,7 @@ import RoleSelection from "./page/auth/role";
 import OTP from "./page/auth/verifyOtp";
 import ConfirmPassword from "./page/auth/confirmPassword";
 import PropertyDetail from "./page/user/propertyDetail";
+import Blog from "./page/blog";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/propertydetail/:id" element={<PropertyDetail />} />
           <Route path="/blogs" element={<Blogs />} />
+           <Route path="/blog/:id" element={<Blog />} />
           <Route path="/role" element={<RoleSelection />} />
           <Route path="/market-trends" element={<MarketTrends />} />
           <Route path="/agents" element={<Agents />} />
