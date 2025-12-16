@@ -44,14 +44,14 @@ export default function Header() {
           </Link>
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">
-          <Link to="/role">
+          <Link to="/role/login">
             <Button className="border border-white rounded-full text-[#fff] px-4 py-2 cursor-pointer">
               Login
             </Button>
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link to="/role">
+          <Link to="/role/signup">
             <Button className="bg-white rounded-full text-[#132141] px-4 py-2 cursor-pointer">
               Sign Up
             </Button>

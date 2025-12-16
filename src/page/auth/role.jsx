@@ -1,29 +1,32 @@
 import { motion } from "framer-motion";
 import { FaUserAlt, FaUserTie, FaUserSecret } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 const roles = [
   {
     id: 1,
-    title: "User",
+    title: "Buyers",
     icon: <FaUserAlt className="text-blue-600 text-6xl" />,
     bg: "bg-white",
   },
   {
     id: 2,
-    title: "Seller",
+    title: "Sellers",
     icon: <FaUserTie className="text-orange-500 text-6xl" />,
     bg: "bg-white",
   },
   {
     id: 3,
-    title: "Agent",
+    title: "Agents",
     icon: <FaUserSecret className="text-black text-6xl" />,
     bg: "bg-white",
   },
 ];
 
 export default function RoleSelection() {
+  const location = useLocation();
+  const { type } = useParams();
+
   return (
     <div className="w-full py-16 px-4 bg-[#e9f0ff] min-h-screen flex flex-col items-center">
       {/* Heading */}
@@ -37,7 +40,7 @@ export default function RoleSelection() {
       {/* Role Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl w-full">
         {roles.map((role, index) => (
-          <Link to={`/login/${role.title.toLowerCase()}`} key={role.id}>
+          <Link to={`/${type}/${role.title.toLowerCase()}`} key={role.id}>
             <motion.div
               key={role.id}
               initial={{ opacity: 0, y: 30 }}

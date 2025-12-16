@@ -24,7 +24,7 @@ function App() {
           <Route path="/propertydetail/:id" element={<PropertyDetail />} />
           <Route path="/blogs" element={<Blogs />} />
            <Route path="/blog/:id" element={<Blog />} />
-          <Route path="/role" element={<RoleSelection />} />
+          <Route path="/role/:type" element={<RoleSelection />} />
           <Route path="/market-trends" element={<MarketTrends />} />
           <Route path="/agents" element={<Agents />} />
           <Route path="/login/:userType" element={<Login />} />
