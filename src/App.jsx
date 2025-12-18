@@ -24,13 +24,13 @@ function App() {
           <Route path="/propertydetail/:id" element={<PropertyDetail />} />
           <Route path="/blogs" element={<Blogs />} />
            <Route path="/blog/:id" element={<Blog />} />
-          <Route path="/role/:type" element={<RoleSelection />} />
+          <Route path="/role/:userType" element={<RoleSelection />} />
           <Route path="/market-trends" element={<MarketTrends />} />
           <Route path="/agents" element={<Agents />} />
-          <Route path="/login/:userType" element={<Login />} />
-          <Route path="/signup/:userType" element={<SignUp />} />
-          <Route path="/verifyOTP" element={<OTP />} />
-          <Route path="/confirmPassword" element={<ConfirmPassword />} />
+          <Route path="/:userType/login" element={<Login />} />
+          <Route path="/:userType/signup" element={<SignUp />} />
+          <Route path="/:userType/verify-otp" element={<OTP />} />
+          <Route path="/:userType/confirm-password" element={<ConfirmPassword />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  FiLock, 
-  FiEye, 
-  FiEyeOff, 
-  FiCheck, 
+import React, { useState, useEffect, useContext } from "react";
+import {
+  FiLock,
+  FiEye,
+  FiEyeOff,
+  FiCheck,
   FiX,
   FiShield,
   FiAlertCircle,
-  FiArrowLeft
-} from 'react-icons/fi';
-import { IoKeyOutline } from 'react-icons/io5';
+  FiArrowLeft,
+} from "react-icons/fi";
+import { IoKeyOutline } from "react-icons/io5";
+import { AlertContext } from "../../context/alertContext";
+import { useAlert } from "../../hooks/useApiAlert";
+import { type } from "../../utils/constant";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import axiosInstance from "../../component/axiosInstance";
 
 const ConfirmPassword = () => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { userType } = useParams();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
@@ -22,10 +28,14 @@ const ConfirmPassword = () => {
     uppercase: false,
     lowercase: false,
     number: false,
-    special: false
+    special: false,
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [loading, setLoading] = useState(false);
+  const { success, error, info, warning } = useContext(AlertContext);
+  const { handleApiError, handleApiSuccess, wrapApiCall } = useAlert();
   // Password validation criteria
   const validatePassword = (pass) => {
     const newCriteria = {
@@ -33,11 +43,11 @@ const ConfirmPassword = () => {
       uppercase: /[A-Z]/.test(pass),
       lowercase: /[a-z]/.test(pass),
       number: /[0-9]/.test(pass),
-      special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pass)
+      special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pass),
     };
-    
+
     setCriteria(newCriteria);
-    
+
     // Calculate strength (0-5)
     const strength = Object.values(newCriteria).filter(Boolean).length;
     setPasswordStrength(strength);
@@ -55,13 +65,29 @@ const ConfirmPassword = () => {
     setConfirmPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitted(true);
-    
+
     if (password === confirmPassword && passwordStrength >= 4) {
-      alert('Password created successfully!');
-      // In real app, you would handle the password submission here
+      try {
+        const response = await axiosInstance.post(`${userType}/set-password`, {
+          sellerId: location?.state?.sellerId,
+          password: password,
+        });
+        if (response) {
+          console.log(response.data);
+          success(response.data.message);
+          setTimeout(() => {
+            navigate(`/${userType}/login`);
+          }, 2000);
+        }
+      } catch (error) {
+        console.error(error);
+        error(error.response);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -74,27 +100,26 @@ const ConfirmPassword = () => {
   };
 
   const getStrengthColor = () => {
-    if (passwordStrength <= 2) return 'bg-red-500';
-    if (passwordStrength === 3) return 'bg-yellow-500';
-    if (passwordStrength === 4) return 'bg-blue-500';
-    return 'bg-green-500';
+    if (passwordStrength <= 2) return "bg-red-500";
+    if (passwordStrength === 3) return "bg-yellow-500";
+    if (passwordStrength === 4) return "bg-blue-500";
+    return "bg-green-500";
   };
 
   const getStrengthText = () => {
-    if (passwordStrength === 0) return 'Very Weak';
-    if (passwordStrength <= 2) return 'Weak';
-    if (passwordStrength === 3) return 'Good';
-    if (passwordStrength === 4) return 'Strong';
-    return 'Very Strong';
+    if (passwordStrength === 0) return "Very Weak";
+    if (passwordStrength <= 2) return "Weak";
+    if (passwordStrength === 3) return "Good";
+    if (passwordStrength === 4) return "Strong";
+    return "Very Strong";
   };
 
-  const passwordsMatch = password === confirmPassword && password !== '';
+  const passwordsMatch = password === confirmPassword && password !== "";
   const isFormValid = passwordsMatch && passwordStrength >= 4;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center p-4">
       <div className=" w-full max-w-lg overflow-hidden">
-
         {/* Content */}
         <div className="p-6 md:p-8">
           <div className="text-center mb-8">
@@ -135,7 +160,7 @@ const ConfirmPassword = () => {
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
               </div>
-              
+
               {/* Password Strength Meter */}
               {password && (
                 <div className="mt-4">
@@ -143,16 +168,22 @@ const ConfirmPassword = () => {
                     <span className="text-sm font-medium text-gray-700">
                       Password Strength
                     </span>
-                    <span className={`text-sm font-bold ${
-                      passwordStrength <= 2 ? 'text-red-600' :
-                      passwordStrength === 3 ? 'text-yellow-600' :
-                      passwordStrength === 4 ? 'text-blue-600' : 'text-green-600'
-                    }`}>
+                    <span
+                      className={`text-sm font-bold ${
+                        passwordStrength <= 2
+                          ? "text-red-600"
+                          : passwordStrength === 3
+                          ? "text-yellow-600"
+                          : passwordStrength === 4
+                          ? "text-blue-600"
+                          : "text-green-600"
+                      }`}
+                    >
                       {getStrengthText()}
                     </span>
                   </div>
                   <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className={`h-full ${getStrengthColor()} transition-all duration-300`}
                       style={{ width: `${(passwordStrength / 5) * 100}%` }}
                     />
@@ -175,11 +206,11 @@ const ConfirmPassword = () => {
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
                   className={`w-full px-4 py-3 pl-11 border-2 rounded-lg focus:ring-2 outline-none transition ${
-                    confirmPassword 
-                      ? passwordsMatch 
-                        ? 'border-green-500 focus:border-green-500 focus:ring-green-200' 
-                        : 'border-red-500 focus:border-red-500 focus:ring-red-200'
-                      : 'border-gray-300 focus:border-blue-500 focus:ring-blue-200'
+                    confirmPassword
+                      ? passwordsMatch
+                        ? "border-green-500 focus:border-green-500 focus:ring-green-200"
+                        : "border-red-500 focus:border-red-500 focus:ring-red-200"
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-200"
                   }`}
                   placeholder="Confirm your password"
                 />
@@ -192,7 +223,7 @@ const ConfirmPassword = () => {
                   {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
               </div>
-              
+
               {/* Password Match Indicator */}
               {confirmPassword && (
                 <div className="mt-2 flex items-center">
@@ -222,20 +253,54 @@ const ConfirmPassword = () => {
                 Password Requirements
               </h3>
               <ul className="space-y-2">
-                <li className={`flex items-center text-sm ${criteria.length ? 'text-green-600' : 'text-gray-600'}`}>
-                  {criteria.length ? <FiCheck className="mr-2" /> : <FiX className="mr-2" />}
+                <li
+                  className={`flex items-center text-sm ${
+                    criteria.length ? "text-green-600" : "text-gray-600"
+                  }`}
+                >
+                  {criteria.length ? (
+                    <FiCheck className="mr-2" />
+                  ) : (
+                    <FiX className="mr-2" />
+                  )}
                   Minimum 8 characters
                 </li>
-                <li className={`flex items-center text-sm ${criteria.uppercase && criteria.lowercase ? 'text-green-600' : 'text-gray-600'}`}>
-                  {criteria.uppercase && criteria.lowercase ? <FiCheck className="mr-2" /> : <FiX className="mr-2" />}
+                <li
+                  className={`flex items-center text-sm ${
+                    criteria.uppercase && criteria.lowercase
+                      ? "text-green-600"
+                      : "text-gray-600"
+                  }`}
+                >
+                  {criteria.uppercase && criteria.lowercase ? (
+                    <FiCheck className="mr-2" />
+                  ) : (
+                    <FiX className="mr-2" />
+                  )}
                   Use both uppercase and lowercase letters
                 </li>
-                <li className={`flex items-center text-sm ${criteria.number ? 'text-green-600' : 'text-gray-600'}`}>
-                  {criteria.number ? <FiCheck className="mr-2" /> : <FiX className="mr-2" />}
+                <li
+                  className={`flex items-center text-sm ${
+                    criteria.number ? "text-green-600" : "text-gray-600"
+                  }`}
+                >
+                  {criteria.number ? (
+                    <FiCheck className="mr-2" />
+                  ) : (
+                    <FiX className="mr-2" />
+                  )}
                   Include at least one number
                 </li>
-                <li className={`flex items-center text-sm ${criteria.special ? 'text-green-600' : 'text-gray-600'}`}>
-                  {criteria.special ? <FiCheck className="mr-2" /> : <FiX className="mr-2" />}
+                <li
+                  className={`flex items-center text-sm ${
+                    criteria.special ? "text-green-600" : "text-gray-600"
+                  }`}
+                >
+                  {criteria.special ? (
+                    <FiCheck className="mr-2" />
+                  ) : (
+                    <FiX className="mr-2" />
+                  )}
                   Use at least one special character (!@#$%^&*)
                 </li>
                 <li className="flex items-center text-sm text-gray-600">
@@ -249,7 +314,7 @@ const ConfirmPassword = () => {
             <button
               type="submit"
               disabled={!isFormValid}
-              className="w-full bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center"
+              className="w-full bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition duration-300 shadow-md hover:shadow-lg flex items-center justify-center"
             >
               <FiShield className="mr-2" />
               Continue
@@ -269,7 +334,8 @@ const ConfirmPassword = () => {
             {isSubmitted && !isFormValid && (
               <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-red-600 text-sm font-medium text-center">
-                  Please ensure all password requirements are met and passwords match.
+                  Please ensure all password requirements are met and passwords
+                  match.
                 </p>
               </div>
             )}

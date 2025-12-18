@@ -2,7 +2,7 @@ import { useContext } from 'react';
 
 import { AlertContext } from '../context/alertContext';
 
-const useAlert = () => useContext(AlertContext);
+export const useAlert = () => useContext(AlertContext);
 
 export const useApiAlert = () => {
   const { apiError, apiSuccess } = useAlert();

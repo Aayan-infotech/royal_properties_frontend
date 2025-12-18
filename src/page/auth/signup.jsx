@@ -12,18 +12,22 @@ import {
   HiChevronRight,
 } from "react-icons/hi";
 import { FcGoogle } from "react-icons/fc";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation ,useParams } from "react-router-dom";
 import axiosInstance from "../../component/axiosInstance";
 import { AlertContext } from "../../context/alertContext";
-import { useApiAlert } from "../../hooks/useApiAlert";
+import { useAlert } from "../../hooks/useApiAlert";
+import { type } from "../../utils/constant";
 const SignUp = () => {
+  const {userType} = useParams();
+
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     email: "",
-    password: "",
-    confirmPassword: "",
-    phoneNumber: "",
     location: "",
+    brokerageName: "",
+    boardName: "",
+    province: "",
+    verificationMethod: "email",
   });
   const [passwordValidation, setPasswordValidation] = useState({
     minLength: false,
@@ -33,9 +37,9 @@ const SignUp = () => {
   });
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
   const { success, error, info, warning } = useContext(AlertContext);
-  const { handleApiError, handleApiSuccess, wrapApiCall } = useApiAlert();
-
+  const { handleApiError, handleApiSuccess, wrapApiCall } = useAlert();
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -53,25 +57,33 @@ const SignUp = () => {
     }
   };
 
-  const handleNext = () => {
-    navigate("/verifyOTP");
-  };
-
-  const type = location.pathname.split("/")[2];
-  console.log(type);
-
-  const handleRegister = async () => {
-    try {
-      const response = await axiosInstance.post(`${type}/init-register`, {
-        formData,
-      });
-    } catch (error) {}
-  };
-
-  const handleSubmit = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    handleNext();
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post(`${userType}/init-register`, 
+        formData,
+      );
+      if (response) {
+        console.log(response.data);
+        success(response.data.message);
+        setTimeout(() => {
+          navigate(`/${userType}/verify-otp`, {
+            state: {
+              email: formData.email,
+              sellerId: response?.data?.data?.sellerId,
+            },
+          });
+        }, 2000);
+      }
+    } catch (error) {
+      console.error(error);
+      error(error.response);
+    } finally {
+      setLoading(false);
+    }
   };
+  console.log(userType)
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
@@ -87,7 +99,7 @@ const SignUp = () => {
         {/* Stepper Indicator */}
         <div className="pt-4 pb-8">
           {/* Form Content */}
-          <form onSubmit={handleSubmit} className="">
+          <form className="">
             <div className="space-y-6">
               <div className="space-y-4">
                 {/* Full Name Input */}
@@ -145,8 +157,8 @@ const SignUp = () => {
                     </div>
                     <input
                       type="text"
-                      name="name"
-                      value={formData.name}
+                      name="fullName"
+                      value={formData.fullName}
                       onChange={handleInputChange}
                       className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       placeholder="Enter your full name"
@@ -157,8 +169,8 @@ const SignUp = () => {
 
                 {/* Email Input */}
 
-                {(location.pathname.split("/")[2] === "sellers" ||
-                  location.pathname.split("/")[2] === "agents") && (
+                {(userType === "sellers" ||
+                  userType === "agents") && (
                   <>
                     {/* Email Input */}
                     <div>
@@ -171,7 +183,7 @@ const SignUp = () => {
                         </div>
                         <input
                           type="email"
-                          name="email"
+                          name="location"
                           value={formData.location}
                           onChange={handleInputChange}
                           className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
@@ -183,7 +195,7 @@ const SignUp = () => {
                   </>
                 )}
 
-                {location.pathname.split("/")[2] === "agents" && (
+                {userType === "agents" && (
                   <>
                     <div className="grid lg:grid-cols-3 gap-3">
                       <div>
@@ -191,7 +203,6 @@ const SignUp = () => {
                           Brokerage Name
                         </label>
                         <div className="relative">
-                        
                           <input
                             type="text"
                             name="brokerageName"
@@ -208,7 +219,6 @@ const SignUp = () => {
                           BoardName
                         </label>
                         <div className="relative">
-                        
                           <input
                             type="text"
                             name="boardName"
@@ -225,7 +235,6 @@ const SignUp = () => {
                           Province
                         </label>
                         <div className="relative">
-                        
                           <input
                             type="text"
                             name="province"
@@ -245,8 +254,9 @@ const SignUp = () => {
               <div className="pt-4">
                 <button
                   type="button"
-                  onClick={handleNext}
-                  className={`w-full flex justify-center items-center py-3 px-4 rounded-lg text-sm font-medium transition-colors ${"bg-[#132141] hover:bg-[#1c346b] text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all"}`}
+                  onClick={handleRegister}
+                  disabled={loading}
+                  className={`w-full flex justify-center cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed items-center py-3 px-4 rounded-lg text-sm font-medium transition-colors ${"bg-[#132141] hover:bg-[#1c346b] text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all"}`}
                 >
                   Continue
                   <HiArrowRight className="ml-2 h-5 w-5" />

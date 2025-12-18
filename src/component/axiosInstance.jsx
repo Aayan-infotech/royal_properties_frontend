@@ -21,9 +21,7 @@ const processQueue = (error, token = null) => {
 // Request Interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token =
-  
-      localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -65,9 +63,7 @@ axiosInstance.interceptors.response.use(
     originalRequest._retry = true;
     isRefreshing = true;
 
-    const refreshToken =
-      localStorage.getItem("RefreshToken");
- 
+    const refreshToken = localStorage.getItem("RefreshToken");
 
     if (!refreshToken) {
       localStorage.clear();

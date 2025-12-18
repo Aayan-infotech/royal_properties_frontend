@@ -52,7 +52,7 @@ const alertConfig = {
 
 // Alert component
 const AlertComponent = ({ alert, onClose }) => {
-  const { type, title, message, duration = 5000 } = alert;
+  const { type, title, message, duration = 500000 } = alert;
   const config = alertConfig[type];
   const Icon = config.icon;
   const timeoutRef = useRef(null);
@@ -89,15 +89,15 @@ const AlertComponent = ({ alert, onClose }) => {
       leaveTo="opacity-0"
       className={`max-w-sm w-full ${config.bgColor} shadow-lg rounded-lg pointer-events-auto border ${config.borderColor} overflow-hidden`}
     >
-      <div className="p-4">
-        <div className="flex items-start">
+      <div className="p-4 w-full">
+        <div className="flex items-center">
           <div className="flex-shrink-0">
             <Icon
               className={`h-6 w-6 ${config.iconColor}`}
               aria-hidden="true"
             />
           </div>
-          <div className="ml-3 w-0 flex-1 pt-0.5">
+          <div className="ml-3 w-0 flex-1 pt-0.5 w-full">
             {title && (
               <p className={`text-sm font-medium ${config.textColor}`}>
                 {title}
@@ -148,7 +148,7 @@ const AlertContainer = ({ children, position = "top-right" }) => {
     <>
       {children}
       <div
-        className={`fixed z-50 ${positionClasses[position]} flex flex-col space-y-2`}
+        className={`fixed z-50 ${positionClasses[position]} flex flex-col space-y-2l`}
       >
         {alerts.map((alert) => (
           <AlertComponent

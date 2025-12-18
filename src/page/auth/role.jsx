@@ -25,7 +25,7 @@ const roles = [
 
 export default function RoleSelection() {
   const location = useLocation();
-  const { type } = useParams();
+  const { userType } = useParams();
 
   return (
     <div className="w-full py-16 px-4 bg-[#e9f0ff] min-h-screen flex flex-col items-center">
@@ -40,7 +40,7 @@ export default function RoleSelection() {
       {/* Role Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl w-full">
         {roles.map((role, index) => (
-          <Link to={`/${type}/${role.title.toLowerCase()}`} key={role.id}>
+          <Link to={`/${role.title.toLowerCase()}/${userType}`} key={role.id}>
             <motion.div
               key={role.id}
               initial={{ opacity: 0, y: 30 }}
