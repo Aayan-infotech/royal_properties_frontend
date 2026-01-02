@@ -1,11 +1,60 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { Link , useParams } from "react-router-dom";
-
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axiosInstance from "../../component/axiosInstance";
+import { AlertContext } from "../../context/alertContext";
+import { useAlert } from "../../hooks/useApiAlert";
+import { encrypt, decrypt } from "../../utils/constant";
 export default function Login() {
-  const {userType} = useParams();
-  console.log(userType);
-  
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    role: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { success, error, info, warning } = useContext(AlertContext);
+  const { handleApiError, handleApiSuccess, wrapApiCall } = useAlert();
+  const navigate = useNavigate();
+  const { userType } = useParams();
+  const encryptedUserType = encrypt(userType);
+  const decryptedUserType = decrypt(encryptedUserType);
+  const singularRole = userType.endsWith("s")
+    ? userType.slice(0, -1)
+    : userType;
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+      role: singularRole,
+    });
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post(`auth/login`, formData);
+      if (response) {
+        console.log(response.data);
+        success(response.data.message);
+        localStorage.setItem("token", response?.data?.data.accessToken);
+        localStorage.setItem("RefreshToken", response?.data?.data.refreshToken);
+        localStorage.setItem("userRole", encryptedUserType);
+        setTimeout(() => {
+          navigate(`/${userType}/home`);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error(error);
+      error(error.response);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-lg">
@@ -25,8 +74,11 @@ export default function Login() {
               Email or Number
             </label>
             <input
-              type="text"
+              type="email"
+              name="email"
               placeholder="Enter your email or number"
+              value={formData.email}
+              onChange={handleChange}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
             />
           </div>
@@ -36,15 +88,35 @@ export default function Login() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Password
             </label>
-            <input
-              type="password"
-              placeholder="Enter Password"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              />
+
+              <span
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-600 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <FaEyeSlash className="w-5 h-5" />
+                ) : (
+                  <FaEye className="w-5 h-5" />
+                )}
+              </span>
+            </div>
           </div>
 
           {/* Login Button */}
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 mb-6">
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 mb-6 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
             Login
           </button>
 
@@ -66,10 +138,10 @@ export default function Login() {
           </div>
 
           {/* Google Sign In Button */}
-          <button className="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-3 transition duration-200 mb-8">
+          {/* <button className="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-3 transition duration-200 mb-8">
             <FcGoogle className="text-xl" />
             Sign in with Google
-          </button>
+          </button> */}
 
           {/* Sign Up Link */}
           <div className="text-center">

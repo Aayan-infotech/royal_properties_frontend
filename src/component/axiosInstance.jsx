@@ -63,13 +63,13 @@ axiosInstance.interceptors.response.use(
     originalRequest._retry = true;
     isRefreshing = true;
 
-    const refreshToken = localStorage.getItem("RefreshToken");
+    // const refreshToken = localStorage.getItem("RefreshToken");
 
-    if (!refreshToken) {
-      localStorage.clear();
-      window.location.href = "/welcome";
-      return Promise.reject(error);
-    }
+    // if (!refreshToken) {
+    //   localStorage.clear();
+    //   window.location.href = "/role/login";
+    //   return Promise.reject(error);
+    // }
 
     try {
       const res = await axios.post(

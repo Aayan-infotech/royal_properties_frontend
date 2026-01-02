@@ -1,0 +1,78 @@
+import React from "react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
+import { Button } from "@headlessui/react";
+
+import Logo from "../assets/logo.png";
+import { Link } from "react-router-dom";
+import { encrypt, decrypt } from "../utils/constant";
+import { IoPersonOutline } from "react-icons/io5";
+export default function SellerHeader() {
+  const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
+  console.log("Decrypted User Type in SellerHeader:", decryptedUserType);
+  return (
+    <Navbar className="bg-[#132141] py-4 px-6">
+      <NavbarBrand>
+        <Link to="/sellers/home">
+          <img src={Logo} alt="Logo" className="cursor-pointer" />
+        </Link>
+      </NavbarBrand>
+
+      <NavbarContent className="hidden sm:flex gap-4" justify="end">
+        <NavbarItem>
+          <Link to="/" className="text-white hover:text-blue-400 transition">
+            Map Search
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link
+            to="/market-trends"
+            className="text-white hover:text-blue-400 transition"
+          >
+            Market Trends
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link
+            to="/home-valuation"
+            className="text-white hover:text-blue-400 transition"
+          >
+            Home Valuation
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link
+            to="/agents"
+            className="text-white hover:text-blue-400 transition"
+          >
+            Agents
+          </Link>
+        </NavbarItem>
+        {localStorage.getItem("token") && decryptedUserType === "sellers" ? (
+          <>
+          <Link to="/sellers/user-profile">
+            <IoPersonOutline className="text-xl text-white"/>
+            </Link>
+          </>
+        ) : (
+          <>
+            {" "}
+            <NavbarItem className="hidden lg:flex">
+              <Link to="/role/login">
+                <Button className="border border-white rounded-full text-[#fff] px-4 py-2 cursor-pointer">
+                  Login
+                </Button>
+              </Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Link to="/role/signup">
+                <Button className="bg-white rounded-full text-[#132141] px-4 py-2 cursor-pointer">
+                  Sign Up
+                </Button>
+              </Link>
+            </NavbarItem>
+          </>
+        )}
+      </NavbarContent>
+    </Navbar>
+  );
+}
