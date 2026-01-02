@@ -827,6 +827,8 @@ const UserProfileDashboard = () => {
         onConfirm={() => {
           console.log("Logging out...");
           setIsLogoutModalOpen(false);
+          localStorage.clear();
+            window.location.href = "/role/login";
         }}
       />
     </div>

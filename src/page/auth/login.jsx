@@ -122,12 +122,12 @@ export default function Login() {
 
           {/* Forgot Password Link */}
           <div className="text-center mb-8">
-            <a
-              href="#"
+            <Link
+              to={`/${userType}/forgot-password/`}
               className="text-blue-600 hover:text-blue-800 font-medium text-sm"
             >
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           {/* Divider */}
@@ -147,7 +147,7 @@ export default function Login() {
           <div className="text-center">
             <span className="text-gray-600 text-sm">New User? </span>
             <Link
-              to={`/signup/${userType}`}
+              to={`/${userType}/signup`}
               className="text-blue-600 hover:text-blue-800 font-semibold text-sm"
             >
               Sign up here

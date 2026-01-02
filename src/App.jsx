@@ -7,6 +7,7 @@ import Home from "./page/home";
 import MarketTrends from "./page/marketTrends";
 import Agents from "./page/agents";
 import Login from "./page/auth/login";
+import ForgotPassword from "./page/auth/forgotPassword";
 import SignUp from "./page/auth/signup";
 import Blogs from "./page/blogs";
 import RoleSelection from "./page/auth/role";
@@ -21,6 +22,8 @@ import PropertyListingForm from "./page/seller/properListing";
 import { encrypt, decrypt } from "./utils/constant";
 import UserProfileDashboard from "./component/myProfile";
 import SellerPropertyDetail from "./page/seller/propertyDetail";
+import AgentsHome from "./page/agent/home";
+import AgentLayout from "./layouts/agentLayout";
 // Create a wrapper component that validates userType
 const ValidatedRoute = ({ children }) => {
   const { userType } = useParams();
@@ -46,6 +49,20 @@ const SellerOnlyRoute = ({ children }) => {
 
   return children;
 };
+
+const AgentOnlyRoute = ({ children }) => {
+  const { userType } = useParams();
+  console.log("User Type in AgentOnlyRoute:", userType);
+  const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
+  console.log("Decrypted User Type in AgentOnlyRoute:", decryptedUserType);
+
+  if (userType !== "agents" && decryptedUserType !== "agents") {
+    return <NotFound />;
+  }
+
+  return children;
+};
+
 
 function App() {
   return (
@@ -76,6 +93,15 @@ function App() {
             element={
               <ValidatedRoute>
                 <SignUp />
+              </ValidatedRoute>
+            }
+          />
+
+           <Route
+            path="/:userType/forgot-password"
+            element={
+              <ValidatedRoute>
+                <ForgotPassword />
               </ValidatedRoute>
             }
           />
@@ -133,6 +159,27 @@ function App() {
               <SellerOnlyRoute>
                 <UserProfileDashboard />
               </SellerOnlyRoute>
+            }
+          />
+        </Route>
+
+          <Route path="/agents" element={<AgentLayout />}>
+          <Route
+            path="home"
+            element={
+              <AgentOnlyRoute>
+                <AgentsHome />
+              </AgentOnlyRoute>
+            }
+          />
+         
+
+           <Route
+            path="user-profile"
+            element={
+              <AgentOnlyRoute>
+                <UserProfileDashboard />
+              </AgentOnlyRoute>
             }
           />
         </Route>

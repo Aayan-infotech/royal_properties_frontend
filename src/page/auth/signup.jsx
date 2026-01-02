@@ -12,13 +12,13 @@ import {
   HiChevronRight,
 } from "react-icons/hi";
 import { FcGoogle } from "react-icons/fc";
-import { useNavigate, useLocation ,useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import axiosInstance from "../../component/axiosInstance";
 import { AlertContext } from "../../context/alertContext";
 import { useAlert } from "../../hooks/useApiAlert";
 import { type } from "../../utils/constant";
 const SignUp = () => {
-  const {userType} = useParams();
+  const { userType } = useParams();
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -61,8 +61,9 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axiosInstance.post(`${userType}/init-register`, 
-        formData,
+      const response = await axiosInstance.post(
+        `${userType}/init-register`,
+        formData
       );
       if (response) {
         console.log(response.data);
@@ -71,7 +72,11 @@ const SignUp = () => {
           navigate(`/${userType}/verify-otp`, {
             state: {
               email: formData.email,
-              sellerId: response?.data?.data?.sellerId,
+              id:
+                response?.data?.data?.sellerId ||
+                response?.data?.data?.agentId ||
+                response?.data?.data?.buyerId,
+                purpose: "registration"
             },
           });
         }, 2000);
@@ -168,8 +173,7 @@ const SignUp = () => {
 
                 {/* Email Input */}
 
-                {(userType === "sellers" ||
-                  userType === "agents") && (
+                {(userType === "sellers" || userType === "agents") && (
                   <>
                     {/* Email Input */}
                     <div>
