@@ -76,7 +76,7 @@ const SignUp = () => {
                 response?.data?.data?.sellerId ||
                 response?.data?.data?.agentId ||
                 response?.data?.data?.buyerId,
-                purpose: "registration"
+              purpose: "registration",
             },
           });
         }, 2000);
@@ -161,8 +161,16 @@ const SignUp = () => {
                     </div>
                     <input
                       type="text"
-                      name="fullName"
-                      value={formData.fullName}
+                      name={
+                        location.pathname.includes("buyers")
+                          ? "name"
+                          : "fullName"
+                      }
+                      value={
+                        location.pathname.includes("buyers")
+                          ? formData.name
+                          : formData.fullName
+                      }
                       onChange={handleInputChange}
                       className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       placeholder="Enter your full name"
