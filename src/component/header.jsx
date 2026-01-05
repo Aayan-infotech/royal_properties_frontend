@@ -80,7 +80,7 @@ export default function Header() {
       </NavbarContent>
 
       {/* Mobile Menu */}
-      <NavbarMenu className="bg-[#132141] pt-8">
+      <NavbarMenu className="bg-[#132141] pt-8 z-1">
         {menuItems.map((item) => (
           <NavbarMenuItem key={item.name}>
             <Link
