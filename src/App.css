@@ -67,3 +67,7 @@ button[class*="primary"] {
   font-style: italic;
   color: #fff;
 }
+
+.mobile-menu header , .mobile-menu {
+padding:10px !important
+}

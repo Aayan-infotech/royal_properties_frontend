@@ -16,16 +16,20 @@ import ConfirmPassword from "./page/auth/confirmPassword";
 import PropertyDetail from "./page/propertyDetail";
 import Blog from "./page/blog";
 import NotFound from "./page/notFound";
-import SellerLayout from "./layouts/sellerLayout";
 import SellerHome from "./page/seller/home";
 import PropertyListingForm from "./page/seller/properListing";
 import { encrypt, decrypt } from "./utils/constant";
 import UserProfileDashboard from "./component/myProfile";
 import SellerPropertyDetail from "./page/seller/propertyDetail";
-import AgentsHome from "./page/buyer/home";
-import AgentLayout from "./layouts/buyerLayout";
+import BuyerHome from "./page/buyer/home";
 import NearbyProperties from "./page/buyer/nearbyProperties";
 import AgentProfile from "./page/buyer/agentDetail";
+import AgentHome from "./page/agent/home";
+
+import BuyerLayout from "./layouts/buyerLayout";
+import SellerLayout from "./layouts/sellerLayout";
+import AgentLayout from "./layouts/agentLayout";
+
 // Create a wrapper component that validates userType
 const ValidatedRoute = ({ children }) => {
   const { userType } = useParams();
@@ -58,6 +62,18 @@ const BuyerOnlyRoute = ({ children }) => {
   const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
   console.log("Decrypted User Type in BuyerOnlyRoute:", decryptedUserType);
   if (userType !== "buyers" && decryptedUserType !== "buyers") {
+    return <NotFound />;
+  }
+
+  return children;
+};
+
+const AgentOnlyRoute = ({ children }) => {
+  const { userType } = useParams();
+  console.log("User Type in AgentOnlyRoute:", userType);
+  const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
+  console.log("Decrypted User Type in AgentOnlyRoute:", decryptedUserType);
+  if (userType !== "agents" && decryptedUserType !== "agents") {
     return <NotFound />;
   }
 
@@ -163,12 +179,12 @@ function App() {
           />
         </Route>
 
-        <Route path="/buyers" element={<AgentLayout />}>
+        <Route path="/buyers" element={<BuyerLayout />}>
           <Route
             path="home"
             element={
               <BuyerOnlyRoute>
-                <AgentsHome />
+                <BuyerHome />
               </BuyerOnlyRoute>
             }
           />
@@ -198,12 +214,32 @@ function App() {
             }
           />
 
-           <Route
+          <Route
             path="agent-detail/:id"
             element={
               <BuyerOnlyRoute>
                 <AgentProfile />
               </BuyerOnlyRoute>
+            }
+          />
+        </Route>
+
+        <Route path="/agents" element={<AgentLayout />}>
+          <Route
+            path="home"
+            element={
+              <AgentOnlyRoute>
+                <AgentHome />
+              </AgentOnlyRoute>
+            }
+          />
+
+          <Route
+            path="user-profile"
+            element={
+              <AgentOnlyRoute>
+                <UserProfileDashboard />
+              </AgentOnlyRoute>
             }
           />
         </Route>

@@ -25,7 +25,7 @@ import {
 } from "react-icons/fi";
 import { MdLocationOn, MdPeople, MdBusiness } from "react-icons/md";
 
-export default function AgentsHome() {
+export default function BuyerHome() {
   const [hoveredCard, setHoveredCard] = useState(null);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
