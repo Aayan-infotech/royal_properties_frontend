@@ -11,3 +11,17 @@ export const decrypt = (cipherText) => {
   const bytes = CryptoJS.AES.decrypt(cipherText, secretKey);
   return bytes.toString(CryptoJS.enc.Utf8);
 };
+
+export const menuItems = [
+  { name: "Map Search", path: "/" },
+  { name: "Market Trends", path: "/market-trends" },
+  { name: "Home Valuation", path: "/home-valuation" },
+  { name: "Agents", path: "/agents" },
+];
+
+export const accountMenuItems = [
+  { name: "Netherlands", abbreviation: "NL" },
+  { name: "Ontario", abbreviation: "ON" },
+  { name: "Alberta", abbreviation: "AB" },
+  { name: "Columbia", abbreviation: "CB" },
+];

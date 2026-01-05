@@ -6,6 +6,7 @@ header li a,
 header li button {
   font-weight: 500;
   font-size: 14px;
+  white-space: nowrap;
 }
 
 #root {
@@ -14,6 +15,10 @@ header li button {
   min-height: 100vh;
 }
 
+.dropdown-headless:focus-visible {
+  outline: none;
+
+}
 main {
   flex: 1;
 }

@@ -8,41 +8,42 @@ import {
   NavbarMenu,
   NavbarMenuItem,
 } from "@heroui/react";
-import { Button } from "@headlessui/react";
-
 import Logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
-import { encrypt, decrypt } from "../utils/constant";
-import { IoPersonOutline, IoMenu, IoClose } from "react-icons/io5";
+import { decrypt } from "../utils/constant";
+import {
+  IoPersonOutline,
+  IoMenu,
+  IoClose,
+  IoChevronDown,
+} from "react-icons/io5";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
+import { accountMenuItems } from "../utils/constant";
 
 export default function AgentHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
 
-  console.log("Decrypted User Type in SellerHeader:", decryptedUserType);
-
   const menuItems = [
     { name: "Client management", path: "/" },
-    { name: "Appointments", path: "/market-trends" },
-    { name: "Property Listing", path: "/home-valuation" },
-    { name: "Map View", path: "/agents" },
-    { name: "Reports", path: "/agents" },
+    { name: "Appointments", path: "/" },
+    { name: "Property Listing", path: "/" },
+    { name: "Map View", path: "/" },
+    { name: "Reports", path: "/" },
   ];
 
   return (
     <Navbar
-      className="bg-[#132141] py-4 px-4 md:px-6 mobile-menu"
+      className="bg-[#132141] py-4 px-4 md:px-6"
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="full"
-      isBordered={false}
     >
-      {/* Mobile Menu Toggle */}
+      {/* Mobile Toggle */}
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          icon={(isOpen) =>
-            isOpen ? (
+          icon={(open) =>
+            open ? (
               <IoClose className="text-white text-2xl" />
             ) : (
               <IoMenu className="text-white text-2xl" />
@@ -51,93 +52,97 @@ export default function AgentHeader() {
         />
       </NavbarContent>
 
-      {/* Logo/Brand */}
+      {/* Logo */}
       <NavbarContent
         className="basis-1/5 sm:basis-full max-w-[200px]"
         justify="start"
       >
-        <NavbarBrand className="">
-          <Link to="/agents/home" onClick={() => setIsMenuOpen(false)}>
+        <NavbarBrand>
+          <Link to="/agents/home">
             <img
               src={Logo}
               alt="Logo"
-              className="cursor-pointer h-8 w-auto min-w-[200px] object-contain"
+              className="h-8 w-auto min-w-[200px] object-contain"
             />
           </Link>
         </NavbarBrand>
       </NavbarContent>
 
-      {/* Desktop Navigation */}
-      <NavbarContent className="hidden sm:flex gap-4 md:gap-6" justify="end">
-        <NavbarItem>
-          <Link
-            to="/"
-            className="text-white hover:text-blue-400 transition text-sm md:text-base"
-          >
-            Client management
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link
-            to="/market-trends"
-            className="text-white hover:text-blue-400 transition text-sm md:text-base"
-          >
-            Appointments
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link
-            to="/home-valuation"
-            className="text-white hover:text-blue-400 transition text-sm md:text-base"
-          >
-            Property Listing
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link
-            to="/agents"
-            className="text-white hover:text-blue-400 transition text-sm md:text-base"
-          >
-            Map View
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link
-            to="/agents"
-            className="text-white hover:text-blue-400 transition text-sm md:text-base"
-          >
-            Reports
-          </Link>
-        </NavbarItem>
+      {/* Desktop */}
+      <NavbarContent
+        className="hidden sm:flex w-full items-center gap-6 justify-end"
+        justify="end"
+      >
+        <div className="flex items-center gap-5 justify-between w-full">
+          <NavbarItem className="hidden lg:flex border border-white rounded-lg px-2 py-1">
+            <Menu>
+              <MenuButton className="flex items-center gap-1 text-white">
+                Netherlands <IoChevronDown />
+              </MenuButton>
+              <MenuItems className="absolute mt-2 bg-white rounded-lg shadow-lg w-48 z-50">
+                {accountMenuItems.map((item) => (
+                  <MenuItem key={item.name}>
+                    {({ active }) => (
+                      <button
+                        className={`block w-full px-4 py-2 text-sm ${
+                          active ? "bg-blue-50 text-blue-600" : "text-gray-700"
+                        }`}
+                      >
+                        {item.name}
+                      </button>
+                    )}
+                  </MenuItem>
+                ))}
+              </MenuItems>
+            </Menu>
+          </NavbarItem>
+          <div className="flex gap-5 flex-row">
+            {menuItems.map((item) => (
+              <NavbarItem key={item.name}>
+                <Link className="text-white hover:text-blue-400" to={item.path}>
+                  {item.name}
+                </Link>
+              </NavbarItem>
+            ))}
+          </div>
+        </div>
 
-        <NavbarItem className="hidden sm:flex">
+        <NavbarItem>
           <Link to="/agents/user-profile">
-            <IoPersonOutline className="text-xl text-white hover:text-blue-400 transition" />
+            <IoPersonOutline className="text-xl text-white" />
           </Link>
         </NavbarItem>
-
-        {/* Mobile Profile Icon */}
       </NavbarContent>
 
       {/* Mobile Menu */}
       <NavbarMenu className="bg-[#132141] pt-8">
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item.name}-${index}`}>
-            <Link
-              to={item.path}
-              className="w-full text-white py-4 px-4 hover:bg-blue-900/50 hover:text-blue-300 transition-colors block border-b border-blue-900/30"
-              onClick={() => setIsMenuOpen(false)}
-            >
+        {menuItems.map((item) => (
+          <NavbarMenuItem key={item.name}>
+            <Link className="block text-white py-4 px-4" to={item.path}>
               {item.name}
             </Link>
           </NavbarMenuItem>
         ))}
       </NavbarMenu>
 
-      <NavbarItem className="sm:hidden">
-        <Link to="/agents/user-profile" onClick={() => setIsMenuOpen(false)}>
-          <IoPersonOutline className="text-xl text-white" />
-        </Link>
+      {/* Mobile dropdown */}
+      <NavbarItem className="flex sm:hidden border border-white rounded-lg px-2 py-1">
+        <Menu>
+          <MenuButton className="flex items-center text-white">
+            NL <IoChevronDown />
+          </MenuButton>
+          <MenuItems className="absolute mt-2 bg-white rounded-lg shadow-lg w-32 z-50">
+            {accountMenuItems.map((item) => (
+              <MenuItem key={item.name}>
+                {({ active }) => (
+                  <button className="block w-full px-3 py-2 text-sm">
+                    {item.abbreviation}
+                  </button>
+                )}
+              </MenuItem>
+            ))}
+          </MenuItems>
+        </Menu>
       </NavbarItem>
     </Navbar>
   );

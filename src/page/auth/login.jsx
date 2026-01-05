@@ -67,58 +67,59 @@ export default function Login() {
           <p className="text-center text-gray-600 mb-8">
             Welcome back! Please enter your details.
           </p>
-
-          {/* Email Input */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email or Number
-            </label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email or number"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-            />
-          </div>
-
-          {/* Password Input */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Password
-            </label>
-            <div className="relative">
+          <form onSubmit={handleLogin}>
+            {/* Email Input */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email or Number
+              </label>
               <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Enter Password"
-                value={formData.password}
+                type="email"
+                name="email"
+                placeholder="Enter your email or number"
+                value={formData.email}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
-
-              <span
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-600 cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <FaEyeSlash className="w-5 h-5" />
-                ) : (
-                  <FaEye className="w-5 h-5" />
-                )}
-              </span>
             </div>
-          </div>
 
-          {/* Login Button */}
-          <button
-            onClick={handleLogin}
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 mb-6 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            Login
-          </button>
+            {/* Password Input */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Enter Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                />
+
+                <span
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-600 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <FaEyeSlash className="w-5 h-5" />
+                  ) : (
+                    <FaEye className="w-5 h-5" />
+                  )}
+                </span>
+              </div>
+            </div>
+
+            {/* Login Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 mb-6 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              Login
+            </button>
+          </form>
 
           {/* Forgot Password Link */}
           <div className="text-center mb-8">
