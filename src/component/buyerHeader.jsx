@@ -82,7 +82,7 @@ export default function BuyerHeader() {
               <MenuButton className="flex items-center gap-1 text-white">
                 Netherlands <IoChevronDown />
               </MenuButton>
-              <MenuItems className="absolute mt-2 bg-white rounded-lg shadow-lg w-48 z-50">
+              <MenuItems className="absolute mt-2 bg-white rounded-lg shadow-lg w-48 z-50 dropdown-headless">
                 {accountMenuItems.map((item) => (
                   <MenuItem key={item.name}>
                     {({ active }) => (
