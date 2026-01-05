@@ -294,7 +294,7 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 pt-12">
+    <div className="max-w-7xl mx-auto lg:px-6 lg:pt-12">
       <motion.div
         className="dark-bg"
         variants={bannerVariants}
@@ -304,7 +304,7 @@ export default function Home() {
         <motion.img
           src={banner}
           alt="Banner"
-          className="w-full mb-8 rounded-xl"
+          className="w-full mb-8 lg:rounded-xl"
           whileHover={{ scale: 1.01 }}
           transition={{ duration: 0.3 }}
         />
@@ -360,7 +360,7 @@ export default function Home() {
 
       {/* Featured Listing Section */}
       <motion.div
-        className="max-w-7xl mx-auto py-4"
+        className="max-w-7xl mx-auto py-4 px-3 lg:px-0"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -522,7 +522,7 @@ export default function Home() {
 
       {/* Just Sold in British Columbia Section */}
       <motion.div
-        className="max-w-7xl mx-auto py-4"
+        className="max-w-7xl mx-auto py-4 px-3 lg:px-0"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -639,7 +639,7 @@ export default function Home() {
 
       {/* Just Sold in Alberta */}
       <motion.div
-        className="max-w-7xl mx-auto py-4"
+        className="max-w-7xl mx-auto py-4 px-3 lg:px-0"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
