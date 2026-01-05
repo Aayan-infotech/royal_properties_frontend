@@ -12,7 +12,7 @@ export default function AgentHeader() {
   return (
     <Navbar className="bg-[#132141] py-4 px-6">
       <NavbarBrand>
-        <Link to="/agents/home">
+        <Link to="/buyers/home">
           <img src={Logo} alt="Logo" className="cursor-pointer" />
         </Link>
       </NavbarBrand>
@@ -72,7 +72,7 @@ export default function AgentHeader() {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link to="/agents/user-profile">
+          <Link to="/buyers/user-profile">
             <IoPersonOutline className="text-xl text-white" />
           </Link>
         </NavbarItem>

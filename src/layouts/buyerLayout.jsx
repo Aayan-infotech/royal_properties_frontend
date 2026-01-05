@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "../component/footer";
-import AgentHeader from "../component/agentHeader";
+import AgentHeader from "../component/buyerHeader";
 
 export default function AgentLayout() {
   return (

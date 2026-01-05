@@ -13,7 +13,7 @@ import Blogs from "./page/blogs";
 import RoleSelection from "./page/auth/role";
 import OTP from "./page/auth/verifyOtp";
 import ConfirmPassword from "./page/auth/confirmPassword";
-import PropertyDetail from "./page/user/propertyDetail";
+import PropertyDetail from "./page/propertyDetail";
 import Blog from "./page/blog";
 import NotFound from "./page/notFound";
 import SellerLayout from "./layouts/sellerLayout";
@@ -22,8 +22,10 @@ import PropertyListingForm from "./page/seller/properListing";
 import { encrypt, decrypt } from "./utils/constant";
 import UserProfileDashboard from "./component/myProfile";
 import SellerPropertyDetail from "./page/seller/propertyDetail";
-import AgentsHome from "./page/agent/home";
-import AgentLayout from "./layouts/agentLayout";
+import AgentsHome from "./page/buyer/home";
+import AgentLayout from "./layouts/buyerLayout";
+import NearbyProperties from "./page/buyer/nearbyProperties";
+import AgentProfile from "./page/buyer/agentDetail";
 // Create a wrapper component that validates userType
 const ValidatedRoute = ({ children }) => {
   const { userType } = useParams();
@@ -50,19 +52,17 @@ const SellerOnlyRoute = ({ children }) => {
   return children;
 };
 
-const AgentOnlyRoute = ({ children }) => {
+const BuyerOnlyRoute = ({ children }) => {
   const { userType } = useParams();
-  console.log("User Type in AgentOnlyRoute:", userType);
+  console.log("User Type in BuyerOnlyRoute:", userType);
   const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
-  console.log("Decrypted User Type in AgentOnlyRoute:", decryptedUserType);
-
-  if (userType !== "agents" && decryptedUserType !== "agents") {
+  console.log("Decrypted User Type in BuyerOnlyRoute:", decryptedUserType);
+  if (userType !== "buyers" && decryptedUserType !== "buyers") {
     return <NotFound />;
   }
 
   return children;
 };
-
 
 function App() {
   return (
@@ -97,7 +97,7 @@ function App() {
             }
           />
 
-           <Route
+          <Route
             path="/:userType/forgot-password"
             element={
               <ValidatedRoute>
@@ -144,7 +144,7 @@ function App() {
             }
           />
 
-            <Route
+          <Route
             path="property/:id"
             element={
               <SellerOnlyRoute>
@@ -153,7 +153,7 @@ function App() {
             }
           />
 
-           <Route
+          <Route
             path="user-profile"
             element={
               <SellerOnlyRoute>
@@ -163,23 +163,47 @@ function App() {
           />
         </Route>
 
-          <Route path="/agents" element={<AgentLayout />}>
+        <Route path="/buyers" element={<AgentLayout />}>
           <Route
             path="home"
             element={
-              <AgentOnlyRoute>
+              <BuyerOnlyRoute>
                 <AgentsHome />
-              </AgentOnlyRoute>
+              </BuyerOnlyRoute>
             }
           />
-         
+          <Route
+            path="property-detail/:id"
+            element={
+              <BuyerOnlyRoute>
+                <PropertyDetail />
+              </BuyerOnlyRoute>
+            }
+          />
+          <Route
+            path="nearby-properties"
+            element={
+              <BuyerOnlyRoute>
+                <NearbyProperties />
+              </BuyerOnlyRoute>
+            }
+          />
 
-           <Route
+          <Route
             path="user-profile"
             element={
-              <AgentOnlyRoute>
+              <BuyerOnlyRoute>
                 <UserProfileDashboard />
-              </AgentOnlyRoute>
+              </BuyerOnlyRoute>
+            }
+          />
+
+           <Route
+            path="agent-detail/:id"
+            element={
+              <BuyerOnlyRoute>
+                <AgentProfile />
+              </BuyerOnlyRoute>
             }
           />
         </Route>

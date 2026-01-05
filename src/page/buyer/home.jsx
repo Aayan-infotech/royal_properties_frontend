@@ -384,9 +384,9 @@ export default function AgentsHome() {
             >
               <motion.div variants={cardVariants} style={{ originY: 0 }}>
                 <Card
-                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full ${
-                    item?.login && `blur-[1.5px]`
-                  }`}
+                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full
+                   
+                     `}
                 >
                   <CardBody className="overflow-visible pb-2">
                     <motion.div
@@ -489,7 +489,7 @@ export default function AgentsHome() {
                   </CardBody>
                 </Card>
               </motion.div>
-              {item?.login && (
+              {/* {item?.login && (
                 <motion.div
                   className="absolute inset-0 flex items-center justify-center"
                   initial={{ opacity: 0 }}
@@ -505,7 +505,7 @@ export default function AgentsHome() {
                     Login required
                   </motion.button>
                 </motion.div>
-              )}
+              )} */}
             </motion.div>
           ))}
         </motion.div>
@@ -542,87 +542,70 @@ export default function AgentsHome() {
               whileHover="hover"
               initial="initial"
             >
-              <motion.div variants={cardVariants}>
-                <Card
-                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full ${
-                    item?.login && `blur-[1.5px]`
-                  }`}
-                >
-                  <CardBody className="overflow-visible pb-2">
-                    <motion.div
-                      className="relative"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <motion.img
-                        alt="Card background"
-                        className="object-cover"
-                        src={Building}
-                        width="100%"
-                        height="100%"
-                        style={{ borderRadius: "15px 15px 0 0" }}
-                      />
-                      {item.sold > 0 && (
-                        <motion.span
-                          className="absolute bottom-2 left-2 bg-[#FF6F1E] text-dark px-2 py-1 rounded-sm text-sm"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                        >
-                          Sold
-                        </motion.span>
-                      )}
-                    </motion.div>
-                    {/* Rest of card content remains the same */}
-                    <div className="flex flex-col gap-1 px-3 pt-2 px-2">
-                      <div className="flex justify-between">
-                        <span className="text-gray-800 text-sm">
-                          Listed: <b>${item.price}</b>
-                        </span>
-                        <span className="text-gray-500 text-sm">
-                          {item.minutes} minutes ago
-                        </span>
-                      </div>
-                      <span className="text-gray-800 text-sm">
-                        {item.address}
-                      </span>
-                      <div className="flex row gap-2 text-sm py-2">
-                        <span className="flex row gap-2">
-                          <IoBedSharp size={20} /> {item.bed}
-                        </span>
-                        <span className="flex row gap-2">
-                          <FaBath size={16} /> {item.bath}
-                        </span>
-                        <span className="flex row gap-2">
-                          <PiGarageFill size={20} /> {item.garage}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="px-2">
-                      <hr className="border-gray-400" />
-                      <span className="text-gray-500 text-sm pt-2">
-                        {item.des}
-                      </span>
-                    </div>
-                  </CardBody>
-                </Card>
-              </motion.div>
-              {item?.login && (
-                <motion.div
-                  className="absolute inset-0 flex items-center justify-center"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <motion.button
-                    type="submit"
-                    className="flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+              <Link to="/buyers/property-detail/123">
+                <motion.div variants={cardVariants}>
+                  <Card
+                    className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full `}
                   >
-                    Login required
-                  </motion.button>
+                    <CardBody className="overflow-visible pb-2">
+                      <motion.div
+                        className="relative"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <motion.img
+                          alt="Card background"
+                          className="object-cover"
+                          src={Building}
+                          width="100%"
+                          height="100%"
+                          style={{ borderRadius: "15px 15px 0 0" }}
+                        />
+                        {item.sold > 0 && (
+                          <motion.span
+                            className="absolute bottom-2 left-2 bg-[#FF6F1E] text-dark px-2 py-1 rounded-sm text-sm"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                          >
+                            Sold
+                          </motion.span>
+                        )}
+                      </motion.div>
+                      {/* Rest of card content remains the same */}
+                      <div className="flex flex-col gap-1 px-3 pt-2 px-2">
+                        <div className="flex justify-between">
+                          <span className="text-gray-800 text-sm">
+                            Listed: <b>${item.price}</b>
+                          </span>
+                          <span className="text-gray-500 text-sm">
+                            {item.minutes} minutes ago
+                          </span>
+                        </div>
+                        <span className="text-gray-800 text-sm">
+                          {item.address}
+                        </span>
+                        <div className="flex row gap-2 text-sm py-2">
+                          <span className="flex row gap-2">
+                            <IoBedSharp size={20} /> {item.bed}
+                          </span>
+                          <span className="flex row gap-2">
+                            <FaBath size={16} /> {item.bath}
+                          </span>
+                          <span className="flex row gap-2">
+                            <PiGarageFill size={20} /> {item.garage}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="px-2">
+                        <hr className="border-gray-400" />
+                        <span className="text-gray-500 text-sm pt-2">
+                          {item.des}
+                        </span>
+                      </div>
+                    </CardBody>
+                  </Card>
                 </motion.div>
-              )}
+              </Link>
             </motion.div>
           ))}
         </motion.div>
@@ -659,35 +642,37 @@ export default function AgentsHome() {
               whileHover="hover"
               initial="initial"
             >
-              <motion.div variants={cardVariants}>
-                <Card
-                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full`}
-                >
-                  <CardBody className="overflow-visible pb-2">
-                    <motion.img
-                      alt="Card background"
-                      className="object-cover"
-                      src={Building}
-                      width="100%"
-                      height="100%"
-                      style={{ borderRadius: "15px 15px 0 0" }}
-                    />
+              <Link to="/buyers/property-detail/123">
+                <motion.div variants={cardVariants}>
+                  <Card
+                    className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full`}
+                  >
+                    <CardBody className="overflow-visible pb-2">
+                      <motion.img
+                        alt="Card background"
+                        className="object-cover"
+                        src={Building}
+                        width="100%"
+                        height="100%"
+                        style={{ borderRadius: "15px 15px 0 0" }}
+                      />
 
-                    {/* Rest of card content remains the same */}
-                    <div className="flex flex-col gap-1 px-3 pt-2 px-2">
-                      <h2>{item.title}</h2>
-                      <motion.button
-                        type="submit"
-                        className="flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        View Details
-                      </motion.button>
-                    </div>
-                  </CardBody>
-                </Card>
-              </motion.div>
+                      {/* Rest of card content remains the same */}
+                      <div className="flex flex-col gap-1 px-3 pt-2 px-2">
+                        <h2>{item.title}</h2>
+                        <motion.button
+                          type="submit"
+                          className="flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          View Details
+                        </motion.button>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </motion.div>{" "}
+              </Link>
             </motion.div>
           ))}
         </motion.div>
@@ -811,68 +796,87 @@ export default function AgentsHome() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
         {/* Our Agent Team */}
-       
-          <div className="flex items-center flex-col gap-4 bg-white p-6 rounded-2xl shadow-lg">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-              A1
-            </div>
-            <div className="flex-1">
-              <h4 className="font-bold text-gray-900">Agent 1</h4>
-              <div className="flex items-center gap-2 mt-1">
-                <MdBusiness className="text-gray-600" size={16} />
-                <span className="text-gray-600 text-sm">Broker</span>
-              </div>
-            </div>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-              Contact
-            </button>
+
+        <div className="flex items-center flex-col gap-4 bg-white p-6 rounded-2xl shadow-lg">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            A1
           </div>
-          <div className="flex items-center flex-col gap-4 bg-white p-6 rounded-2xl shadow-lg">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-              A1
+          <div className="flex-1">
+            <h4 className="font-bold text-gray-900">Agent 1</h4>
+            <div className="flex items-center gap-2 mt-1">
+              <MdBusiness className="text-gray-600" size={16} />
+              <span className="text-gray-600 text-sm">Broker</span>
             </div>
-            <div className="flex-1">
-              <h4 className="font-bold text-gray-900">Agent 1</h4>
-              <div className="flex items-center gap-2 mt-1">
-                <MdBusiness className="text-gray-600" size={16} />
-                <span className="text-gray-600 text-sm">Broker</span>
-              </div>
-            </div>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-              Contact
-            </button>
           </div>
-          <div className="flex items-center flex-col gap-4 bg-white p-6 rounded-2xl shadow-lg">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-              A1
-            </div>
-            <div className="flex-1">
-              <h4 className="font-bold text-gray-900">Agent 1</h4>
-              <div className="flex items-center gap-2 mt-1">
-                <MdBusiness className="text-gray-600" size={16} />
-                <span className="text-gray-600 text-sm">Broker</span>
-              </div>
-            </div>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-              Contact
-            </button>
+          <motion.button
+            type="submit"
+            className="w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            View Details
+          </motion.button>
+        </div>
+        <div className="flex items-center flex-col gap-4 bg-white p-6 rounded-2xl shadow-lg">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            A1
           </div>
-          <div className="flex items-center flex-col gap-4 bg-white p-6 rounded-2xl shadow-lg">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-              A1
+          <div className="flex-1">
+            <h4 className="font-bold text-gray-900">Agent 1</h4>
+            <div className="flex items-center gap-2 mt-1">
+              <MdBusiness className="text-gray-600" size={16} />
+              <span className="text-gray-600 text-sm">Broker</span>
             </div>
-            <div className="flex-1">
-              <h4 className="font-bold text-gray-900">Agent 1</h4>
-              <div className="flex items-center gap-2 mt-1">
-                <MdBusiness className="text-gray-600" size={16} />
-                <span className="text-gray-600 text-sm">Broker</span>
-              </div>
-            </div>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-              Contact
-            </button>
           </div>
-       
+          <motion.button
+            type="submit"
+            className="w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            View Details
+          </motion.button>
+        </div>
+        <div className="flex items-center flex-col gap-4 bg-white p-6 rounded-2xl shadow-lg">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            A1
+          </div>
+          <div className="flex-1">
+            <h4 className="font-bold text-gray-900">Agent 1</h4>
+            <div className="flex items-center gap-2 mt-1">
+              <MdBusiness className="text-gray-600" size={16} />
+              <span className="text-gray-600 text-sm">Broker</span>
+            </div>
+          </div>
+          <motion.button
+            type="submit"
+            className=" w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            View Details
+          </motion.button>
+        </div>
+        <div className="flex items-center flex-col gap-4 bg-white p-6 rounded-2xl shadow-lg">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+            A1
+          </div>
+          <div className="flex-1">
+            <h4 className="font-bold text-gray-900">Agent 1</h4>
+            <div className="flex items-center gap-2 mt-1">
+              <MdBusiness className="text-gray-600" size={16} />
+              <span className="text-gray-600 text-sm">Broker</span>
+            </div>
+          </div>
+          <motion.button
+            type="submit"
+            className="w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            View Details
+          </motion.button>
+        </div>
       </div>
 
       {/* Mobile Home Button */}
