@@ -15,7 +15,7 @@ export const decrypt = (cipherText) => {
 export const menuItems = [
   { name: "Map Search", path: "/" },
   { name: "Market Trends", path: "/market-trends" },
-  { name: "Home Valuation", path: "/home-valuation" },
+  { name: "Home Valuation", path: "/" },
   { name: "Agents", path: "/agents" },
 ];
 
