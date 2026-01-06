@@ -403,7 +403,7 @@ export default function Home() {
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Image
+                      <motion.img
                         alt="Card background"
                         className="object-cover"
                         src={Building}
@@ -563,7 +563,7 @@ export default function Home() {
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Image
+                      <motion.img
                         alt="Card background"
                         className="object-cover"
                         src={Building}
@@ -680,7 +680,7 @@ export default function Home() {
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Image
+                      <motion.img
                         alt="Card background"
                         className="object-cover"
                         src={Building}
