@@ -21,7 +21,7 @@ export const menuItems = [
 
 export const accountMenuItems = [
   { name: "Netherlands", abbreviation: "NL" },
-  { name: "Ontario", abbreviation: "ON" },
-  { name: "Alberta", abbreviation: "AB" },
-  { name: "Columbia", abbreviation: "CB" },
+  // { name: "Ontario", abbreviation: "ON" },
+  // { name: "Alberta", abbreviation: "AB" },
+  // { name: "Columbia", abbreviation: "CB" },
 ];

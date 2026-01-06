@@ -102,7 +102,7 @@ export default function BuyerHeader() {
           <div className="flex gap-5 flex-row">
             {menuItems.map((item) => (
               <NavbarItem key={item.name}>
-                <Link className="text-white hover:text-blue-400" to={item.path}>
+                <Link className="text-white hover:text-blue-400" >
                   {item.name}
                 </Link>
               </NavbarItem>

@@ -361,7 +361,7 @@ export default function BuyerHome() {
           <h5>Featured Listing</h5>
           <motion.div whileHover={{ x: 5 }}>
             <Link
-              to="/search"
+              to="/"
               className="text-primary font-semibold hover:underline"
             >
               See All
@@ -523,7 +523,7 @@ export default function BuyerHome() {
           <h5>Just Sold in British Columbia</h5>
           <motion.div whileHover={{ x: 5 }}>
             <Link
-              to="/search"
+              to="/"
               className="text-primary font-semibold hover:underline"
             >
               See All
@@ -623,7 +623,7 @@ export default function BuyerHome() {
           <h5>Nearby</h5>
           <motion.div whileHover={{ x: 5 }}>
             <Link
-              to="/search"
+              to="/"
               className="text-primary font-semibold hover:underline"
             >
               See All

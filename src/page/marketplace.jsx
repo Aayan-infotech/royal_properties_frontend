@@ -34,7 +34,7 @@ export default function Marketplace() {
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-gray-900">Featured Listing</h2>
           <Link
-            to="/search"
+            to="/"
             className="text-blue-600 font-semibold hover:underline"
           >
             See All
