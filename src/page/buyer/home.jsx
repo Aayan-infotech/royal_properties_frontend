@@ -826,6 +826,8 @@ export default function BuyerHome() {
             className="w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+                        onClick={() => navigate("/buyers/agent-detail/agent1")}
+
           >
             View Details
           </motion.button>
@@ -846,6 +848,8 @@ export default function BuyerHome() {
             className=" w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+                        onClick={() => navigate("/buyers/agent-detail/agent1")}
+
           >
             View Details
           </motion.button>
@@ -866,6 +870,8 @@ export default function BuyerHome() {
             className="w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+                        onClick={() => navigate("/buyers/agent-detail/agent1")}
+
           >
             View Details
           </motion.button>
