@@ -47,9 +47,8 @@ export default function Login() {
           navigate(`/${userType}/home`);
         }, 2000);
       }
-    } catch (error) {
-      console.error(error);
-      error(error.response);
+    } catch (err) {
+      error(err?.response?.data?.message);
     } finally {
       setLoading(false);
     }

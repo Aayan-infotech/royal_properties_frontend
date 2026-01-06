@@ -28,13 +28,13 @@ export default function SellerHeader() {
 
   return (
     <Navbar
-      className="bg-[#132141] py-4 px-4 md:px-6"
+      className="bg-[#132141] py-4 lg:px-6 "
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="full"
     >
       {/* Mobile Toggle */}
-      <NavbarContent className="sm:hidden" justify="start">
+      <NavbarContent className="sm:hidden px-2" justify="start">
         <NavbarMenuToggle
           icon={(open) =>
             open ? (

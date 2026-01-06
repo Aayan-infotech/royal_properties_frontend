@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useContext } from "react";
 import {
   MdApartment,
   MdHome,
@@ -12,6 +12,8 @@ import {
   MdRemove,
 } from "react-icons/md";
 import axiosInstance from "../../component/axiosInstance";
+import { useAlert } from "../../hooks/useApiAlert";
+import { AlertContext } from "../../context/alertContext";
 
 const InputField = React.memo(
   ({
@@ -91,6 +93,8 @@ const StepIndicator = React.memo(({ currentStep }) => (
 const PropertyListingForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
+  const { success, error, info, warning } = useContext(AlertContext);
+  const { handleApiError, handleApiSuccess, wrapApiCall } = useAlert();
   const [formData, setFormData] = useState({
     sellerId: "6942a1ebab1f0cb7384e0633",
     property: "test",
@@ -312,11 +316,11 @@ const PropertyListingForm = () => {
       await axiosInstance.post("/properties", formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      
+
       alert("Property submitted successfully!");
-    } catch (error) {
-      console.error("Error creating property:", error);
-      alert("Error submitting property. Please try again.");
+    } catch (err) {
+      console.error("Error creating property:", err);
+      error(err?.response?.data?.message);
     } finally {
       setLoading(false);
     }
@@ -591,7 +595,11 @@ const PropertyListingForm = () => {
                       label="Fireplace"
                       value={formData.details.fireplace}
                       onChange={(e) =>
-                        handleInputChange("fireplace", e.target.value, "details")
+                        handleInputChange(
+                          "fireplace",
+                          e.target.value,
+                          "details"
+                        )
                       }
                       options={fireplaceOptions}
                     />

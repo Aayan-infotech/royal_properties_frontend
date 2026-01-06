@@ -114,9 +114,8 @@ const OTP = () => {
           });
         }, 2000);
       }
-    } catch (error) {
-      console.error("Verification Error:", error);
-      error(error.response?.data?.message || "OTP verification failed");
+    } catch (err) {
+      error(err?.response?.data?.message);
     } finally {
       setLoading(false);
     }
@@ -168,9 +167,8 @@ const OTP = () => {
           inputRefs.current[0].focus();
         }
       }
-    } catch (error) {
-      console.error("Resend Error:", error);
-      error(error.response?.data?.message || "Failed to resend OTP");
+    } catch (err) {
+      error(err?.response?.data?.message);
     } finally {
       setLoading(false);
     }

@@ -93,11 +93,10 @@ export default function ForgotPassword() {
           });
         }, 2000);
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (err) {
       const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
+        err.response?.data?.message ||
+        err.message ||
         "Something went wrong";
       error(errorMessage);
     } finally {

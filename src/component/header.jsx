@@ -20,7 +20,7 @@ export default function Header() {
 
   return (
     <Navbar
-      className="bg-[#132141] py-4 px-4 md:px-6"
+      className="bg-[#132141] py-4 md:px-6"
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="full"
