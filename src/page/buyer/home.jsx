@@ -24,10 +24,11 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import { MdLocationOn, MdPeople, MdBusiness } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 export default function BuyerHome() {
   const [hoveredCard, setHoveredCard] = useState(null);
-
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState("All Locations");
   const [searchQuery, setSearchQuery] = useState("");
@@ -360,10 +361,7 @@ export default function BuyerHome() {
         <motion.div className="flex justify-between" variants={itemVariants}>
           <h5>Featured Listing</h5>
           <motion.div whileHover={{ x: 5 }}>
-            <Link
-              to="/"
-              className="text-primary font-semibold hover:underline"
-            >
+            <Link to="/" className="text-primary font-semibold hover:underline">
               See All
             </Link>
           </motion.div>
@@ -522,10 +520,7 @@ export default function BuyerHome() {
         <motion.div className="flex justify-between" variants={itemVariants}>
           <h5>Just Sold in British Columbia</h5>
           <motion.div whileHover={{ x: 5 }}>
-            <Link
-              to="/"
-              className="text-primary font-semibold hover:underline"
-            >
+            <Link to="/" className="text-primary font-semibold hover:underline">
               See All
             </Link>
           </motion.div>
@@ -622,10 +617,7 @@ export default function BuyerHome() {
         <motion.div className="flex justify-between" variants={itemVariants}>
           <h5>Nearby</h5>
           <motion.div whileHover={{ x: 5 }}>
-            <Link
-              to="/"
-              className="text-primary font-semibold hover:underline"
-            >
+            <Link to="/" className="text-primary font-semibold hover:underline">
               See All
             </Link>
           </motion.div>
@@ -813,6 +805,7 @@ export default function BuyerHome() {
             className="w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => navigate("/buyers/agent-detail/agent1")}
           >
             View Details
           </motion.button>
