@@ -312,7 +312,6 @@ const PropertyListingForm = () => {
       }
 
       // Replace with your actual axios call
-      console.log("Submitting property data...");
       await axiosInstance.post("/properties", formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });

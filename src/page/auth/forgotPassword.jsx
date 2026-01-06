@@ -48,7 +48,6 @@ export default function ForgotPassword() {
         formData
       );
       if (response) {
-        console.log("Full Response:", response.data);
         success(response.data.message);
 
         // Extract the ID based on user type
@@ -82,7 +81,7 @@ export default function ForgotPassword() {
             data.memberId;
         }
 
-        console.log("Extracted ID:", idToPass);
+        // console.log("Extracted ID:", idToPass);
 
         setTimeout(() => {
           navigate(`/${userType}/verify-otp`, {

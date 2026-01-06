@@ -66,7 +66,6 @@ const SignUp = () => {
         formData
       );
       if (response) {
-        console.log(response.data);
         success(response.data.message);
         setTimeout(() => {
           navigate(`/${userType}/verify-otp`, {

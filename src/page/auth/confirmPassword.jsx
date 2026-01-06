@@ -128,9 +128,6 @@ const ConfirmPassword = () => {
 
     try {
       const { endpoint, data } = getApiConfig();
-
-      console.log(`Calling API: ${endpoint}`, data);
-
       const response = await axiosInstance.post(endpoint, data);
 
       if (response?.data) {

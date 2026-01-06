@@ -53,7 +53,6 @@ const alertConfig = {
 // Alert component
 const AlertComponent = ({ alert, onClose }) => {
   const { type, title, message, duration = 500000 } = alert;
-  console.log("alert", alert);
   const config = alertConfig[type];
   const Icon = config.icon;
   const timeoutRef = useRef(null);

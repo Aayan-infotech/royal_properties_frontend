@@ -38,7 +38,6 @@ export default function Login() {
     try {
       const response = await axiosInstance.post(`auth/login`, formData);
       if (response) {
-        console.log(response.data);
         success(response.data.message);
         localStorage.setItem("token", response?.data?.data.accessToken);
         localStorage.setItem("RefreshToken", response?.data?.data.refreshToken);

@@ -100,7 +100,6 @@ const OTP = () => {
       );
 
       if (response) {
-        console.log(response.data);
         success(response.data.message);
         setIsVerified(true);
 
@@ -157,7 +156,6 @@ const OTP = () => {
       );
 
       if (response) {
-        console.log(response.data);
         success(response.data.message);
         setTimer(30);
         setCanResend(false);
