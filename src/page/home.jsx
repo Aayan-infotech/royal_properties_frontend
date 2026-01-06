@@ -180,6 +180,7 @@ export default function Home() {
       "Coquitlam",
       "North Vancouver",
       "Abbotsford",
+      "Abbotsford",
     ],
     Alberta: [
       "Calgary",
@@ -190,6 +191,7 @@ export default function Home() {
       "Grande Prairie",
       "St. Albert",
       "Sherwood Park",
+      "Fort McMurray",
       "Fort McMurray",
     ],
   };
@@ -339,7 +341,7 @@ export default function Home() {
             <br />
             Watch new listings, get notified when they're sold.
           </motion.p>
-          <motion.div className="relative mt-3"  style={{ maxWidth: "400px" }}>
+          <motion.div className="relative mt-3" style={{ maxWidth: "400px" }}>
             <motion.input
               type="text"
               name="text"
@@ -348,13 +350,11 @@ export default function Home() {
               className="max-h-[42px] w-full flex-auto rounded-md bg-white px-3.5 border border-gray-300 py-2 text-base text-black placeholder:text-white-500 focus:outline-indigo-500 sm:text-sm/6 pr-10" // Added pr-10 for padding
               whileFocus={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
-             
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-             <FaSearch color="#837d7dff"/>
+              <FaSearch color="#837d7dff" />
             </div>
           </motion.div>
-        
         </motion.div>
       </motion.div>
 
@@ -492,7 +492,7 @@ export default function Home() {
                     >
                       <hr className="border-gray-400" />
                       <span className="text-gray-500 text-sm pt-2">
-                        {item.des}
+                        1045678, Century 21{" "}
                       </span>
                     </motion.div>
                   </CardBody>
@@ -609,7 +609,7 @@ export default function Home() {
                     <div className="px-2">
                       <hr className="border-gray-400" />
                       <span className="text-gray-500 text-sm pt-2">
-                        {item.des}
+                        1045678, Century 21
                       </span>
                     </div>
                   </CardBody>
@@ -726,7 +726,7 @@ export default function Home() {
                     <div className="px-2">
                       <hr className="border-gray-400" />
                       <span className="text-gray-500 text-sm pt-2">
-                        {item.des}
+                        1045678, Century 21{" "}
                       </span>
                     </div>
                   </CardBody>
