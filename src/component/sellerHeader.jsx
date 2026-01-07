@@ -61,7 +61,7 @@ export default function SellerHeader() {
             <img
               src={Logo}
               alt="Logo"
-              className="h-8 w-auto min-w-[200px] object-contain"
+              className="h-8 w-auto min-w-[150px] md:min-w-[200px] object-contain"
             />
           </Link>
         </NavbarBrand>
@@ -149,7 +149,7 @@ export default function SellerHeader() {
             </MenuItems>
           </Menu>
         </NavbarItem>
-        <NavbarItem>
+        <NavbarItem className="lg:hidden">
           <Link to="/sellers/user-profile">
             <IoPersonOutline className="text-xl text-white" />
           </Link>

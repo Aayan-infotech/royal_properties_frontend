@@ -65,7 +65,7 @@ export default function BuyerHeader() {
             <img
               src={Logo}
               alt="Logo"
-              className="h-8 w-auto min-w-[200px] object-contain"
+               className="h-8 w-auto min-w-[150px] md:min-w-[200px] object-contain"
             />
           </Link>
         </NavbarBrand>
@@ -153,7 +153,7 @@ export default function BuyerHeader() {
             </MenuItems>
           </Menu>
         </NavbarItem>
-        <NavbarItem>
+        <NavbarItem className="lg:hidden">
           <Link to="/buyers/user-profile">
             <IoPersonOutline className="text-xl text-white" />
           </Link>

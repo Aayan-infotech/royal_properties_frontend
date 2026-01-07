@@ -35,7 +35,7 @@ export default function Header() {
             <img
               src={Logo}
               alt="Logo"
-              className="h-8 w-auto min-w-[200px] object-contain cursor-pointer"
+               className="h-8 w-auto min-w-[150px] md:min-w-[200px] object-contain"
             />
           </Link>
         </NavbarBrand>
