@@ -43,7 +43,7 @@ export default function Header() {
 
       {/* Desktop Navigation */}
       <NavbarContent
-        className="hidden sm:flex gap-4 md:gap-6 w-full"
+        className="hidden lg:flex gap-4 md:gap-6 w-full"
         justify="end"
       >
         <div className="flex justify-between w-full items-center">
@@ -142,7 +142,7 @@ export default function Header() {
         </NavbarMenuItem>
       </NavbarMenu>
 
-      <NavbarContent className="sm:hidden" justify="start">
+      <NavbarContent className="lg:hidden order-last" justify="start">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           icon={(isOpen) =>
@@ -206,13 +206,13 @@ export default function Header() {
       </NavbarItem>
 
       {/* Login button for mobile/tablet */}
-      <NavbarItem className="hidden sm:flex lg:hidden">
+      {/* <NavbarItem className="hidden sm:flex lg:hidden">
         <Link to="/role/login">
           <Button className="border border-white rounded-full text-white px-3 py-1.5 hover:bg-white/10 transition text-sm">
             Login
           </Button>
         </Link>
-      </NavbarItem>
+      </NavbarItem> */}
     </Navbar>
   );
 }

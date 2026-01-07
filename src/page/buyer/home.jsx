@@ -280,9 +280,9 @@ export default function BuyerHome() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
       {/* Search and Location Bar */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6 items-center mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-8 gap-4 md:gap-2 items-center mb-4">
         {/* Location Dropdown */}
-        <div className="relative flex-1">
+        <div className="relative flex-1 md:col-span-2 lg:col-span-1">
           <div
             className="flex items-center justify-between bg-white rounded-xl px-4 py-3 cursor-pointer"
             onClick={() =>
@@ -322,7 +322,7 @@ export default function BuyerHome() {
         </div>
 
         {/* Search Box */}
-        <div className="flex-1 relative md:col-span-3">
+        <div className="flex-1 relative md:col-span-4 lg:col-span-3">
           <input
             type="text"
             placeholder="Search properties, areas, or keywords..."
@@ -339,13 +339,13 @@ export default function BuyerHome() {
         </div>
 
         {/* Filter Button */}
-        <div className="md:col-span-1.5">
+        <div className="md:col-span-2 lg:col-span-1.5">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white md:px-2 lg:px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <RiFilter3Line size={20} />
-            <span className="font-medium">Personalize Listing</span>
+            <span className="font-sm lg:font-medium">Personalize Listing</span>
           </button>
         </div>
       </div>
@@ -367,7 +367,7 @@ export default function BuyerHome() {
           </motion.div>
         </motion.div>
         <motion.div
-          className="grid lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           variants={containerVariants}
         >
           {data.map((item, index) => (
@@ -526,7 +526,7 @@ export default function BuyerHome() {
           </motion.div>
         </motion.div>
         <motion.div
-          className="grid lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           variants={containerVariants}
         >
           {data.slice(0, 4).map((item, index) => (
@@ -623,7 +623,7 @@ export default function BuyerHome() {
           </motion.div>
         </motion.div>
         <motion.div
-          className="grid lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           variants={containerVariants}
         >
           {data.slice(0, 4).map((item, index) => (
@@ -786,7 +786,7 @@ export default function BuyerHome() {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
         {/* Our Agent Team */}
 
         <div className="flex items-center flex-col gap-4 bg-white p-6 rounded-2xl shadow-lg">

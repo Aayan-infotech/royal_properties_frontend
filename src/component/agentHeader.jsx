@@ -40,7 +40,7 @@ export default function AgentHeader() {
       maxWidth="full"
     >
       {/* Mobile Toggle */}
-      <NavbarContent className="sm:hidden" justify="start">
+      <NavbarContent className="lg:hidden" justify="start">
         <NavbarMenuToggle
           icon={(open) =>
             open ? (
@@ -70,7 +70,7 @@ export default function AgentHeader() {
 
       {/* Desktop */}
       <NavbarContent
-        className="hidden sm:flex w-full items-center gap-6 justify-end"
+        className="hidden lg:flex w-full items-center gap-6 justify-end"
         justify="end"
       >
         <div className="flex items-center gap-5 justify-between w-full">
@@ -99,7 +99,7 @@ export default function AgentHeader() {
           <div className="flex gap-5 flex-row">
             {menuItems.map((item) => (
               <NavbarItem key={item.name}>
-                <Link className="text-white hover:text-blue-400" >
+                <Link className="text-white hover:text-blue-400">
                   {item.name}
                 </Link>
               </NavbarItem>
@@ -126,24 +126,36 @@ export default function AgentHeader() {
       </NavbarMenu>
 
       {/* Mobile dropdown */}
-      <NavbarItem className="flex sm:hidden border border-white rounded-lg px-2 py-1">
-        <Menu>
-          <MenuButton className="flex items-center text-white">
-            NL <IoChevronDown />
-          </MenuButton>
-          <MenuItems className="absolute mt-2 bg-white rounded-lg shadow-lg w-32 z-50">
-            {accountMenuItems.map((item) => (
-              <MenuItem key={item.name}>
-                {({ active }) => (
-                  <button className="block w-full px-3 py-2 text-sm">
-                    {item.abbreviation}
-                  </button>
-                )}
-              </MenuItem>
-            ))}
-          </MenuItems>
-        </Menu>
-      </NavbarItem>
+      <div className="flex flex-row gap-2 items-center">
+        <NavbarItem className="flex lg:hidden border rounded-lg border-white px-2 py-1">
+          <Menu as="div" className="relative">
+            <MenuButton className="flex items-center gap-1 text-white hover:text-blue-400 transition text-sm focus:outline-none">
+              NL
+              <IoChevronDown className="h-4 w-4" />
+            </MenuButton>
+            <MenuItems className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200 dropdown-headless">
+              {accountMenuItems.map((item) => (
+                <MenuItem key={item.name}>
+                  {({ active }) => (
+                    <button
+                      className={`${
+                        active ? "bg-blue-50 text-blue-600" : "text-gray-700"
+                      } block w-full text-left px-3 py-2 text-sm`}
+                    >
+                      {item.abbreviation}
+                    </button>
+                  )}
+                </MenuItem>
+              ))}
+            </MenuItems>
+          </Menu>
+        </NavbarItem>
+        <NavbarItem>
+          <Link to="/agents/user-profile">
+            <IoPersonOutline className="text-xl text-white" />
+          </Link>
+        </NavbarItem>
+      </div>
     </Navbar>
   );
 }

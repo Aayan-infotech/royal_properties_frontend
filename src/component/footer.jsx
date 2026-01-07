@@ -133,7 +133,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <ul className="text-gray-400 text-sm space-y-2 grid grid-cols-2 lg:grid-cols-1 gap-3">
+            <ul className="text-gray-400 text-sm space-y-2 grid grid-cols-2 md:grid-cols-1 gap-3">
               <li>
                 <a
                   href="#"

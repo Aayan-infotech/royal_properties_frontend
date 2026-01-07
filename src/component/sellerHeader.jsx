@@ -12,7 +12,12 @@ import { Button } from "@headlessui/react";
 import Logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 import { decrypt } from "../utils/constant";
-import { IoPersonOutline, IoMenu, IoClose , IoChevronDown  } from "react-icons/io5";
+import {
+  IoPersonOutline,
+  IoMenu,
+  IoClose,
+  IoChevronDown,
+} from "react-icons/io5";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
 import { menuItems, accountMenuItems } from "../utils/constant";
 export default function SellerHeader() {
@@ -28,13 +33,13 @@ export default function SellerHeader() {
 
   return (
     <Navbar
-      className="bg-[#132141] py-4 lg:px-6 "
+      className="bg-[#132141] py-4 md:px-6"
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="full"
     >
       {/* Mobile Toggle */}
-      <NavbarContent className="sm:hidden px-2" justify="start">
+      <NavbarContent className="lg:hidden" justify="start">
         <NavbarMenuToggle
           icon={(open) =>
             open ? (
@@ -52,7 +57,7 @@ export default function SellerHeader() {
         justify="start"
       >
         <NavbarBrand>
-          <Link to="/buyers/home">
+          <Link to="/sellers/home">
             <img
               src={Logo}
               alt="Logo"
@@ -64,7 +69,7 @@ export default function SellerHeader() {
 
       {/* Desktop */}
       <NavbarContent
-        className="hidden sm:flex w-full items-center gap-6 justify-end"
+        className="hidden lg:flex w-full items-center gap-6 justify-end"
         justify="end"
       >
         <div className="flex items-center gap-5 justify-between w-full">
@@ -120,29 +125,36 @@ export default function SellerHeader() {
       </NavbarMenu>
 
       {/* Mobile dropdown */}
-      <NavbarItem className="flex sm:hidden border rounded-lg border-white px-2 py-1">
-        <Menu as="div" className="relative">
-          <MenuButton className="flex items-center gap-1 text-white hover:text-blue-400 transition text-sm focus:outline-none">
-            NL
-            <IoChevronDown className="h-4 w-4" />
-          </MenuButton>
-          <MenuItems className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200 dropdown-headless">
-            {accountMenuItems.map((item) => (
-              <MenuItem key={item.name}>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active ? "bg-blue-50 text-blue-600" : "text-gray-700"
-                    } block w-full text-left px-3 py-2 text-sm`}
-                  >
-                    {item.abbreviation}
-                  </button>
-                )}
-              </MenuItem>
-            ))}
-          </MenuItems>
-        </Menu>
-      </NavbarItem>
+      <div className="flex flex-row gap-2 items-center">
+        <NavbarItem className="flex lg:hidden border rounded-lg border-white px-2 py-1">
+          <Menu as="div" className="relative">
+            <MenuButton className="flex items-center gap-1 text-white hover:text-blue-400 transition text-sm focus:outline-none">
+              NL
+              <IoChevronDown className="h-4 w-4" />
+            </MenuButton>
+            <MenuItems className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200 dropdown-headless">
+              {accountMenuItems.map((item) => (
+                <MenuItem key={item.name}>
+                  {({ active }) => (
+                    <button
+                      className={`${
+                        active ? "bg-blue-50 text-blue-600" : "text-gray-700"
+                      } block w-full text-left px-3 py-2 text-sm`}
+                    >
+                      {item.abbreviation}
+                    </button>
+                  )}
+                </MenuItem>
+              ))}
+            </MenuItems>
+          </Menu>
+        </NavbarItem>
+        <NavbarItem>
+          <Link to="/sellers/user-profile">
+            <IoPersonOutline className="text-xl text-white" />
+          </Link>
+        </NavbarItem>
+      </div>
     </Navbar>
   );
 }
