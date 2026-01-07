@@ -341,7 +341,10 @@ export default function Home() {
             <br />
             Watch new listings, get notified when they're sold.
           </motion.p>
-          <motion.div className="relative mt-3 w-full" style={{ maxWidth: "400px" }}>
+          <motion.div
+            className="relative mt-3 w-full"
+            style={{ maxWidth: "400px" }}
+          >
             <motion.input
               type="text"
               name="text"
@@ -369,16 +372,13 @@ export default function Home() {
         <motion.div className="flex justify-between" variants={itemVariants}>
           <h5>Featured Listing</h5>
           <motion.div whileHover={{ x: 5 }}>
-            <Link
-              to="/"
-              className="text-primary font-semibold hover:underline"
-            >
+            <Link to="/" className="text-primary font-semibold hover:underline">
               See All
             </Link>
           </motion.div>
         </motion.div>
         <motion.div
-          className="grid lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           variants={containerVariants}
         >
           {data.map((item, index) => (
@@ -531,16 +531,13 @@ export default function Home() {
         <motion.div className="flex justify-between" variants={itemVariants}>
           <h5>Just Sold in British Columbia</h5>
           <motion.div whileHover={{ x: 5 }}>
-            <Link
-              to="/"
-              className="text-primary font-semibold hover:underline"
-            >
+            <Link to="/" className="text-primary font-semibold hover:underline">
               See All
             </Link>
           </motion.div>
         </motion.div>
         <motion.div
-          className="grid lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           variants={containerVariants}
         >
           {data.slice(0, 4).map((item, index) => (
@@ -648,17 +645,13 @@ export default function Home() {
         <motion.div className="flex justify-between" variants={itemVariants}>
           <h5>Just Sold in Alberta</h5>
           <motion.div whileHover={{ x: 5 }}>
-            <Link
-              to="/"
-              className="text-primary font-semibold hover:underline"
-            >
+            <Link to="/" className="text-primary font-semibold hover:underline">
               See All
             </Link>
           </motion.div>
         </motion.div>
         <motion.div
-          className="grid lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full"
-          variants={containerVariants}
+  className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"          variants={containerVariants}
         >
           {data.slice(0, 4).map((item, index) => (
             <motion.div

@@ -69,8 +69,7 @@ button[class*="primary"] {
 
 .heading-sub {
   font-size: 50px;
-  font-weight: 400;
-  font-style: italic;
+  font-weight: 600;
   color: #fff;
 }
 
@@ -116,16 +115,17 @@ button[class*="primary"] {
 
 @media (max-width: 1024px) {
   .heading-outline {
-    font-size: 25px;
+    font-size: 30px;
     font-weight: 700;
     color: transparent;
     -webkit-text-stroke: 1px white;
   }
   .heading-sub {
-    font-size: 20px;
+    font-size: 40px;
     font-weight: 400;
-    font-style: italic;
+    font-style: normal;
     color: #fff;
+    font-weight: 600;
   }
   .dark-bg,
   .dark-bg img {
