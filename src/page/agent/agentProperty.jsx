@@ -1,7 +1,9 @@
-import React from "react";
-import { Fragment } from "react";
-import { Button, Menu, Transition } from "@headlessui/react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../../component/axiosInstance";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@heroui/button";
+import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
+import {motion} from "framer-motion";
 import {
   MdAdd,
   MdFilterList,
@@ -13,12 +15,9 @@ import {
   MdChevronRight,
 } from "react-icons/md";
 import { FaHome, FaChartLine, FaCalendarCheck } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../component/axiosInstance";
-
-const SellerHome = () => {
+export default function AgentProperty() {
   const navigate = useNavigate();
-  const [data, setData] = React.useState([]);
+  const [data, setData] = useState([]);
   const [pagination, setPagination] = React.useState({
     total: 0,
     page: 1,
@@ -27,26 +26,15 @@ const SellerHome = () => {
   });
   const [loading, setLoading] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
-
-  const handleFetchProperties = async (page = 1) => {
-    setLoading(true);
+  const handleResponse = async (page = 1) => {
     try {
-      const response = await axiosInstance.get(
-        `/properties/my-properties?page=${page}&limit=10`
-      );
+      const response = await axiosInstance.get(`/properties/AgentProperties`);
       setData(response.data.data.data);
-      setPagination(response.data.data.pagination);
-      setCurrentPage(page);
     } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+      console.log(error);
     }
   };
 
-  React.useEffect(() => {
-    handleFetchProperties(1);
-  }, []);
 
   const handleAddProperty = () => {
     navigate("/sellers/property-listing");
@@ -54,16 +42,15 @@ const SellerHome = () => {
 
   const handleViewDetails = (propertyId) => {
     // You can replace this with your navigation logic
-    navigate(`/sellers/property/${propertyId}`);
+    navigate(`/agents/property-detail/${propertyId}`);
   };
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= pagination.totalPages) {
-      handleFetchProperties(page);
+      handleResponse(page);
     }
   };
 
-  // Format price to currency
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -102,16 +89,11 @@ const SellerHome = () => {
     return "Inactive • Not available";
   };
 
+  useEffect(() => {
+    handleResponse(1);
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
-      <div className="flex justify-end">
-        <Button
-          onClick={handleAddProperty}
-          className="mb-6 inline-flex items-center px-6 py-3 bg-[#132141] text-white font-semibold rounded-lg transition-colors duration-200"
-        >
-          Add New Property
-        </Button>
-      </div>
 
       {/* Loading State */}
       {loading ? (
@@ -121,7 +103,7 @@ const SellerHome = () => {
       ) : (
         <>
           {/* Properties Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {data.map((property, index) => (
               <motion.div
                 key={property._id}
@@ -240,65 +222,64 @@ const SellerHome = () => {
               className="flex items-center justify-center mt-8 gap-2 flex-col"
             >
               <div className="flex items-center gap-2">
-                 <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`flex items-center justify-center w-10 h-10 rounded-lg ${
-                  currentPage === 1
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
-                }`}
-              >
-                <MdChevronLeft className="w-5 h-5" />
-              </button>
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`flex items-center justify-center w-10 h-10 rounded-lg ${
+                    currentPage === 1
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
+                  }`}
+                >
+                  <MdChevronLeft className="w-5 h-5" />
+                </button>
 
-              {[...Array(pagination.totalPages)].map((_, index) => {
-                const page = index + 1;
-                // Show first page, last page, current page, and pages around current page
-                if (
-                  page === 1 ||
-                  page === pagination.totalPages ||
-                  (page >= currentPage - 1 && page <= currentPage + 1)
-                ) {
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`flex items-center justify-center w-10 h-10 rounded-lg font-medium ${
-                        currentPage === page
-                          ? "bg-[#132141] text-white shadow-md"
-                          : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  );
-                } else if (
-                  page === currentPage - 2 ||
-                  page === currentPage + 2
-                ) {
-                  return (
-                    <span key={page} className="text-gray-400">
-                      ...
-                    </span>
-                  );
-                }
-                return null;
-              })}
+                {[...Array(pagination.totalPages)].map((_, index) => {
+                  const page = index + 1;
+                  // Show first page, last page, current page, and pages around current page
+                  if (
+                    page === 1 ||
+                    page === pagination.totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`flex items-center justify-center w-10 h-10 rounded-lg font-medium ${
+                          currentPage === page
+                            ? "bg-[#132141] text-white shadow-md"
+                            : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  } else if (
+                    page === currentPage - 2 ||
+                    page === currentPage + 2
+                  ) {
+                    return (
+                      <span key={page} className="text-gray-400">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
 
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === pagination.totalPages}
-                className={`flex items-center justify-center w-10 h-10 rounded-lg ${
-                  currentPage === pagination.totalPages
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
-                }`}
-              >
-                <MdChevronRight className="w-5 h-5" />
-              </button>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === pagination.totalPages}
+                  className={`flex items-center justify-center w-10 h-10 rounded-lg ${
+                    currentPage === pagination.totalPages
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
+                  }`}
+                >
+                  <MdChevronRight className="w-5 h-5" />
+                </button>
               </div>
-             
 
               <div className="ml-4 text-sm text-gray-600">
                 Showing {(currentPage - 1) * pagination.limit + 1} -{" "}
@@ -324,19 +305,10 @@ const SellerHome = () => {
               <p className="text-gray-500 mb-6">
                 Add your first property to get started
               </p>
-              <button
-                onClick={handleAddProperty}
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200"
-              >
-                <MdAdd className="w-5 h-5 mr-2" />
-                Add First Property
-              </button>
             </motion.div>
           )}
         </>
       )}
     </div>
   );
-};
-
-export default SellerHome;
+}

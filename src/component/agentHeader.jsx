@@ -25,11 +25,11 @@ export default function AgentHeader() {
   const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
 
   const menuItems = [
-    { name: "Client management", path: "/" },
-    { name: "Appointments", path: "/" },
-    { name: "Property Listing", path: "/" },
-    { name: "Map View", path: "/" },
-    { name: "Reports", path: "/" },
+    { name: "Client management", path: "/home" },
+    { name: "Appointments", path: "/home" },
+    { name: "Property Listing", path: "/agent-property" },
+    { name: "Map View", path: "/home" },
+    { name: "Reports", path: "/home" },
   ];
 
   return (
@@ -99,7 +99,7 @@ export default function AgentHeader() {
           <div className="flex gap-5 flex-row">
             {menuItems.map((item) => (
               <NavbarItem key={item.name}>
-                <Link className="text-white hover:text-blue-400">
+                <Link className="text-white hover:text-blue-400" to={`/${decryptedUserType}/${item.path}`}>
                   {item.name}
                 </Link>
               </NavbarItem>
@@ -118,7 +118,10 @@ export default function AgentHeader() {
       <NavbarMenu className="bg-[#132141] pt-8">
         {menuItems.map((item) => (
           <NavbarMenuItem key={item.name}>
-            <Link className="block text-white py-4 px-4" to={item.path}>
+            <Link
+              className="block text-white py-4 px-4"
+              to={`/${decryptedUserType}/${item.path}`}
+            >
               {item.name}
             </Link>
           </NavbarMenuItem>

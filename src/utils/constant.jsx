@@ -12,10 +12,14 @@ export const decrypt = (cipherText) => {
   return bytes.toString(CryptoJS.enc.Utf8);
 };
 
+export const userType = decrypt(localStorage.getItem("userRole") || "");
+
+
+
 export const menuItems = [
-  { name: "Map Search", path: "/" },
+  { name: "Map Search", path: "/map" },
   { name: "Market Trends", path: "/market-trends" },
-  { name: "Home Valuation", path: "/" },
+  { name: "Home Valuation", path: "/home-valuation" },
   { name: "Agents", path: "/agents" },
 ];
 

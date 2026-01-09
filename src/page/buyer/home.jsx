@@ -7,7 +7,6 @@ import {
   FiCheck,
 } from "react-icons/fi";
 import { RiFilter3Line } from "react-icons/ri";
-import data from "../../data/home.json";
 import Building from "../../assets/building.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -25,9 +24,11 @@ import {
 } from "react-icons/fi";
 import { MdLocationOn, MdPeople, MdBusiness } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../component/axiosInstance";
 
 export default function BuyerHome() {
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [data, setData] = useState([]);
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState("All Locations");
@@ -45,6 +46,13 @@ export default function BuyerHome() {
     "GTA-Central": {},
     "GTA-North": {},
   });
+  const [pagination, setPagination] = React.useState({
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 1,
+  });
+  const [currentPage, setCurrentPage] = React.useState(1);
 
   // Location options for dropdown
   const locationOptions = [
@@ -277,52 +285,42 @@ export default function BuyerHome() {
     },
   ];
 
+  const getData = async (page) => {
+    try {
+      const response = await axiosInstance.get(
+        `/properties?page=${page}&limit=10`
+      );
+      setData(response.data.data.data);
+      setPagination(response.data.data.pagination);
+      setCurrentPage(page);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= pagination.totalPages) {
+      getData(page);
+    }
+  };
+
+  React.useEffect(() => {
+    getData(1);
+  }, []);
+
+  const handlePropertyClick = (property) => {
+    console.log("button clicking" , property);
+    navigate(`/buyers/property-detail/${property._id}`, { state: { property } });
+    // navigate(`/buyers/property-detail/${property.id}`, { state: { property } });
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
       {/* Search and Location Bar */}
       <div className="grid grid-cols-1 md:grid-cols-8 gap-4 md:gap-2 items-center mb-4">
         {/* Location Dropdown */}
-        <div className="relative flex-1 md:col-span-2 lg:col-span-1">
-          <div
-            className="flex items-center justify-between bg-white rounded-xl px-4 py-3 cursor-pointer"
-            onClick={() =>
-              document
-                .getElementById("location-dropdown")
-                .classList.toggle("hidden")
-            }
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-gray-800 font-medium">
-                {selectedLocation}
-              </span>
-            </div>
-            <FiChevronDown className="text-gray-600" />
-          </div>
-
-          {/* Dropdown Menu */}
-          <div
-            id="location-dropdown"
-            className="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto"
-          >
-            {locationOptions.map((location, index) => (
-              <div
-                key={index}
-                className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                onClick={() => {
-                  setSelectedLocation(location);
-                  document
-                    .getElementById("location-dropdown")
-                    .classList.add("hidden");
-                }}
-              >
-                {location}
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* Search Box */}
-        <div className="flex-1 relative md:col-span-4 lg:col-span-3">
+        <div className="flex-1 relative md:col-span-4 lg:col-span-5">
           <input
             type="text"
             placeholder="Search properties, areas, or keywords..."
@@ -339,13 +337,51 @@ export default function BuyerHome() {
         </div>
 
         {/* Filter Button */}
-        <div className="md:col-span-2 lg:col-span-1.5">
+        <div className="md:col-span-2 lg:col-span-3 flex justify-end flex-row gap-3">
+          <div className="relative w-full">
+            <div
+              className="flex items-center justify-between bg-white rounded-xl px-4 py-3 cursor-pointer"
+              onClick={() =>
+                document
+                  .getElementById("location-dropdown")
+                  .classList.toggle("hidden")
+              }
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-gray-800 font-medium">
+                  {selectedLocation}
+                </span>
+              </div>
+              <FiChevronDown className="text-gray-600" />
+            </div>
+
+            {/* Dropdown Menu */}
+            <div
+              id="location-dropdown"
+              className="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto"
+            >
+              {locationOptions.map((location, index) => (
+                <div
+                  key={index}
+                  className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                  onClick={() => {
+                    setSelectedLocation(location);
+                    document
+                      .getElementById("location-dropdown")
+                      .classList.add("hidden");
+                  }}
+                >
+                  {location}
+                </div>
+              ))}
+            </div>
+          </div>
           <button
             onClick={() => setSidebarOpen(true)}
-            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white md:px-2 lg:px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="w-full flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white md:px-2 lg:px-6 lg:py-2 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <RiFilter3Line size={20} />
-            <span className="font-sm lg:font-medium">Personalize Listing</span>
+            <span className="font-sm">Personalize Listing</span>
           </button>
         </div>
       </div>
@@ -382,11 +418,12 @@ export default function BuyerHome() {
             >
               <motion.div variants={cardVariants} style={{ originY: 0 }}>
                 <Card
-                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full
-                   
-                     `}
+                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full cursor-pointer`}
                 >
-                  <CardBody className="overflow-visible pb-2">
+                  <CardBody
+                    className="overflow-visible pb-2"
+                    onClick={() => handlePropertyClick(item)}
+                  >
                     <motion.div
                       className="relative"
                       whileHover={{ scale: 1.05 }}
@@ -826,8 +863,7 @@ export default function BuyerHome() {
             className="w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-                        onClick={() => navigate("/buyers/agent-detail/agent1")}
-
+            onClick={() => navigate("/buyers/agent-detail/agent1")}
           >
             View Details
           </motion.button>
@@ -848,8 +884,7 @@ export default function BuyerHome() {
             className=" w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-                        onClick={() => navigate("/buyers/agent-detail/agent1")}
-
+            onClick={() => navigate("/buyers/agent-detail/agent1")}
           >
             View Details
           </motion.button>
@@ -870,8 +905,7 @@ export default function BuyerHome() {
             className="w-full flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-                        onClick={() => navigate("/buyers/agent-detail/agent1")}
-
+            onClick={() => navigate("/buyers/agent-detail/agent1")}
           >
             View Details
           </motion.button>

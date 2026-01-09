@@ -1,6 +1,15 @@
-import React from "react";
+import React , {useState , useEffect} from "react";
+import axiosInstance from "../../component/axiosInstance";
 
 export default function AgentHome() {
+
+const [data , setData ] = useState([]);
+
+useEffect(() => {
+  axiosInstance.get("/enquiries/agent").then((res) => {
+    setData(res.data.data.data);
+  });
+}, []);
   return (
     <div>
       <div className="min-h-screen bg-black text-white">

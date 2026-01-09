@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Tab } from "@headlessui/react";
 import {
   FaUser,
@@ -19,6 +19,9 @@ import {
   FaChevronUp,
   FaPaperPlane,
 } from "react-icons/fa";
+import axiosInstance from "./axiosInstance";
+import { decrypt , userType } from "../utils/constant";
+import { AlertContext } from "../context/alertContext";
 
 // Component for Logout Modal
 const LogoutModal = ({ isOpen, onClose, onConfirm }) => {
@@ -118,14 +121,12 @@ const FAQSubmissionForm = ({ onSubmit }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     onSubmit(formData);
     setIsSubmitting(false);
     setIsSubmitted(true);
 
-    // Reset form after 2 seconds
     setTimeout(() => {
       setFormData({
         name: "",
@@ -293,7 +294,7 @@ const FAQSubmissionForm = ({ onSubmit }) => {
   );
 };
 
-// Property Card Component (unchanged from previous)
+// Property Card Component
 const PropertyCard = ({ property, type = "watched" }) => {
   const [isLiked, setIsLiked] = useState(false);
 
@@ -356,23 +357,14 @@ const PropertyCard = ({ property, type = "watched" }) => {
   );
 };
 
-// Edit Profile Component (unchanged from previous)
-const EditProfile = () => {
-  const [profile, setProfile] = useState({
-    photo: "https://via.placeholder.com/150",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567",
-    address: "123 Main Street",
-    city: "New York",
-  });
-
+// Edit Profile Component (Fixed as proper component)
+const EditProfile = ({ profile, setProfile, onSave }) => {
   const handleChange = (e) => {
-    setProfile({
-      ...profile,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setProfile(prev => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handlePhotoUpload = (e) => {
@@ -380,10 +372,10 @@ const EditProfile = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfile({
-          ...profile,
+        setProfile(prev => ({
+          ...prev,
           photo: reader.result,
-        });
+        }));
       };
       reader.readAsDataURL(file);
     }
@@ -394,7 +386,7 @@ const EditProfile = () => {
       <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
         <div className="relative">
           <img
-            src={profile.photo}
+            src={profile?.photo || "https://via.placeholder.com/150"}
             alt="Profile"
             className="w-32 h-32 rounded-full object-cover border-4 border-white shadow"
           />
@@ -417,24 +409,12 @@ const EditProfile = () => {
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              First Name
+              Name
             </label>
             <input
               type="text"
-              name="firstName"
-              value={profile.firstName}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Last Name
-            </label>
-            <input
-              type="text"
-              name="lastName"
-              value={profile.lastName}
+              name="name"
+              value={profile?.name || ""}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -446,7 +426,7 @@ const EditProfile = () => {
             <input
               type="email"
               name="email"
-              value={profile.email}
+              value={profile?.email || ""}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -458,19 +438,7 @@ const EditProfile = () => {
             <input
               type="tel"
               name="phone"
-              value={profile.phone}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Address
-            </label>
-            <input
-              type="text"
-              name="address"
-              value={profile.address}
+              value={profile?.phone || ""}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -482,7 +450,19 @@ const EditProfile = () => {
             <input
               type="text"
               name="city"
-              value={profile.city}
+              value={profile?.city || ""}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Address
+            </label>
+            <input
+              type="text"
+              name="address"
+              value={profile?.address || ""}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -490,7 +470,10 @@ const EditProfile = () => {
         </div>
       </div>
       <div className="flex justify-end">
-        <button className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+        <button
+          onClick={onSave}
+          className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+        >
           Save Changes
         </button>
       </div>
@@ -504,6 +487,60 @@ const UserProfileDashboard = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [openFAQIndex, setOpenFAQIndex] = useState(0);
   const [userQuestions, setUserQuestions] = useState([]);
+  const {success , error} = useContext(AlertContext);
+  const [profile, setProfile] = useState({
+    photo: "https://via.placeholder.com/150",
+    name: "",
+    email: "",
+    phone: "",
+    city: "",
+    address: "",
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Mock functions to replace axiosInstance and AlertContext
+  const mockFetchProfile = async () => {
+    // Simulate API call
+    const response = await axiosInstance.get(`/${userType}/me/profile`)
+    return response
+  };
+
+  const mockUpdateProfile = async (profileData) => {
+    // Simulate API call
+   const response = await axiosInstance.put(`/${userType}/me/profile`)
+    return response
+  };
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await mockFetchProfile();
+        if (response) {
+          setProfile(response?.data?.data);
+          console.log("Profile Data:", response?.data);
+        }
+      } catch (err) {
+        console.error("Error fetching profile data:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProfileData();
+  }, []);
+
+  const handleSaveProfile = async () => {
+    try {
+      const response = await mockUpdateProfile(profile);
+      if (response?.data?.message) {
+        console.log(response.data.message);
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Error updating profile");
+    }
+  };
 
   const tabItems = [
     { id: 0, name: "Edit Profile", icon: <FaUser /> },
@@ -516,7 +553,6 @@ const UserProfileDashboard = () => {
     { id: 7, name: "FAQ", icon: <FaQuestionCircle /> },
   ];
 
-  // Initial FAQ data
   const [faqItems, setFaqItems] = useState([
     {
       id: 1,
@@ -566,7 +602,7 @@ const UserProfileDashboard = () => {
       userName: newQuestion.name,
     };
 
-    setUserQuestions([...userQuestions, newFaq]);
+    setUserQuestions(prev => [...prev, newFaq]);
   };
 
   const handleFAQToggle = (index) => {
@@ -578,7 +614,6 @@ const UserProfileDashboard = () => {
 
     return (
       <div className="space-y-8">
-        {/* FAQ List */}
         <div>
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Frequently Asked Questions
@@ -599,7 +634,6 @@ const UserProfileDashboard = () => {
     );
   };
 
-  // Mock data for other tabs (unchanged from previous)
   const watchedProperties = [
     {
       id: 1,
@@ -620,7 +654,7 @@ const UserProfileDashboard = () => {
       bedrooms: 4,
       bathrooms: 3,
       image:
-        "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w-400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop",
       status: "For Sale",
     },
   ];
@@ -650,27 +684,18 @@ const UserProfileDashboard = () => {
     },
   ];
 
-  const submittedEnquiries = [
-    {
-      id: 1,
-      fullName: "John Smith",
-      email: "john.smith@example.com",
-      phone: "+1 (555) 987-6543",
-      message: "I'm interested in viewing the property next week.",
-    },
-    {
-      id: 2,
-      fullName: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      phone: "+1 (555) 456-7890",
-      message: "Could you provide more details about the parking situation?",
-    },
-  ];
-
   const renderTabContent = () => {
+    if (isLoading && selectedTab === 0) {
+      return (
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      );
+    }
+
     switch (selectedTab) {
       case 0:
-        return <EditProfile />;
+        return <EditProfile profile={profile} setProfile={setProfile} onSave={handleSaveProfile} />;
       case 1:
         return (
           <div className="space-y-4">
@@ -770,7 +795,6 @@ const UserProfileDashboard = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Navigation */}
           <div className="lg:w-1/4">
             <div className="bg-white rounded-lg shadow p-4">
               <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
@@ -779,10 +803,9 @@ const UserProfileDashboard = () => {
                     <Tab
                       key={item.id}
                       className={({ selected }) =>
-                        `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                          selected
-                            ? "bg-blue-50 text-blue-600 border-l-4 border-blue-600"
-                            : "text-gray-700 hover:bg-gray-100"
+                        `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${selected
+                          ? "bg-blue-50 text-blue-600 border-l-4 border-blue-600"
+                          : "text-gray-700 hover:bg-gray-100"
                         }`
                       }
                     >
@@ -803,7 +826,6 @@ const UserProfileDashboard = () => {
             </div>
           </div>
 
-          {/* Main Content */}
           <div className="lg:w-3/4">
             <div className="bg-white rounded-lg shadow p-6">
               <div className="mb-6">
@@ -826,8 +848,9 @@ const UserProfileDashboard = () => {
         onClose={() => setIsLogoutModalOpen(false)}
         onConfirm={() => {
           setIsLogoutModalOpen(false);
-          localStorage.clear();
-            window.location.href = "/role/login";
+          // Mock logout - replace with actual logic
+          console.log("User logged out");
+          alert("Logged out successfully!");
         }}
       />
     </div>

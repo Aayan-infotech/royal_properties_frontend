@@ -2,11 +2,19 @@ import { useState } from "react";
 import ReactImageMagnify from "react-image-magnify";
 import { IoMdClose } from "react-icons/io";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import {
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Fieldset,
+} from "@headlessui/react";
 import { IoBedSharp } from "react-icons/io5";
 import { FaBath } from "react-icons/fa";
 import { CiLock } from "react-icons/ci";
 import { PiGarageFill } from "react-icons/pi";
+import { CiShare1 } from "react-icons/ci";
 import {
   FaTag,
   FaCalendarAlt,
@@ -17,13 +25,33 @@ import {
 } from "react-icons/fa";
 import { IoMdInformationCircle } from "react-icons/io";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { useLocation, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import axiosInstance from "../component/axiosInstance";
+
 export default function PropertyDetail() {
+  const [openEnquiry, setOpenEnquiry] = useState(false);
+
   const [selectedImage, setSelectedImage] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [selectedTab, setSelectedTab] = useState(0);
   const [activeDescTab, setActiveDescTab] = useState("original");
   const [showMore, setShowMore] = useState(false);
+  const location = useLocation();
+  const [propertyData, setPropertyData] = useState(location?.state?.property);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [agentForm, setAgentForm] = useState({
+    name: "",
+    enquiry: "General Inquiry",
+    email: "",
+    phone: "",
+    message: "",
+  });
+  const [selectedAgent, setSelectedAgent] = useState(null);
+
+  console.log("Location state:", location.state);
   // Sample images - replace with your actual images
   const images = [
     {
@@ -53,17 +81,6 @@ export default function PropertyDetail() {
       alt: "Modern interior",
     },
   ];
-
-  const propertyData = {
-    address: "1525 Errigal Place",
-    location: "West Vancouver - Canterbury WV",
-    type: "Single Family Residence",
-    price: "$ 7,788,000",
-    addedDate: "Added 1 day ago",
-    bedrooms: 6,
-    bathrooms: 7,
-    garages: 3,
-  };
 
   const listingHistory = [
     {
@@ -166,11 +183,185 @@ export default function PropertyDetail() {
     },
   ];
 
+  const EnquiryModal = ({ open, onClose, agentId }) => {
+    const [localForm, setLocalForm] = useState({
+      name: "",
+      enquiry: "General Inquiry",
+      email: "",
+      phone: "",
+      message: "",
+      agentId: agentId,
+      propertyId: propertyData?._id,
+    });
+
+    const [localLoading, setLocalLoading] = useState(false);
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setLocalLoading(true);
+      console.log("Form submitted:", localForm, agentId);
+      try {
+        const response = await axiosInstance.post("/enquiries", {
+          propertyId: propertyData?._id,
+          agentId: agentId,
+          name: localForm?.name,
+          enquiry: localForm?.enquiry,
+          email: localForm?.email,
+          phoneNumber: localForm?.phone,
+          message: localForm?.message,
+        });
+
+        if (response.status === 200 || response.status === 201) {
+          console.log("Enquiry sent successfully:", response.data);
+          setLocalForm({
+            name: "",
+            enquiry: "General Inquiry",
+            email: "",
+            phone: "",
+            message: "",
+          });
+          onClose();
+          alert("Enquiry sent successfully!");
+        }
+      } catch (error) {
+        console.error("Error sending enquiry:", error);
+        alert("Failed to send enquiry. Please try again.");
+      } finally {
+        setLocalLoading(false);
+      }
+    };
+
+    if (!open) return null;
+
+    return (
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center overflow-y-auto">
+        {/* Backdrop */}
+        <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+
+        {/* Modal */}
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          className="relative bg-white w-full sm:max-w-[800px] rounded-t-2xl sm:rounded-2xl p-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-800">Send Enquiry</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-400 text-2xl hover:text-gray-600"
+            >
+              ×
+            </button>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            <div className="grid lg:grid-cols-2 gap-3">
+              <div className="mb-2">
+                <label className="text-sm font-medium">Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter your full name"
+                  name="name"
+                  onChange={(e) =>
+                    setLocalForm({ ...localForm, name: e.target.value })
+                  }
+                  value={localForm.name}
+                  className="w-full mt-2 border rounded-lg px-3 py-2 outline-none border-gray-500"
+                />
+              </div>
+
+              <div className="mb-2">
+                <label className="text-sm font-medium">Enquiry Type</label>
+                <select
+                  className="w-full mt-2 border border-gray-500 rounded-lg px-3 py-2 outline-none"
+                  name="enquiry"
+                  value={localForm.enquiry}
+                  onChange={(e) =>
+                    setLocalForm({ ...localForm, enquiry: e.target.value })
+                  }
+                >
+                  {[
+                    "General Inquiry",
+                    "Schedule Viewing",
+                    "Price Information",
+                    "Request Callback",
+                  ].map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Email */}
+              <div className="mb-2">
+                <label className="text-sm font-medium">Email Address</label>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full mt-2 border rounded-lg px-3 py-2 outline-none border-gray-500"
+                  name="email"
+                  onChange={(e) =>
+                    setLocalForm({ ...localForm, email: e.target.value })
+                  }
+                  value={localForm.email}
+                />
+              </div>
+
+              {/* Phone */}
+              <div className="mb-2">
+                <label className="text-sm font-medium">Phone Number</label>
+                <input
+                  type="tel"
+                  placeholder="Enter your phone number"
+                  className="w-full mt-2 border rounded-lg px-3 py-2 outline-none border-gray-500"
+                  name="phone"
+                  onChange={(e) =>
+                    setLocalForm({ ...localForm, phone: e.target.value })
+                  }
+                  value={localForm.phone}
+                />
+              </div>
+
+              {/* Message */}
+              <div className="mb-4 col-span-2">
+                <label className="text-sm font-medium">Message</label>
+                <textarea
+                  rows="4"
+                  placeholder="Write your message here..."
+                  className="w-full mt-2 border rounded-lg px-3 py-2 outline-none resize-none border-gray-500"
+                  name="message"
+                  onChange={(e) =>
+                    setLocalForm({ ...localForm, message: e.target.value })
+                  }
+                  value={localForm.message}
+                />
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              className="w-full bg-[#3b5c9c] text-white py-3 rounded-lg font-semibold hover:bg-[#2d4a7a] disabled:bg-gray-400 disabled:cursor-not-allowed"
+              disabled={localLoading}
+            >
+              {localLoading ? "Sending..." : "Send Enquiry"}
+            </button>
+          </form>
+        </motion.div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Navigation Tabs */}
-        <div className="bg-white mb-4">
+        {/* <div className="bg-white mb-4">
           <div className="flex justify-between items-end w-full">
             <div className="flex space-x-8 px-6">
               {[
@@ -243,15 +434,15 @@ export default function PropertyDetail() {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Image Gallery Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 h-[600px]">
           {/* Main Large Image */}
           <div className="md:col-span-2 md:row-span-2 relative group cursor-pointer overflow-hidden rounded-lg">
             <img
-              src={images[0].src}
-              alt={images[0].alt}
+              src={propertyData?.photos[0].url}
+              alt="property image"
               className="w-full h-full object-cover"
               onClick={() => {
                 setModalImageIndex(0);
@@ -268,9 +459,9 @@ export default function PropertyDetail() {
 
           {/* Right Side Images */}
           <div className="md:col-span-2 grid grid-cols-2 gap-2">
-            {images.slice(1, 5).map((img, idx) => (
+            {propertyData?.photos.slice(1, 5).map((img, idx) => (
               <div
-                key={img.id}
+                key={img._id}
                 className="relative group cursor-pointer overflow-hidden rounded-lg h-[295px]"
                 onClick={() => {
                   setModalImageIndex(idx + 1);
@@ -278,8 +469,8 @@ export default function PropertyDetail() {
                 }}
               >
                 <img
-                  src={img.src}
-                  alt={img.alt}
+                  src={img?.url}
+                  alt="other images"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 {idx === 3 && (
@@ -306,49 +497,57 @@ export default function PropertyDetail() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left Section - Property Details */}
               <div className="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
-                <div className="flex justify-between border-b  border-gray-200">
+                <div className="flex justify-between flex-wrap lg:flex-nowrap border-b  border-gray-200">
                   <div className=" pb-4">
                     <h1 className="text-xl font-semibold text-gray-900 mb-1">
-                      {propertyData.address}
+                      {propertyData?.address}
                     </h1>
                     <p className="text-gray-600 mb-2 text-md">
-                      {propertyData.location}
+                      West Vancouver - Canterbury WV
                     </p>
-                    <p className="text-sm text-gray-500">{propertyData.type}</p>
+                    <p className="text-sm text-gray-500">
+                      Single Family Residence
+                    </p>
                   </div>
                   <div className="pb-4">
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <p className="text-sm text-gray-600">Listed for</p>
                         <p className="text-2xl font-bold text-gray-900">
-                          {propertyData.price}
+                          ${propertyData?.price}
                         </p>
                       </div>
                     </div>
                     <p className="text-xs text-gray-500">
-                      {propertyData.addedDate}
+                      {new Date(propertyData?.createdAt).toUTCString()}
                     </p>
                   </div>
                 </div>
 
                 {/* Property Features */}
-                <div className="flex justify-between items-center gap-8 mb-6 mt-4">
-                  <div className="flex items-center gap-2">
+                <div className="flex justify-between items-center gap-8 mb-6 mt-4 flex-wrap lg:flex-nowrap">
+                  <div className="flex  items-center gap-2">
                     <IoBedSharp size={30} />
                     <span className="text-gray-700">
-                      {propertyData.bedrooms} Bedrooms
+                      {propertyData?.details?.bedrooms} Bedrooms
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <FaBath size={30} />
                     <span className="text-gray-700">
-                      {propertyData.bathrooms} Bathrooms
+                      {propertyData?.details?.halfBathrooms} half Bathrooms
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <PiGarageFill size={30} />
+                    <FaBath size={30} />
                     <span className="text-gray-700">
-                      {propertyData.garages} Garage
+                      {propertyData?.details?.fullBathrooms} full Bathrooms
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <IoBedSharp size={30} />
+                    <span className="text-gray-700">
+                      {propertyData?.details?.additionalRooms} Additional Rooms
                     </span>
                   </div>
                 </div>
@@ -675,7 +874,6 @@ export default function PropertyDetail() {
                             >
                               Summary (AI)
                             </button>
-                          
                           </div>
                         </div>
 
@@ -777,10 +975,10 @@ export default function PropertyDetail() {
 
               {/* Right Section - Schedule Viewing Form */}
               <div className="lg:col-span-1">
-                <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+                <div className="bg-white rounded-lg shadow-sm p-6 px-3 ">
                   <div className="mb-4">
                     <h3 className="text-lg font-semibold text-gray-500 py-2 ">
-                      Schedule Viewing
+                      Property Agent
                     </h3>
                     <div>
                       <p className="text-xs text-gray-700">
@@ -788,8 +986,58 @@ export default function PropertyDetail() {
                       </p>
                     </div>
                   </div>
+                  <div className="grid lg:grid-cols-2 gap-3">
+                    {propertyData?.agentIds?.map((agentId) => (
+                      <div
+                        key={agentId?._id}
+                        className=" border border-gray-300 rounded-lg mb-4"
+                      >
+                        <div className="flex items-center items-center">
+                          <div className="flex flex-col items-center w-full">
+                            <img
+                              src={
+                                agentId?.agentImage ||
+                                "https://imgs.search.brave.com/Ra2YlxZk0tKBLBaMqBBnBfWFCoLbtTRp1bJs36rHAv4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzM2LzEy/LzY0LzM2MTI2NGM3/M2U2OWViNmQyMDRl/MjFiZjlkMTYxNGM4/LmpwZw"
+                              }
+                              alt="Agent"
+                              className="w-30 lg:w-full h-35 object-cover"
+                            />
+                            <p className="text-lg font-semibold text-gray-600">
+                              {agentId?.fullName?.toUpperCase(" ")}
+                            </p>
+                            <div>
+                              {/* <p className="text-xs text-gray-600">
+                              {agentTitle}
+                            </p> */}
+                              <div className="flex gap-2 flex-col items-center px-1 pb-3">
+                                {" "}
+                                <button
+                                  type="button"
+                                  className="px-4 py-2 text-sm text-white rounded-md bg-[#132141] hover:bg-indigo-400"
+                                  onClick={(e) => {
+                                    e.preventDefault();
 
-                  <form className="space-y-4">
+                                    setSelectedAgent(agentId?._id);
+                                    setOpenEnquiry(true);
+                                  }}
+                                >
+                                  Schedule Viewing
+                                </button>
+                                <button
+                                  type="button"
+                                  className="px-4 py-2 text-sm text-white rounded-md bg-gray-500 hover:bg-gray-400 w-full"
+                                >
+                                  View Profile
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* <form className="space-y-4">
                     <div>
                       <input
                         type="text"
@@ -836,7 +1084,7 @@ export default function PropertyDetail() {
                     >
                       Schedule Viewing
                     </button>
-                  </form>
+                  </form> */}
                 </div>
               </div>
             </div>
@@ -876,12 +1124,12 @@ export default function PropertyDetail() {
                     <ReactImageMagnify
                       {...{
                         smallImage: {
-                          alt: images[modalImageIndex].alt,
+                          alt: "property image",
                           isFluidWidth: true,
-                          src: images[modalImageIndex].src,
+                          src: propertyData?.photos[modalImageIndex].url,
                         },
                         largeImage: {
-                          src: images[modalImageIndex].src,
+                          src: propertyData?.photos[modalImageIndex]?.url,
                           width: 1800,
                           height: 1200,
                         },
@@ -919,7 +1167,7 @@ export default function PropertyDetail() {
 
                 {/* Thumbnail Strip */}
                 <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
-                  {images.map((img, idx) => (
+                  {propertyData?.photos.map((img, idx) => (
                     <button
                       key={img.id}
                       onClick={() => setModalImageIndex(idx)}
@@ -930,8 +1178,8 @@ export default function PropertyDetail() {
                       }`}
                     >
                       <img
-                        src={img.src}
-                        alt={img.alt}
+                        src={img.url}
+                        alt="image"
                         className="w-full h-full object-cover"
                       />
                     </button>
@@ -942,6 +1190,12 @@ export default function PropertyDetail() {
           </div>
         </div>
       )}
+
+      <EnquiryModal
+        open={openEnquiry}
+        onClose={() => setOpenEnquiry(false)}
+        agentId={selectedAgent}
+      />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./page/home";
-import MarketTrends from "./page/marketTrends";
+import MarketTrends from "./page/homeValuation";
 import Agents from "./page/agents";
 import Login from "./page/auth/login";
 import ForgotPassword from "./page/auth/forgotPassword";
@@ -29,6 +29,9 @@ import AgentHome from "./page/agent/home";
 import BuyerLayout from "./layouts/buyerLayout";
 import SellerLayout from "./layouts/sellerLayout";
 import AgentLayout from "./layouts/agentLayout";
+import Mapper from "./page/map";
+import AgentProperty from "./page/agent/agentProperty";
+import HomeValuation from "./page/homeValuation";
 
 // Create a wrapper component that validates userType
 const ValidatedRoute = ({ children }) => {
@@ -86,10 +89,11 @@ function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
+           <Route path="/map" element={<Mapper />} />
           <Route path="/propertydetail/:id" element={<PropertyDetail />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/blog/:id" element={<Blog />} />
-          <Route path="/market-trends" element={<MarketTrends />} />
+          <Route path="/home-valuation" element={<HomeValuation />} />
           <Route path="/agents" element={<Agents />} />
 
           {/* Add validation for RoleSelection too */}
@@ -230,6 +234,23 @@ function App() {
             element={
               <AgentOnlyRoute>
                 <AgentHome />
+              </AgentOnlyRoute>
+            }
+          />
+            <Route
+            path="agent-property"
+            element={
+              <AgentOnlyRoute>
+                <AgentProperty />
+              </AgentOnlyRoute>
+            }
+          />
+
+           <Route
+            path="property-detail/:id"
+            element={
+              <AgentOnlyRoute>
+                <PropertyDetail />
               </AgentOnlyRoute>
             }
           />
