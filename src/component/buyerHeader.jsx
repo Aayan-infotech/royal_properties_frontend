@@ -26,7 +26,7 @@ export default function BuyerHeader() {
   const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
 
   const menuItems = [
-    { name: "For sale or gold", path: "/" },
+    { name: "Maps", path: "/buyers/map" },
     { name: "Precon", path: "/" },
     { name: "Rental", path: "/" },
     { name: "Home Valuation", path: "/" },

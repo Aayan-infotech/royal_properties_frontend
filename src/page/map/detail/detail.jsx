@@ -6,41 +6,59 @@ import React from 'react';
 
 import './detail.css';
 
-export const RealEstateListingDetails = ({details}) => {
-  const {
-    property_address,
-    property_price,
-    listing_title,
-    property_bedrooms,
-    property_bathrooms,
-    property_square_feet,
-    listing_description
-  } = details;
+export const RealEstateListingDetails = ({ details }) => {
+  // Handle both the old structure and new API response structure
+  const property = details?.property || details?.listing_title || 'Property';
+  const address = details?.address || details?.property_address || '';
+  const price = details?.price || details?.property_price || 0;
+  const bedrooms = details?.property_bedrooms || '';
+  const bathrooms = details?.property_bathrooms || '';
+  const squareFeet = details?.property_square_feet || '';
+  const description = details?.listing_description || '';
+
+  // Format price to Indian currency
+  const formatPrice = (price) => {
+    if (!price) return '';
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(price);
+  };
 
   return (
     <div className="details-container">
       <div className="listing-content">
-        <h2>{listing_title}</h2>
-        <p>{property_address}</p>
-        <div className="details">
-          <div className="detail_item">
-            {/* <FloorplanIcon /> */}
-             {property_square_feet.replace('sq ft', 'ft²')}
-          </div>
-          <div className="detail_item">
-            {/* <BathroomIcon />  */}
-            {property_bathrooms}
-          </div>
-          <div className="detail_item">
-            {/* <BedroomIcon /> */}
-             {property_bedrooms}
-          </div>
-        </div>
+        <h2>{property}</h2>
+        <p>{address}</p>
 
-        <p className="description">{listing_description}</p>
+        {(bedrooms || bathrooms || squareFeet) && (
+          <div className="details">
+            {squareFeet && (
+              <div className="detail_item">
+                {/* <FloorplanIcon /> */}
+                {squareFeet.replace ? squareFeet.replace('sq ft', 'ft²') : squareFeet}
+              </div>
+            )}
+            {bathrooms && (
+              <div className="detail_item">
+                {/* <BathroomIcon /> */}
+                {bathrooms}
+              </div>
+            )}
+            {bedrooms && (
+              <div className="detail_item">
+                {/* <BedroomIcon /> */}
+                {bedrooms}
+              </div>
+            )}
+          </div>
+        )}
 
-        {/* <p className="price">{getFormattedCurrency(property_price)}</p> */}
+        {description && <p className="description">{description}</p>}
+
+        {price > 0 && <p className="price">{formatPrice(price)}</p>}
       </div>
     </div>
   );
-};
+}; 

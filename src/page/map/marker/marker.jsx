@@ -4,38 +4,92 @@ import classNames from "classnames";
 
 import { RealEstateListingDetails } from "../detail/detail";
 import { RealEstateGallery } from "../gallery/gallery";
-// import { RealEstateIcon } from "../../../icons/real-estate-icon";
+import axiosInstance from "../../../component/axiosInstance";
 
 import "./marker.css";
 
 export const CustomAdvancedMarker = ({ realEstateListing }) => {
   const [clicked, setClicked] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [propertyDetails, setPropertyDetails] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // Add safety check for letLONG
+  if (!realEstateListing?.letLONG || realEstateListing.letLONG.length < 2) {
+    console.warn('Invalid coordinates for listing:', realEstateListing);
+    return null;
+  }
 
   const position = {
-    lat: realEstateListing.details.latitude,
-    lng: realEstateListing.details.longitude,
+    lat: realEstateListing.letLONG[0],
+    lng: realEstateListing.letLONG[1],
+  };
+
+  const fetchPropertyDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.post('/map/property-by-location', {
+        propertyId: realEstateListing.propertyId,
+        letLONG: realEstateListing.letLONG
+      });
+
+      // Extract the data from the response
+      const data = response?.data?.data;
+      setPropertyDetails(data);
+    } catch (error) {
+      console.error('Error fetching property details:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleMarkerClick = () => {
+    if (!clicked) {
+      fetchPropertyDetails();
+    }
+    setClicked(!clicked);
+  };
+
+  const handleClose = (e) => {
+    e.stopPropagation();
+    setClicked(false);
+    setPropertyDetails(null);
   };
 
   const renderCustomPin = () => {
     return (
       <>
         <div className="custom-pin">
-          <button className="close-button">
-            <span className="material-symbols-outlined">close</span>
-          </button>
+          {clicked && (
+            <button className="close-button" onClick={handleClose}>
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          )}
 
-          <div className="image-container">
-            <RealEstateGallery
-              images={realEstateListing.images}
-              isExtended={clicked}
-            />
-            {/* <span className="icon">
-              <RealEstateIcon />
-            </span> */}
-          </div>
+          {clicked && (
+            <>
+              {loading ? (
+                <div className="loading-container">
+                  <p>Loading property details...</p>
+                </div>
+              ) : propertyDetails ? (
+                <>
+                  <div className="image-container">
+                    <RealEstateGallery
+                      images={propertyDetails.photos || []}
+                      isExtended={clicked}
+                    />
+                  </div>
 
-          <RealEstateListingDetails details={realEstateListing.details} />
+                  <RealEstateListingDetails details={propertyDetails} />
+                </>
+              ) : (
+                <div className="placeholder-container">
+                  <p>No details available</p>
+                </div>
+              )}
+            </>
+          )}
         </div>
 
         <div className="tip" />
@@ -50,7 +104,7 @@ export const CustomAdvancedMarker = ({ realEstateListing }) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className={classNames("real-estate-marker", { clicked, hovered })}
-      onClick={() => setClicked(!clicked)}
+      onClick={handleMarkerClick}
     >
       {renderCustomPin()}
     </AdvancedMarker>

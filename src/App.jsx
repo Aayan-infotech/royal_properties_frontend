@@ -197,6 +197,16 @@ function App() {
               </BuyerOnlyRoute>
             }
           />
+
+            <Route
+            path="map"
+            element={
+              <BuyerOnlyRoute>
+                <Mapper />
+              </BuyerOnlyRoute>
+            }
+          />
+
           <Route
             path="property-detail/:id"
             element={
