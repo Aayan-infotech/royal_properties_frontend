@@ -231,6 +231,9 @@ export default function PropertyDetail() {
       }
     };
 
+  
+
+
     if (!open) return null;
 
     return (
@@ -357,6 +360,26 @@ export default function PropertyDetail() {
     );
   };
 
+    const handleWatchList = async () => {
+     console.log(propertyData?._id)
+  
+      try {
+        const response = await axiosInstance.post("/buyer/watchlist", {
+          propertyId: propertyData?._id,
+
+        });
+
+        if (response.status === 200 || response.status === 201) {
+          console.log("Add to watchlist successfully", response.data);
+        }
+      } catch (error) {
+        console.error("Error sending enquiry:", error);
+        alert("Failed to send enquiry. Please try again.");
+      } finally {
+        console.log("watchlist sent successfully");
+      }
+    };
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
@@ -435,6 +458,24 @@ export default function PropertyDetail() {
             </div>
           </div>
         </div> */}
+        <div className="flex w-full justify-end">
+          <button onClick={handleWatchList} className="cursor-pointer flex justify-end mb-4 items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+              />
+            </svg>
+            Add to Watch list
+          </button>
+        </div>
 
         {/* Image Gallery Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 h-[600px]">
@@ -557,10 +598,9 @@ export default function PropertyDetail() {
                   <TabList className="flex gap-8 border-b border-gray-200">
                     <Tab
                       className={({ selected }) =>
-                        `pb-3 text-sm font-medium border-b-2 transition-colors outline-none ${
-                          selected
-                            ? "border-blue-600 text-blue-600"
-                            : "border-transparent text-gray-600 hover:text-gray-900"
+                        `pb-3 text-sm font-medium border-b-2 transition-colors outline-none ${selected
+                          ? "border-blue-600 text-blue-600"
+                          : "border-transparent text-gray-600 hover:text-gray-900"
                         }`
                       }
                     >
@@ -568,10 +608,9 @@ export default function PropertyDetail() {
                     </Tab>
                     <Tab
                       className={({ selected }) =>
-                        `pb-3 text-sm font-medium border-b-2 transition-colors outline-none ${
-                          selected
-                            ? "border-blue-600 text-blue-600"
-                            : "border-transparent text-gray-600 hover:text-gray-900"
+                        `pb-3 text-sm font-medium border-b-2 transition-colors outline-none ${selected
+                          ? "border-blue-600 text-blue-600"
+                          : "border-transparent text-gray-600 hover:text-gray-900"
                         }`
                       }
                     >
@@ -669,10 +708,9 @@ export default function PropertyDetail() {
                     <div className="flex">
                       <Tab
                         className={({ selected }) =>
-                          `px-6 py-4 text-sm font-medium outline-none ${
-                            selected
-                              ? "text-blue-600 border-b-2 border-blue-600"
-                              : "text-gray-600 hover:text-gray-900"
+                          `px-6 py-4 text-sm font-medium outline-none ${selected
+                            ? "text-blue-600 border-b-2 border-blue-600"
+                            : "text-gray-600 hover:text-gray-900"
                           }`
                         }
                       >
@@ -680,10 +718,9 @@ export default function PropertyDetail() {
                       </Tab>
                       <Tab
                         className={({ selected }) =>
-                          `px-6 py-4 text-sm font-medium outline-none ${
-                            selected
-                              ? "text-blue-600 border-b-2 border-blue-600"
-                              : "text-gray-600 hover:text-gray-900"
+                          `px-6 py-4 text-sm font-medium outline-none ${selected
+                            ? "text-blue-600 border-b-2 border-blue-600"
+                            : "text-gray-600 hover:text-gray-900"
                           }`
                         }
                       >
@@ -691,10 +728,9 @@ export default function PropertyDetail() {
                       </Tab>
                       <Tab
                         className={({ selected }) =>
-                          `px-6 py-4 text-sm font-medium outline-none ${
-                            selected
-                              ? "text-blue-600 border-b-2 border-blue-600"
-                              : "text-gray-600 hover:text-gray-900"
+                          `px-6 py-4 text-sm font-medium outline-none ${selected
+                            ? "text-blue-600 border-b-2 border-blue-600"
+                            : "text-gray-600 hover:text-gray-900"
                           }`
                         }
                       >
@@ -856,21 +892,19 @@ export default function PropertyDetail() {
                           <div className="flex gap-6">
                             <button
                               onClick={() => setActiveDescTab("original")}
-                              className={`pb-2 text-sm font-medium border-b-2 ${
-                                activeDescTab === "original"
-                                  ? "border-blue-600 text-blue-600"
-                                  : "border-transparent text-gray-600 hover:text-gray-900"
-                              }`}
+                              className={`pb-2 text-sm font-medium border-b-2 ${activeDescTab === "original"
+                                ? "border-blue-600 text-blue-600"
+                                : "border-transparent text-gray-600 hover:text-gray-900"
+                                }`}
                             >
                               Original
                             </button>
                             <button
                               onClick={() => setActiveDescTab("summary")}
-                              className={`pb-2 text-sm font-medium border-b-2 ${
-                                activeDescTab === "summary"
-                                  ? "border-blue-600 text-blue-600"
-                                  : "border-transparent text-gray-600 hover:text-gray-900"
-                              }`}
+                              className={`pb-2 text-sm font-medium border-b-2 ${activeDescTab === "summary"
+                                ? "border-blue-600 text-blue-600"
+                                : "border-transparent text-gray-600 hover:text-gray-900"
+                                }`}
                             >
                               Summary (AI)
                             </button>
@@ -1171,11 +1205,10 @@ export default function PropertyDetail() {
                     <button
                       key={img.id}
                       onClick={() => setModalImageIndex(idx)}
-                      className={`shrink-0 w-24 h-16 rounded-md overflow-hidden border-2 transition-all ${
-                        modalImageIndex === idx
-                          ? "border-blue-500 opacity-100"
-                          : "border-transparent opacity-50 hover:opacity-75"
-                      }`}
+                      className={`shrink-0 w-24 h-16 rounded-md overflow-hidden border-2 transition-all ${modalImageIndex === idx
+                        ? "border-blue-500 opacity-100"
+                        : "border-transparent opacity-50 hover:opacity-75"
+                        }`}
                     >
                       <img
                         src={img.url}

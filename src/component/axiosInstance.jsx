@@ -73,7 +73,7 @@ axiosInstance.interceptors.response.use(
 
     try {
       const res = await axios.post(
-        "http://44.195.249.112:7878/auth/refreshtoken",
+        "http://44.195.249.112:7878/auth/refresh",
         { refreshToken },
         {
           baseURL: "http://44.195.249.112:7878/",
@@ -82,8 +82,7 @@ axiosInstance.interceptors.response.use(
           },
         }
       );
-
-      const newToken = res.data.accessToken;
+      const newToken = res?.data?.data?.accessToken;
       const tokenKey = "token";
       localStorage.setItem(tokenKey, newToken);
       axiosInstance.defaults.headers.common[

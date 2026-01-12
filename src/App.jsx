@@ -21,9 +21,14 @@ import PropertyListingForm from "./page/seller/properListing";
 import { encrypt, decrypt } from "./utils/constant";
 import UserProfileDashboard from "./component/myProfile";
 import SellerPropertyDetail from "./page/seller/propertyDetail";
+
+// buyer pages
 import BuyerHome from "./page/buyer/home";
 import NearbyProperties from "./page/buyer/nearbyProperties";
 import AgentProfile from "./page/buyer/agentDetail";
+import WatchList from "./page/buyer/watchList";
+
+// agent pages
 import AgentHome from "./page/agent/home";
 
 import BuyerLayout from "./layouts/buyerLayout";
@@ -89,7 +94,7 @@ function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-           <Route path="/map" element={<Mapper />} />
+          <Route path="/map" element={<Mapper />} />
           <Route path="/propertydetail/:id" element={<PropertyDetail />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/blog/:id" element={<Blog />} />
@@ -219,6 +224,16 @@ function App() {
           />
 
           <Route
+            path="watchlist"
+            element={
+              <BuyerOnlyRoute>
+                <WatchList />
+              </BuyerOnlyRoute>
+            }
+          />
+
+
+          <Route
             path="agent-detail/:id"
             element={
               <BuyerOnlyRoute>
@@ -237,7 +252,7 @@ function App() {
               </AgentOnlyRoute>
             }
           />
-            <Route
+          <Route
             path="agent-property"
             element={
               <AgentOnlyRoute>
@@ -246,7 +261,7 @@ function App() {
             }
           />
 
-           <Route
+          <Route
             path="property-detail/:id"
             element={
               <AgentOnlyRoute>

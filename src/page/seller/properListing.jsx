@@ -24,6 +24,7 @@ const InputField = React.memo(
     type = "text",
     required = false,
     prefix = null,
+    inputRef = null,  // Add this line
   }) => (
     <div>
       <label className="block text-sm font-medium mb-1">
@@ -36,13 +37,13 @@ const InputField = React.memo(
           </span>
         )}
         <input
+          ref={inputRef}  // Add this line
           type={type}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`w-full ${
-            prefix ? "pl-8" : "pl-4"
-          } pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all`}
+          className={`w-full ${prefix ? "pl-8" : "pl-4"
+            } pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all`}
           required={required}
         />
       </div>
@@ -81,9 +82,8 @@ const StepIndicator = React.memo(({ currentStep }) => (
       {[0, 1, 2].map((step) => (
         <div
           key={step}
-          className={`h-1 flex-1 rounded-full transition-colors ${
-            step <= currentStep ? "bg-blue-900" : "bg-gray-300"
-          }`}
+          className={`h-1 flex-1 rounded-full transition-colors ${step <= currentStep ? "bg-blue-900" : "bg-gray-300"
+            }`}
         />
       ))}
     </div>
@@ -95,42 +95,119 @@ const PropertyListingForm = () => {
   const [loading, setLoading] = useState(false);
   const { success, error, info, warning } = useContext(AlertContext);
   const { handleApiError, handleApiSuccess, wrapApiCall } = useAlert();
+  const addressInputRef = React.useRef(null);
+  const autocompleteRef = React.useRef(null);
   const [formData, setFormData] = useState({
-    sellerId: "6942a1ebab1f0cb7384e0633",
-    property: "test",
-    price: "40000",
-    address: "test",
+    sellerId: "",
+    property: "",
+    price: "",
+    address: "",
     keyFacts: {
       propertyType: "Apartment",
-      yearBuilt: "2020",
-      size: "1000",
-      pricePerSqft: "400",
+      yearBuilt: "",
+      size: "",
+      pricePerSqft: "",
       lotSize: "1",
       parking: "1",
-      letLONG: ["19.13", "72.89"],
+      letLONG: ["", ""],
     },
     details: {
-      municipality: "MUMBAI",
-      roomsAboveGrade: "2",
-      bedrooms: "4",
-      bedroomsAboveGrade: "2",
-      fullBathrooms: "2",
-      halfBathrooms: "2",
-      fireplace: "false",
-      basement: "None",
-      basementDevelopment: "NA",
-      additionalRooms: "2",
-      buildingAge: "5",
-      constructionType: "RCC",
-      exteriorFeature: "NA",
-      parkingFeatures: "YES",
+      municipality: "",
+      roomsAboveGrade: "",
+      bedrooms: "",
+      bedroomsAboveGrade: "",
+      fullBathrooms: "",
+      halfBathrooms: "",
+      fireplace: "",
+      basement: "",
+      basementDevelopment: "",
+      additionalRooms: "",
+      buildingAge: "",
+      constructionType: "",
+      exteriorFeature: "",
+      parkingFeatures: "",
     },
     rooms: {
-      items: [{ name: "MAIN", size: "10*50", level: "MAIN" }],
+      items: [{ name: "", size: "", level: "" }],
     },
     images: [],
     video: null,
   });
+
+  console.log(formData)
+
+  const initAutocomplete = () => {
+    if (!addressInputRef.current || !window.google) return;
+
+    autocompleteRef.current = new window.google.maps.places.Autocomplete(
+      addressInputRef.current,
+      {
+        types: ["address"],
+        componentRestrictions: { country: "in" },
+      }
+    );
+
+    autocompleteRef.current.addListener("place_changed", () => {
+      const place = autocompleteRef.current.getPlace();
+
+      if (!place.geometry) {
+        console.log("No details available for input: '" + place.name + "'");
+        return;
+      }
+
+      // Update address
+      setFormData((prev) => ({
+        ...prev,
+        address: place.formatted_address || "",
+        keyFacts: {
+          ...prev.keyFacts,
+          letLONG: [
+            place.geometry.location.lat().toString(),
+            place.geometry.location.lng().toString(),
+          ],
+        },
+      }));
+
+      // Extract municipality from address components
+      const addressComponents = place.address_components || [];
+      const locality = addressComponents.find((component) =>
+        component.types.includes("locality")
+      );
+      const adminArea = addressComponents.find((component) =>
+        component.types.includes("administrative_area_level_2")
+      );
+
+      if (locality || adminArea) {
+        setFormData((prev) => ({
+          ...prev,
+          details: {
+            ...prev.details,
+            municipality: locality?.long_name || adminArea?.long_name || "",
+          },
+        }));
+      }
+    });
+  };
+
+  React.useEffect(() => {
+    const loadGoogleMapsScript = () => {
+      if (window.google && window.google.maps) {
+        initAutocomplete();
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCImFnps9l5WZ-Sxm5ZZX-yowF_vWunS2c&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = initAutocomplete;
+      document.head.appendChild(script);
+    };
+
+    loadGoogleMapsScript();
+  }, []);
+
+
 
   const propertyTypes = useMemo(
     () => [
@@ -334,8 +411,8 @@ const PropertyListingForm = () => {
               {currentStep === 0
                 ? "Add New Property"
                 : ["Basic Information", "Property Details", "Media Uploads"][
-                    currentStep
-                  ]}
+                currentStep
+                ]}
             </h1>
             <p className="text-sm text-gray-500">Step {currentStep + 1} of 3</p>
           </div>
@@ -383,6 +460,7 @@ const PropertyListingForm = () => {
                       onChange={(e) =>
                         handleInputChange("address", e.target.value)
                       }
+                      inputRef={addressInputRef}
                       required
                     />
                   </div>
@@ -407,11 +485,10 @@ const PropertyListingForm = () => {
                               "keyFacts"
                             )
                           }
-                          className={`flex flex-col items-center justify-center p-6 rounded-lg border-2 transition-all ${
-                            formData.keyFacts.propertyType === type.name
-                              ? "border-blue-900 bg-blue-50"
-                              : "border-gray-200 bg-white hover:border-gray-300"
-                          }`}
+                          className={`flex flex-col items-center justify-center p-6 rounded-lg border-2 transition-all ${formData.keyFacts.propertyType === type.name
+                            ? "border-blue-900 bg-blue-50"
+                            : "border-gray-200 bg-white hover:border-gray-300"
+                            }`}
                         >
                           <Icon className="w-8 h-8 mb-2" />
                           <span className="text-sm font-medium">
@@ -718,9 +795,8 @@ const PropertyListingForm = () => {
                       >
                         <InputField
                           label="Room Name"
-                          placeholder={`e.g. ${
-                            index === 0 ? "Living Room" : `Bedroom ${index}`
-                          }`}
+                          placeholder={`e.g. ${index === 0 ? "Living Room" : `Bedroom ${index}`
+                            }`}
                           value={room.name}
                           onChange={(e) =>
                             handleArrayInputChange("rooms", index, {
@@ -939,8 +1015,8 @@ const PropertyListingForm = () => {
               {loading
                 ? "Submitting..."
                 : currentStep === 2
-                ? "Submit Property"
-                : "Next"}
+                  ? "Submit Property"
+                  : "Next"}
             </button>
           </div>
         </div>

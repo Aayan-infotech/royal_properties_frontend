@@ -15,7 +15,6 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { success, error, info, warning } = useContext(AlertContext);
-  const { handleApiError, handleApiSuccess, wrapApiCall } = useAlert();
   const navigate = useNavigate();
   const { userType } = useParams();
   const encryptedUserType = encrypt(userType);

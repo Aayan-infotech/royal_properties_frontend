@@ -20,9 +20,9 @@ import {
   FaPaperPlane,
 } from "react-icons/fa";
 import axiosInstance from "./axiosInstance";
-import { decrypt , userType } from "../utils/constant";
+import { decrypt, userType } from "../utils/constant";
 import { AlertContext } from "../context/alertContext";
-
+import { useNavigate } from "react-router-dom";
 // Component for Logout Modal
 const LogoutModal = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
@@ -483,11 +483,12 @@ const EditProfile = ({ profile, setProfile, onSave }) => {
 
 // Main Component
 const UserProfileDashboard = () => {
+  const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState(0);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [openFAQIndex, setOpenFAQIndex] = useState(0);
   const [userQuestions, setUserQuestions] = useState([]);
-  const {success , error} = useContext(AlertContext);
+  const { success, error } = useContext(AlertContext);
   const [profile, setProfile] = useState({
     photo: "https://via.placeholder.com/150",
     name: "",
@@ -507,7 +508,7 @@ const UserProfileDashboard = () => {
 
   const mockUpdateProfile = async (profileData) => {
     // Simulate API call
-   const response = await axiosInstance.put(`/${userType}/me/profile`)
+    const response = await axiosInstance.put(`/${userType}/me/profile`)
     return response
   };
 
@@ -848,9 +849,8 @@ const UserProfileDashboard = () => {
         onClose={() => setIsLogoutModalOpen(false)}
         onConfirm={() => {
           setIsLogoutModalOpen(false);
-          // Mock logout - replace with actual logic
-          console.log("User logged out");
-          alert("Logged out successfully!");
+          localStorage.clear();
+          navigate("/role/login")
         }}
       />
     </div>

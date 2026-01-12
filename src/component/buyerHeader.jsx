@@ -31,7 +31,7 @@ export default function BuyerHeader() {
     { name: "Rental", path: "/" },
     { name: "Home Valuation", path: "/" },
     { name: "Recommended Communities", path: "/" },
-    { name: "Blogs", path: "/" },
+    { name: "Watchlist", path: "/buyers/watchlist" },
     { name: "Agents", path: "/" },
   ];
 
@@ -102,7 +102,7 @@ export default function BuyerHeader() {
           <div className="flex gap-5 flex-row">
             {menuItems.map((item) => (
               <NavbarItem key={item.name}>
-                <Link className="text-white hover:text-blue-400">
+                <Link className="text-white hover:text-blue-400" to={item.path}>
                   {item.name}
                 </Link>
               </NavbarItem>

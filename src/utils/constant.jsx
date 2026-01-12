@@ -12,6 +12,24 @@ export const decrypt = (cipherText) => {
   return bytes.toString(CryptoJS.enc.Utf8);
 };
 
+export const formatPrice = (price) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+};
+
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(date);
+};
+
 export const userType = decrypt(localStorage.getItem("userRole") || "");
 
 
