@@ -89,7 +89,7 @@ const AlertComponent = ({ alert, onClose }) => {
       leaveTo="opacity-0"
       className={`max-w-sm w-full ${config.bgColor} shadow-lg rounded-lg pointer-events-auto border ${config.borderColor} overflow-hidden`}
     >
-      <div className="p-4 w-full">
+      <div className="p-4 w-full mb-4">
         <div className="flex items-center">
           <div className="flex-shrink-0">
             <Icon

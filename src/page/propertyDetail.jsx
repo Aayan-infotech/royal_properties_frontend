@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import ReactImageMagnify from "react-image-magnify";
 import { IoMdClose } from "react-icons/io";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -14,7 +14,9 @@ import { IoBedSharp } from "react-icons/io5";
 import { FaBath } from "react-icons/fa";
 import { CiLock } from "react-icons/ci";
 import { PiGarageFill } from "react-icons/pi";
+import { FaRegSave } from "react-icons/fa";
 import { CiShare1 } from "react-icons/ci";
+import { HiDotsHorizontal } from "react-icons/hi";
 import {
   FaTag,
   FaCalendarAlt,
@@ -28,6 +30,7 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { useLocation, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axiosInstance from "../component/axiosInstance";
+import { AlertContext } from "../context/alertContext";
 
 export default function PropertyDetail() {
   const [openEnquiry, setOpenEnquiry] = useState(false);
@@ -40,8 +43,8 @@ export default function PropertyDetail() {
   const [showMore, setShowMore] = useState(false);
   const location = useLocation();
   const [propertyData, setPropertyData] = useState(location?.state?.property);
+  const { success, error } = useContext(AlertContext);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [agentForm, setAgentForm] = useState({
     name: "",
     enquiry: "General Inquiry",
@@ -231,7 +234,7 @@ export default function PropertyDetail() {
       }
     };
 
-  
+
 
 
     if (!open) return null;
@@ -360,25 +363,24 @@ export default function PropertyDetail() {
     );
   };
 
-    const handleWatchList = async () => {
-     console.log(propertyData?._id)
-  
-      try {
-        const response = await axiosInstance.post("/buyer/watchlist", {
-          propertyId: propertyData?._id,
+  const handleWatchList = async () => {
+    console.log(propertyData?._id)
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post("/buyer/watchlist", {
+        propertyId: propertyData?._id,
 
-        });
+      });
 
-        if (response.status === 200 || response.status === 201) {
-          console.log("Add to watchlist successfully", response.data);
-        }
-      } catch (error) {
-        console.error("Error sending enquiry:", error);
-        alert("Failed to send enquiry. Please try again.");
-      } finally {
-        console.log("watchlist sent successfully");
+      if (response.status === 200 || response.status === 201) {
+        success(response.data.message)
       }
-    };
+    } catch (err) {
+      error(err.response.data.message)
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
@@ -459,20 +461,11 @@ export default function PropertyDetail() {
           </div>
         </div> */}
         <div className="flex w-full justify-end">
-          <button onClick={handleWatchList} className="cursor-pointer flex justify-end mb-4 items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-              />
-            </svg>
+          <button disabled={loading}
+            onClick={handleWatchList}
+            className={`cursor-pointer ${loading && "circular"} flex justify-end mb-4 items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50`}>
+            {loading ? <HiDotsHorizontal /> : <FaRegSave />}
+
             Add to Watch list
           </button>
         </div>

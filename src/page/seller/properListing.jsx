@@ -10,6 +10,23 @@ import {
   MdDragIndicator,
   MdAdd,
   MdRemove,
+  MdSchool,
+  MdLocalHospital,
+  MdLocalGroceryStore,
+  MdShoppingCart,
+  MdPark,
+  MdDirectionsBus,
+  MdTrain,
+  MdDirectionsRailway,
+  MdFlight,
+  MdAccountBalance,
+  MdAtm,
+  MdRestaurant,
+  MdHotel,
+  MdLocalGasStation,
+  MdTempleHindu,
+  MdMosque,
+  MdChurch
 } from "react-icons/md";
 import axiosInstance from "../../component/axiosInstance";
 import { useAlert } from "../../hooks/useApiAlert";
@@ -18,6 +35,7 @@ import { AlertContext } from "../../context/alertContext";
 const InputField = React.memo(
   ({
     label,
+    className,
     placeholder,
     value,
     onChange,
@@ -26,7 +44,7 @@ const InputField = React.memo(
     prefix = null,
     inputRef = null,  // Add this line
   }) => (
-    <div>
+    <div className={className}>
       <label className="block text-sm font-medium mb-1">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
@@ -97,6 +115,7 @@ const PropertyListingForm = () => {
   const { handleApiError, handleApiSuccess, wrapApiCall } = useAlert();
   const addressInputRef = React.useRef(null);
   const autocompleteRef = React.useRef(null);
+  const [propertyId, setPropertyId] = useState(null);
   const [formData, setFormData] = useState({
     sellerId: "",
     property: "",
@@ -130,6 +149,7 @@ const PropertyListingForm = () => {
     rooms: {
       items: [{ name: "", size: "", level: "" }],
     },
+    nearbyProperties: [],
     images: [],
     video: null,
   });
@@ -220,6 +240,30 @@ const PropertyListingForm = () => {
     []
   );
 
+  const nearbyPropertyTypes = useMemo(
+    () => [
+      { name: "School", icon: MdSchool, value: "SCHOOL" },
+      { name: "Hospital", icon: MdLocalHospital, value: "HOSPITAL" },
+      { name: "College", icon: MdSchool, value: "COLLEGE" },
+      { name: "Market", icon: MdLocalGroceryStore, value: "MARKET" },
+      { name: "Mall", icon: MdShoppingCart, value: "MALL" },
+      { name: "Park", icon: MdPark, value: "PARK" },
+      { name: "Bus Stop", icon: MdDirectionsBus, value: "BUS_STOP" },
+      { name: "Metro Station", icon: MdTrain, value: "METRO_STATION" },
+      { name: "Railway Station", icon: MdDirectionsRailway, value: "RAILWAY_STATION" },
+      { name: "Airport", icon: MdFlight, value: "AIRPORT" },
+      { name: "Bank", icon: MdAccountBalance, value: "BANK" },
+      { name: "ATM", icon: MdAtm, value: "ATM" },
+      { name: "Restaurant", icon: MdRestaurant, value: "RESTAURANT" },
+      { name: "Hotel", icon: MdHotel, value: "HOTEL" },
+      { name: "Petrol Pump", icon: MdLocalGasStation, value: "PETROL_PUMP" },
+      { name: "Temple", icon: MdTempleHindu, value: "TEMPLE" },
+      { name: "Mosque", icon: MdMosque, value: "MOSQUE" },
+      { name: "Church", icon: MdChurch, value: "CHURCH" },
+    ],
+    []
+  );
+
   const fireplaceOptions = useMemo(
     () => [
       { value: "false", label: "No" },
@@ -273,6 +317,28 @@ const PropertyListingForm = () => {
       return { ...prev, [field]: value };
     });
   }, []);
+
+
+  const handleNearbyPropertyToggle = useCallback((propertyValue) => {
+    setFormData((prev) => {
+      const currentNearby = [...prev.nearbyProperties];
+      const index = currentNearby.indexOf(propertyValue);
+
+      if (index > -1) {
+        // Remove if already selected
+        currentNearby.splice(index, 1);
+      } else {
+        // Add if not selected
+        currentNearby.push(propertyValue);
+      }
+
+      return {
+        ...prev,
+        nearbyProperties: currentNearby,
+      };
+    });
+  }, []);
+
 
   const handleArrayInputChange = useCallback((field, index, value) => {
     setFormData((prev) => {
@@ -389,11 +455,79 @@ const PropertyListingForm = () => {
       }
 
       // Replace with your actual axios call
-      await axiosInstance.post("/properties", formDataToSend, {
+      const response = await axiosInstance.post("/properties", formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      if (response) {
+        const createdPropertyId = response.data._id;
+        console.log("Property created successfully with ID:", createdPropertyId);
 
-      alert("Property submitted successfully!");
+        // Set the property ID in state for reference
+        setPropertyId(createdPropertyId);
+
+        // Prepare data for second API call (property-extras)
+        const propertyExtrasData = {
+          propertyId: createdPropertyId,
+          propertyCategory: formData.keyFacts.propertyType,
+          nearbyPlaces: formData.nearbyProperties
+        };
+
+        // Second API call to property-extras
+        const extrasResponse = await axiosInstance.post("/property-extras", propertyExtrasData, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token') || ''}`
+          },
+        });
+
+        // Show success message
+        success("Property and nearby places added successfully!");
+
+        setTimeout(() => {
+          setFormData({
+            sellerId: "",
+            property: "",
+            price: "",
+            address: "",
+            keyFacts: {
+              propertyType: "Apartment",
+              yearBuilt: "",
+              size: "",
+              pricePerSqft: "",
+              lotSize: "1",
+              parking: "1",
+              letLONG: ["", ""],
+            },
+            details: {
+              municipality: "",
+              roomsAboveGrade: "",
+              bedrooms: "",
+              bedroomsAboveGrade: "",
+              fullBathrooms: "",
+              halfBathrooms: "",
+              fireplace: "",
+              basement: "",
+              basementDevelopment: "",
+              additionalRooms: "",
+              buildingAge: "",
+              constructionType: "",
+              exteriorFeature: "",
+              parkingFeatures: "",
+            },
+            rooms: {
+              items: [{ name: "", size: "", level: "" }],
+            },
+            nearbyProperties: [],
+            images: [],
+            video: null,
+          });
+          setCurrentStep(0);
+          setPropertyId(null);
+        }, 2000);
+
+      } else {
+        throw new Error("Property ID not found in response");
+      }
     } catch (err) {
       console.error("Error creating property:", err);
       error(err?.response?.data?.message);
@@ -430,7 +564,7 @@ const PropertyListingForm = () => {
                     Basic property details
                   </p>
 
-                  <div className="space-y-4">
+                  <div className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <InputField
                       label="Property Name"
                       placeholder="e.g. Luxury 3 BHK Apartment"
@@ -457,6 +591,7 @@ const PropertyListingForm = () => {
                       label="Full Address"
                       placeholder="e.g. Andheri West, Mumbai, Maharashtra"
                       value={formData.address}
+                      className="col-span-2"
                       onChange={(e) =>
                         handleInputChange("address", e.target.value)
                       }
@@ -492,6 +627,35 @@ const PropertyListingForm = () => {
                         >
                           <Icon className="w-8 h-8 mb-2" />
                           <span className="text-sm font-medium">
+                            {type.name}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <h2 className="text-xl font-bold mb-1">Nearby Property</h2>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Select all that apply
+                  </p>
+                  <div className="grid grid-cols-6 gap-4">
+                    {nearbyPropertyTypes.map((type) => {
+                      const Icon = type.icon;
+                      const isSelected = formData.nearbyProperties.includes(type.value);
+                      return (
+                        <button
+                          key={type.value}
+                          type="button"
+                          onClick={() => handleNearbyPropertyToggle(type.value)}
+                          className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all ${isSelected
+                            ? "border-blue-900 bg-blue-50"
+                            : "border-gray-200 bg-white hover:border-gray-300"
+                            }`}
+                        >
+                          <Icon className="w-6 h-6 mb-2" />
+                          <span className="text-xs font-medium text-center">
                             {type.name}
                           </span>
                         </button>
@@ -561,24 +725,6 @@ const PropertyListingForm = () => {
                       value={formData.keyFacts.parking}
                       onChange={(e) =>
                         handleInputChange("parking", e.target.value, "keyFacts")
-                      }
-                    />
-
-                    <InputField
-                      label="Latitude"
-                      placeholder="e.g. 19.1367"
-                      value={formData.keyFacts.letLONG[0]}
-                      onChange={(e) =>
-                        handleArrayInputChange("letLONG", 0, e.target.value)
-                      }
-                    />
-
-                    <InputField
-                      label="Longitude"
-                      placeholder="e.g. 72.8265"
-                      value={formData.keyFacts.letLONG[1]}
-                      onChange={(e) =>
-                        handleArrayInputChange("letLONG", 1, e.target.value)
                       }
                     />
                   </div>

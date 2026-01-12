@@ -105,7 +105,7 @@ export default function WatchList() {
                                 >
                                     <div className="grid grid-cols-1 lg:grid-cols-5">
                                         {/* Swiper Image Carousel */}
-                                        <div className="lg:col-span-2 relative max-h-[350px] overflow-hidden">
+                                        <div className="lg:col-span-2 relative max-h-[300px] overflow-hidden">
                                             {photos.length > 0 ? (
                                                 <>
                                                     <Swiper
@@ -188,9 +188,9 @@ export default function WatchList() {
                                         </div>
 
                                         {/* Property Details */}
-                                        <div className="p-6 md:p-8 lg:col-span-3">
+                                        <div className="p-4 md:p-6 lg:col-span-3 lg:pb-2">
                                             {/* Title and Price */}
-                                            <div className="mb-6">
+                                            <div className="mb-3">
                                                 <div className="flex justify-between items-start mb-3">
                                                     <h3 className="text-xl md:text-2xl font-bold text-gray-900 pr-4">{property.property}</h3>
                                                     <div className="text-right">
@@ -211,20 +211,20 @@ export default function WatchList() {
                                             </div>
 
                                             {/* Key Facts Grid */}
-                                            <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-2">
-                                                <div className="border border-gray-200 p-4 rounded-xl">
+                                            <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+                                                <div className="border border-gray-200 p-2 rounded-xl">
                                                     <div className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-1">Type</div>
                                                     <div className="font-bold text-gray-900">{property.keyFacts.propertyType}</div>
                                                 </div>
-                                                <div className="border border-gray-200 p-4 rounded-xl">
+                                                <div className="border border-gray-200 p-2 rounded-xl">
                                                     <div className="text-xs font-semibold text-green-700 uppercase tracking-wide mb-1">Size</div>
                                                     <div className="font-bold text-gray-900">{property.keyFacts.size} sqft</div>
                                                 </div>
-                                                <div className="border border-gray-200 p-4 rounded-xl">
+                                                <div className="border border-gray-200 p-2 rounded-xl">
                                                     <div className="text-xs font-semibold text-purple-700 uppercase tracking-wide mb-1">Year Built</div>
                                                     <div className="font-bold text-gray-900">{property.keyFacts.yearBuilt}</div>
                                                 </div>
-                                                <div className="border border-gray-200 p-4 rounded-xl">
+                                                <div className="border border-gray-200 p-2 rounded-xl">
                                                     <div className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">Parking</div>
                                                     <div className="font-bold text-gray-900">{property.keyFacts.parking} spots</div>
                                                 </div>
