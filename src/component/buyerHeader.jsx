@@ -32,7 +32,7 @@ export default function BuyerHeader() {
     { name: "Home Valuation", path: "/" },
     { name: "Recommended Communities", path: "/" },
     { name: "Watchlist", path: "/buyers/watchlist" },
-    { name: "Agents", path: "/" },
+    { name: "Agents", path: "/buyers/agents" },
   ];
 
   return (

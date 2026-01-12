@@ -198,6 +198,15 @@ function App() {
             }
           />
 
+           <Route
+            path="agents"
+            element={
+              <BuyerOnlyRoute>
+                <Agents />
+              </BuyerOnlyRoute>
+            }
+          />
+
             <Route
             path="map"
             element={
