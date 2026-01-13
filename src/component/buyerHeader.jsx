@@ -27,10 +27,10 @@ export default function BuyerHeader() {
 
   const menuItems = [
     { name: "Maps", path: "/buyers/map" },
-    { name: "Precon", path: "/" },
-    { name: "Rental", path: "/" },
-    { name: "Home Valuation", path: "/" },
-    { name: "Recommended Communities", path: "/" },
+    { name: "Precon", path: "/buyers/home" },
+    { name: "Rental", path: "/buyers/home" },
+    { name: "Home Valuation", path: "/buyers/home" },
+    { name: "Recommended Communities", path: "/buyers/home" },
     { name: "Watchlist", path: "/buyers/watchlist" },
     { name: "Agents", path: "/buyers/agents" },
   ];

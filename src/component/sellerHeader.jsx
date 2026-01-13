@@ -25,9 +25,9 @@ export default function SellerHeader() {
   const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
 
   const menuItems = [
-    { name: "Map Search", path: "/" },
+    { name: "Map Search", path: "/home" },
     { name: "Market Trends", path: "/market-trends" },
-    { name: "Home Valuation", path: "/" },
+    { name: "Home Valuation", path: "/home" },
     { name: "Agents", path: "/sellers" },
   ];
 

@@ -35,9 +35,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    console.log(error.response)
 
     // Only handle 401 errors
-    if (error.response?.status !== 401) {
+    if (error.response?.status !== 401 && error.response?.message !== "Invalid credentials") {
       return Promise.reject(error);
     }
 
