@@ -289,7 +289,7 @@ export default function BuyerHome() {
   const getData = async (page) => {
     try {
       const response = await axiosInstance.get(
-        `/properties?page=${page}&limit=4`
+        `/properties/approved?page=${page}&limit=4`
       );
       setData(response.data.data.data);
       setPagination(response.data.data.pagination);

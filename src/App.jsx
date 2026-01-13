@@ -39,6 +39,39 @@ import AgentProperty from "./page/agent/agentProperty";
 import HomeValuation from "./page/homeValuation";
 
 // Create a wrapper component that validates userType
+const checkAuthToken = () => {
+  const token = localStorage.getItem("token");
+  const userRole = decrypt(localStorage.getItem("userRole") || "");
+
+  // Return true if both token and role exist
+  return !!(token && userRole);
+};
+const ValidUserRoute = ({ children }) => {
+  const { userType } = useParams();
+  const allowedUserTypes = ["buyers", "sellers", "agents"];
+  const isLoggedIn = checkAuthToken();
+
+  // If user is logged in, redirect to NotFound
+  if (isLoggedIn) {
+    return <NotFound />;
+  }
+
+  // Check if this is being used on the home page (no userType param)
+  if (!userType) {
+    return children;
+  }
+
+  // For routes with userType param, validate it
+  const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
+
+  if (allowedUserTypes.includes(userType)) {
+    return children;
+  }
+
+  return <NotFound />;
+};
+
+
 const ValidatedRoute = ({ children }) => {
   const { userType } = useParams();
   const allowedUserTypes = ["buyers", "sellers", "agents"];
@@ -93,7 +126,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
+
+          <Route path="/" element={<ValidUserRoute><Home /></ValidUserRoute>} />
           <Route path="/map" element={<Mapper />} />
           <Route path="/propertydetail/:id" element={<PropertyDetail />} />
           <Route path="/blogs" element={<Blogs />} />
@@ -198,7 +232,7 @@ function App() {
             }
           />
 
-           <Route
+          <Route
             path="agents"
             element={
               <BuyerOnlyRoute>
@@ -207,7 +241,7 @@ function App() {
             }
           />
 
-            <Route
+          <Route
             path="map"
             element={
               <BuyerOnlyRoute>

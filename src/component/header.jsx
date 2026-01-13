@@ -10,14 +10,15 @@ import {
 } from "@heroui/react";
 import { Button } from "@headlessui/react";
 import Logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
-import { IoMenu, IoClose, IoChevronDown } from "react-icons/io5";
+import { Link, useLocation } from "react-router-dom";
+import { IoPersonOutline, IoMenu, IoClose, IoChevronDown } from "react-icons/io5";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
-import { menuItems, accountMenuItems } from "../utils/constant";
+import { menuItems, accountMenuItems, decrypt } from "../utils/constant";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const token = localStorage.getItem("token");
+  const userRole = decrypt(localStorage.getItem("userRole") || "");
   return (
     <Navbar
       className="bg-[#132141] py-4 md:px-6"
@@ -35,7 +36,7 @@ export default function Header() {
             <img
               src={Logo}
               alt="Logo"
-               className="h-8 w-auto min-w-[150px] md:min-w-[200px] object-contain"
+              className="h-8 w-auto min-w-[150px] md:min-w-[200px] object-contain"
             />
           </Link>
         </NavbarBrand>
@@ -59,9 +60,8 @@ export default function Header() {
                   <MenuItem key={item.name}>
                     {({ active }) => (
                       <button
-                        className={`${
-                          active ? "bg-blue-50 text-blue-600" : "text-gray-700"
-                        } block w-full text-left px-4 py-2 text-sm`}
+                        className={`${active ? "bg-blue-50 text-blue-600" : "text-gray-700"
+                          } block w-full text-left px-4 py-2 text-sm`}
                       >
                         {item.name}
                       </button>
@@ -85,8 +85,7 @@ export default function Header() {
             ))}
           </div>
         </div>
-
-        <NavbarItem className="hidden lg:flex">
+        {!token ? <> <NavbarItem className="hidden lg:flex">
           <Link to="/role/login">
             <Button className="border border-white rounded-full text-white px-4 py-2 hover:bg-white/10 transition">
               Login
@@ -94,13 +93,18 @@ export default function Header() {
           </Link>
         </NavbarItem>
 
-        <NavbarItem>
-          <Link to="/role/signup">
-            <Button className="bg-white rounded-full text-[#132141] px-4 py-2 hover:bg-gray-100 transition">
-              Sign Up
-            </Button>
+          <NavbarItem>
+            <Link to="/role/signup">
+              <Button className="bg-white rounded-full text-[#132141] px-4 py-2 hover:bg-gray-100 transition">
+                Sign Up
+              </Button>
+            </Link>
+          </NavbarItem></> : <NavbarItem>
+          <Link to={`/${userRole}/user-profile`}>
+            <IoPersonOutline className="text-xl text-white" />
           </Link>
-        </NavbarItem>
+        </NavbarItem>}
+
       </NavbarContent>
 
       {/* Mobile Menu */}
@@ -117,7 +121,7 @@ export default function Header() {
           </NavbarMenuItem>
         ))}
 
-        <NavbarMenuItem>
+        {!token ? <> <NavbarMenuItem>
           <Link
             to="/role/login"
             onClick={() => setIsMenuOpen(false)}
@@ -129,17 +133,22 @@ export default function Header() {
           </Link>
         </NavbarMenuItem>
 
-        <NavbarMenuItem>
-          <Link
-            to="/role/signup"
-            onClick={() => setIsMenuOpen(false)}
-            className="block w-full py-2 px-4"
-          >
-            <Button className="w-full bg-white rounded-full text-[#132141] py-2 hover:bg-gray-100">
-              Sign Up
-            </Button>
+          <NavbarMenuItem>
+            <Link
+              to="/role/signup"
+              onClick={() => setIsMenuOpen(false)}
+              className="block w-full py-2 px-4"
+            >
+              <Button className="w-full bg-white rounded-full text-[#132141] py-2 hover:bg-gray-100">
+                Sign Up
+              </Button>
+            </Link>
+          </NavbarMenuItem></> : <NavbarItem>
+          <Link to={`/${userRole}/user-profile`}>
+            <IoPersonOutline className="text-xl text-white" />
           </Link>
-        </NavbarMenuItem>
+        </NavbarItem>}
+
       </NavbarMenu>
 
       <NavbarContent className="lg:hidden order-last" justify="start">
@@ -167,9 +176,8 @@ export default function Header() {
               <MenuItem key={item.name}>
                 {({ active }) => (
                   <button
-                    className={`${
-                      active ? "bg-blue-50 text-blue-600" : "text-gray-700"
-                    } block w-full text-left px-4 py-2 text-sm`}
+                    className={`${active ? "bg-blue-50 text-blue-600" : "text-gray-700"
+                      } block w-full text-left px-4 py-2 text-sm`}
                   >
                     {item.name}
                   </button>
@@ -192,9 +200,8 @@ export default function Header() {
               <MenuItem key={item.name}>
                 {({ active }) => (
                   <button
-                    className={`${
-                      active ? "bg-blue-50 text-blue-600" : "text-gray-700"
-                    } block w-full text-left px-3 py-2 text-sm`}
+                    className={`${active ? "bg-blue-50 text-blue-600" : "text-gray-700"
+                      } block w-full text-left px-3 py-2 text-sm`}
                   >
                     {item.abbreviation}
                   </button>
