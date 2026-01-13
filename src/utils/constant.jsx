@@ -2,6 +2,48 @@ export const type = location.pathname.split("/")[1];
 import CryptoJS from "crypto-js";
 import { AES } from "crypto-js";
 const secretKey = "RoyalPropertyKey";
+import {
+  FaSchool,
+  FaHospital,
+  FaUniversity,
+  FaShoppingCart,
+  FaShoppingBag,
+  FaTree,
+  FaBus,
+  FaSubway,
+  FaTrain,
+  FaPlane,
+  FaBuilding,
+  FaCreditCard,
+  FaUtensils,
+  FaHotel,
+  FaGasPump,
+  FaPlaceOfWorship,
+  FaMosque,
+  FaChurch
+} from 'react-icons/fa';
+
+export const NearbyPlace = {
+  SCHOOL: { label: 'School', icon: FaSchool },
+  HOSPITAL: { label: 'Hospital', icon: FaHospital },
+  COLLEGE: { label: 'College', icon: FaUniversity },
+  MARKET: { label: 'Market', icon: FaShoppingCart },
+  MALL: { label: 'Mall', icon: FaShoppingBag },
+  PARK: { label: 'Park', icon: FaTree },
+  BUS_STOP: { label: 'Bus Stop', icon: FaBus },
+  METRO_STATION: { label: 'Metro Station', icon: FaSubway },
+  RAILWAY_STATION: { label: 'Railway Station', icon: FaTrain },
+  AIRPORT: { label: 'Airport', icon: FaPlane },
+  BANK: { label: 'Bank', icon: FaBuilding },
+  ATM: { label: 'ATM', icon: FaCreditCard },
+  RESTAURANT: { label: 'Restaurant', icon: FaUtensils },
+  HOTEL: { label: 'Hotel', icon: FaHotel },
+  PETROL_PUMP: { label: 'Petrol Pump', icon: FaGasPump },
+  TEMPLE: { label: 'Temple', icon: FaPlaceOfWorship },
+  MOSQUE: { label: 'Mosque', icon: FaMosque },
+  CHURCH: { label: 'Church', icon: FaChurch }
+}
+
 
 export const encrypt = (text) => {
   return CryptoJS.AES.encrypt(text, secretKey).toString();
@@ -39,7 +81,6 @@ export const formatDate = (dateString) => {
 };
 
 export const userType = decrypt(localStorage.getItem("userRole") || "");
-
 
 
 export const menuItems = [

@@ -38,6 +38,7 @@ import Mapper from "./page/map";
 import AgentProperty from "./page/agent/agentProperty";
 import HomeValuation from "./page/homeValuation";
 import PropertyListing from "./page/buyer/propertyListing";
+import CategoryListing from "./page/buyer/categoryListing";
 
 // Create a wrapper component that validates userType
 const checkAuthToken = () => {
@@ -229,6 +230,15 @@ function App() {
             element={
               <BuyerOnlyRoute>
                 <BuyerHome />
+              </BuyerOnlyRoute>
+            }
+          />
+
+            <Route
+            path="category-listing"
+            element={
+              <BuyerOnlyRoute>
+                <CategoryListing />
               </BuyerOnlyRoute>
             }
           />

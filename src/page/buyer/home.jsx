@@ -25,7 +25,7 @@ import {
 import { MdLocationOn, MdPeople, MdBusiness } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../component/axiosInstance";
-import { formatDate } from "../../utils/constant";
+import { formatDate, NearbyPlace } from "../../utils/constant";
 
 export default function BuyerHome() {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -637,7 +637,7 @@ export default function BuyerHome() {
         <motion.div className="flex justify-between" variants={itemVariants}>
           <h5>Nearby</h5>
           <motion.div whileHover={{ x: 5 }}>
-            <Link to="/buyers/property-listing" className="text-primary font-semibold hover:underline">
+            <Link to="/buyers/category-listing" className="text-primary font-semibold hover:underline">
               See All
             </Link>
           </motion.div>
@@ -646,47 +646,49 @@ export default function BuyerHome() {
           className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           variants={containerVariants}
         >
-          {data.slice(0, 4).map((item, index) => (
-            <motion.div
-              key={index}
-              className="relative"
-              variants={itemVariants}
-              whileHover="hover"
-              initial="initial"
-            >
-              <Link to="/buyers/property-detail/123">
-                <motion.div variants={cardVariants}>
-                  <Card
-                    className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full`}
-                  >
-                    <CardBody className="overflow-visible pb-2">
-                      <motion.img
-                        alt="Card background"
-                        className="object-cover"
-                        src={Building}
-                        width="100%"
-                        height="100%"
-                        style={{ borderRadius: "15px 15px 0 0" }}
-                      />
+          {Object.entries(NearbyPlace)
+            .slice(0, 4)
+            .map(([key, item], index) => (
+              <motion.div
+                key={index}
+                className="relative"
+                variants={itemVariants}
+                whileHover="hover"
+                initial="initial"
+              >
+                <Link to={`/buyers/property-listing?nearbyPlaces=${item.label}`}>
+                  <motion.div variants={cardVariants}>
+                    <Card
+                      className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full`}
+                    >
+                      <CardBody className="overflow-visible pb-2">
+                        <motion.img
+                          alt="Card background"
+                          className="object-cover"
+                          src={Building}
+                          width="100%"
+                          height="100%"
+                          style={{ borderRadius: "15px 15px 0 0" }}
+                        />
 
-                      {/* Rest of card content remains the same */}
-                      <div className="flex flex-col gap-1 px-3 pt-2 px-2">
-                        <h2>{item.title}</h2>
-                        <motion.button
-                          type="submit"
-                          className="flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          View Details
-                        </motion.button>
-                      </div>
-                    </CardBody>
-                  </Card>
-                </motion.div>{" "}
-              </Link>
-            </motion.div>
-          ))}
+                        {/* Rest of card content remains the same */}
+                        <div className="flex flex-col gap-1 px-3 pt-2 px-2">
+                          <h2 className="text-gray-800 text-md text-center">{item.label}</h2>
+                          <motion.button
+                            type="submit"
+                            className="flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            View Details
+                          </motion.button>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </motion.div>{" "}
+                </Link>
+              </motion.div>
+            ))}
         </motion.div>
       </motion.div>
 

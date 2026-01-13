@@ -54,15 +54,15 @@ export default function WatchList() {
     const showRemoveConfirmation = (item) => {
         showConfirmation({
             title: "Remove from Watchlist?",
-            message: `Are you sure you want to remove "${item.propertyId.property}" from your watchlist?`,
+            message: `Are you sure you want to remove "${item?.propertyId?.property}" from your watchlist?`,
             itemDetails: {
-                property: item.propertyId.property,
-                price: formatPrice(item.propertyId.price),
-                address: item.propertyId.address,
-                added: formatDate(item.createdAt)
+                property: item?.propertyId?.property,
+                price: formatPrice(item?.propertyId?.price),
+                address: item?.propertyId?.address,
+                added: formatDate(item?.createdAt)
             },
-            apiEndpoint: `/buyer/watchlist/${item._id}`,
-            itemId: item._id,
+            apiEndpoint: `/buyer/watchlist/${item?._id}`,
+            itemId: item?._id,
             onConfirm: () => handleRemoveFromWatchlist(item)
         })
     }
@@ -96,7 +96,7 @@ export default function WatchList() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                         {watchlistItems.map((item) => {
                             const property = item.propertyId
-                            const photos = property.photos || []
+                            const photos = property?.photos || []
 
                             return (
                                 <div
@@ -134,7 +134,7 @@ export default function WatchList() {
                                                             <SwiperSlide key={photo._id || index}>
                                                                 <div className="relative h-full w-full">
                                                                     <img
-                                                                        src={photo.url}
+                                                                        src={photo?.url}
                                                                         alt={`${property.property} - ${index + 1}`}
                                                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                                                         loading="lazy"
@@ -192,13 +192,13 @@ export default function WatchList() {
                                             {/* Title and Price */}
                                             <div className="mb-3">
                                                 <div className="flex justify-between items-start mb-3">
-                                                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 pr-4">{property.property}</h3>
+                                                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 pr-4">{property?.property}</h3>
                                                     <div className="text-right">
                                                         <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                                                            {formatPrice(property.price)}
+                                                            {formatPrice(property?.price)}
                                                         </div>
                                                         <div className="text-sm text-gray-600">
-                                                            {property.keyFacts.pricePerSqft}/sqft
+                                                            {property?.keyFacts?.pricePerSqft}/sqft
                                                         </div>
                                                     </div>
                                                 </div>
@@ -206,7 +206,7 @@ export default function WatchList() {
                                                     <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                                                     </svg>
-                                                    <span className="line-clamp-1">{property.address}</span>
+                                                    <span className="line-clamp-1">{property?.address}</span>
                                                 </div>
                                             </div>
 
@@ -214,19 +214,19 @@ export default function WatchList() {
                                             <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
                                                 <div className="border border-gray-200 p-2 rounded-xl">
                                                     <div className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-1">Type</div>
-                                                    <div className="font-bold text-gray-900">{property.keyFacts.propertyType}</div>
+                                                    <div className="font-bold text-gray-900">{property?.keyFacts?.propertyType}</div>
                                                 </div>
                                                 <div className="border border-gray-200 p-2 rounded-xl">
                                                     <div className="text-xs font-semibold text-green-700 uppercase tracking-wide mb-1">Size</div>
-                                                    <div className="font-bold text-gray-900">{property.keyFacts.size} sqft</div>
+                                                    <div className="font-bold text-gray-900">{property?.keyFacts?.size} sqft</div>
                                                 </div>
                                                 <div className="border border-gray-200 p-2 rounded-xl">
                                                     <div className="text-xs font-semibold text-purple-700 uppercase tracking-wide mb-1">Year Built</div>
-                                                    <div className="font-bold text-gray-900">{property.keyFacts.yearBuilt}</div>
+                                                    <div className="font-bold text-gray-900">{property?.keyFacts?.yearBuilt}</div>
                                                 </div>
                                                 <div className="border border-gray-200 p-2 rounded-xl">
                                                     <div className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">Parking</div>
-                                                    <div className="font-bold text-gray-900">{property.keyFacts.parking} spots</div>
+                                                    <div className="font-bold text-gray-900">{property?.keyFacts?.parking} spots</div>
                                                 </div>
                                             </div>
 
@@ -241,14 +241,14 @@ export default function WatchList() {
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                     </svg>
-                                                    <span className="text-sm">Added {formatDate(item.createdAt)}</span>
+                                                    <span className="text-sm">Added {formatDate(item?.createdAt)}</span>
                                                 </div>
-                                                {property.keyFacts.lotSize && (
+                                                {property?.keyFacts?.lotSize && (
                                                     <div className="flex items-center gap-2">
                                                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                                             <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                                                         </svg>
-                                                        <span className="text-sm">{property.keyFacts.lotSize} acre lot</span>
+                                                        <span className="text-sm">{property?.keyFacts?.lotSize} acre lot</span>
                                                     </div>
                                                 )}
                                             </div>
