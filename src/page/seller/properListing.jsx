@@ -583,7 +583,7 @@ const PropertyListingForm = () => {
                       onChange={(e) =>
                         handleInputChange("price", e.target.value)
                       }
-                      prefix="₹"
+                      prefix="$"
                       required
                     />
 
