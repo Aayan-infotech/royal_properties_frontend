@@ -54,7 +54,7 @@ const SellerHome = () => {
 
   const handleViewDetails = (propertyId) => {
     // You can replace this with your navigation logic
-    navigate(`/sellers/property/${propertyId}`);
+    navigate(`/sellers/property-detail/${propertyId}`);
   };
 
   const handlePageChange = (page) => {

@@ -28,7 +28,7 @@ export default function AgentHeader() {
     { name: "Client management", path: "/home" },
     { name: "Appointments", path: "/home" },
     { name: "Property Listing", path: "/agent-property" },
-    { name: "Map View", path: "/home" },
+    { name: "Map View", path: "/map" },
     { name: "Reports", path: "/home" },
   ];
 

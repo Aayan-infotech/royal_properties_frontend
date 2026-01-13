@@ -205,10 +205,10 @@ function App() {
           />
 
           <Route
-            path="property/:id"
+            path="property-detail/:id"
             element={
               <SellerOnlyRoute>
-                <SellerPropertyDetail />
+                <PropertyDetail />
               </SellerOnlyRoute>
             }
           />
@@ -312,6 +312,15 @@ function App() {
             element={
               <AgentOnlyRoute>
                 <AgentHome />
+              </AgentOnlyRoute>
+            }
+          />
+
+           <Route
+            path="map"
+            element={
+              <AgentOnlyRoute>
+                <Mapper />
               </AgentOnlyRoute>
             }
           />

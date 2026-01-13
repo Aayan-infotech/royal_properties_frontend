@@ -24,14 +24,30 @@ const Mapper = () => {
 
   useEffect(() => {
     loadMapData().then((data) => {
-      setRealEstateListings(data);
+      console.log("Raw data from API:", data);
+      // Filter out listings with invalid coordinates
+      const validListings = data.filter(listing => {
+        const isValid = listing.letLONG &&
+          Array.isArray(listing.letLONG) &&
+          listing.letLONG.length === 2 &&
+          typeof listing.letLONG[0] === 'number' &&
+          typeof listing.letLONG[1] === 'number';
+
+        if (!isValid) {
+          console.warn('Invalid listing coordinates:', listing);
+        }
+        return isValid;
+      });
+
+      console.log(`Valid listings: ${validListings.length} out of ${data.length}`);
+      setRealEstateListings(validListings);
     });
   }, []);
 
-  // Calculate center based on first listing or use default
-  const mapCenter = realEstateListings.length > 0 && realEstateListings[0].letLONG
-    ? { lat: realEstateListings[0].letLONG[0], lng: realEstateListings[0].letLONG[1] }
-    : { lat: 19.1367, lng: 72.8265 }; // Mumbai coordinates as default
+  console.log("realEstateListings with coordinates:", realEstateListings.map(l => ({
+    id: l.propertyId,
+    coords: l.letLONG
+  })));
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
@@ -40,7 +56,7 @@ const Mapper = () => {
           <Map
             mapId={"bf51a910020fa25a"}
             defaultZoom={12}
-            defaultCenter={mapCenter}
+            // defaultCenter={mapCenter}
             gestureHandling={"greedy"}
             disableDefaultUI
           >

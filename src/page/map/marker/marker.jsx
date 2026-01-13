@@ -15,11 +15,11 @@ export const CustomAdvancedMarker = ({ realEstateListing }) => {
   const [loading, setLoading] = useState(false);
 
   // Add safety check for letLONG
-  if (!realEstateListing?.letLONG || realEstateListing.letLONG.length < 2) {
+  if (!realEstateListing?.letLONG ) {
     console.warn('Invalid coordinates for listing:', realEstateListing);
     return null;
   }
-
+console.log(realEstateListing , "realEstateListing")
   const position = {
     lat: realEstateListing.letLONG[0],
     lng: realEstateListing.letLONG[1],
