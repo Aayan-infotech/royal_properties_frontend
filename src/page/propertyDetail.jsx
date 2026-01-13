@@ -53,6 +53,7 @@ export default function PropertyDetail() {
     phone: "",
     message: "",
   });
+  console.log(userType)
   const [selectedAgent, setSelectedAgent] = useState(null);
   // Sample images - replace with your actual images
   const images = [
@@ -1117,7 +1118,7 @@ export default function PropertyDetail() {
                 </TabGroup>
               </div>
 
-              {userType !== "agents" && <>
+              {!userType === "agents" && <>
                 <div className="lg:col-span-1">
                   <div className="bg-white rounded-lg shadow-sm p-6 px-3 ">
                     <div className="mb-4">
