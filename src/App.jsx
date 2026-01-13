@@ -1,6 +1,6 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { useParams } from "react-router-dom";
-
+import { useParams , useLocation } from "react-router-dom";
+import React , {useEffect} from "react"
 import "./App.css";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./page/home";
@@ -39,6 +39,22 @@ import AgentProperty from "./page/agent/agentProperty";
 import HomeValuation from "./page/homeValuation";
 import PropertyListing from "./page/buyer/propertyListing";
 import CategoryListing from "./page/buyer/categoryListing";
+
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant" // Use "smooth" for smooth scrolling
+    });
+  }, [pathname]);
+
+  return null;
+};
+
 
 // Create a wrapper component that validates userType
 const checkAuthToken = () => {
@@ -126,6 +142,7 @@ const AgentOnlyRoute = ({ children }) => {
 function App() {
   return (
     <BrowserRouter>
+    <ScrollToTop />
       <Routes>
         <Route element={<MainLayout />}>
 
