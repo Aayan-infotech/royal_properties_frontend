@@ -25,6 +25,7 @@ import {
 import { MdLocationOn, MdPeople, MdBusiness } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../component/axiosInstance";
+import { formatDate } from "../../utils/constant";
 
 export default function BuyerHome() {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -288,7 +289,7 @@ export default function BuyerHome() {
   const getData = async (page) => {
     try {
       const response = await axiosInstance.get(
-        `/properties?page=${page}&limit=10`
+        `/properties?page=${page}&limit=4`
       );
       setData(response.data.data.data);
       setPagination(response.data.data.pagination);
@@ -461,54 +462,33 @@ export default function BuyerHome() {
                       </AnimatePresence>
                     </motion.div>
 
-                    <div className="flex flex-col gap-1 px-3 pt-2 px-2">
-                      <motion.div
-                        className="flex justify-between"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.1 }}
-                      >
-                        <span className="text-gray-800 text-sm">
-                          Listed: <b>${item.price}</b>
+                   <div className="flex flex-col gap-1 px-3 pt-2 px-2">
+                         <span className="text-gray-800 text-sm">
+                            <b>{item?.property}</b>
+                          </span>
+                        <div className="flex justify-between">
+                          <span className="text-gray-800 text-sm">
+                            Listed: <b>${item.price}</b>
+                          </span>
+                          <span className="text-gray-500 text-sm">
+                            {formatDate(item.createdAt)}
+                          </span>
+                        </div>
+                        <span className="text-gray-800 text-sm truncate ">
+                          {item.address}
                         </span>
-                        <span className="text-gray-500 text-sm">
-                          {item.minutes} minutes ago
-                        </span>
-                      </motion.div>
-                      <motion.span
-                        className="text-gray-800 text-sm"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                      >
-                        {item.address}
-                      </motion.span>
-                      <motion.div
-                        className="flex row gap-2 text-sm py-2"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                      >
-                        <motion.span
-                          className="flex row gap-2"
-                          whileHover={{ scale: 1.1 }}
-                        >
-                          <IoBedSharp size={20} /> {item.bed}
-                        </motion.span>
-                        <motion.span
-                          className="flex row gap-2"
-                          whileHover={{ scale: 1.1 }}
-                        >
-                          <FaBath size={16} /> {item.bath}
-                        </motion.span>
-                        <motion.span
-                          className="flex row gap-2"
-                          whileHover={{ scale: 1.1 }}
-                        >
-                          <PiGarageFill size={20} /> {item.garage}
-                        </motion.span>
-                      </motion.div>
-                    </div>
+                        <div className="flex row gap-2 text-sm py-2">
+                          <span className="flex row gap-2">
+                            <IoBedSharp size={20} /> {item?.details?.bedrooms}
+                          </span>
+                          <span className="flex row gap-2">
+                            <FaBath size={16} /> {item?.details?.fullBathrooms}
+                          </span>
+                          <span className="flex row gap-2">
+                            <PiGarageFill size={20} /> {item?.keyFacts?.parking}
+                          </span>
+                        </div>
+                      </div>
 
                     <motion.div
                       className="px-2"
@@ -516,7 +496,7 @@ export default function BuyerHome() {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.4 }}
                     >
-                      <hr className="border-gray-400" />
+                    
                       <span className="text-gray-500 text-sm pt-2">
                         {item.des}
                       </span>
@@ -605,31 +585,34 @@ export default function BuyerHome() {
                       </motion.div>
                       {/* Rest of card content remains the same */}
                       <div className="flex flex-col gap-1 px-3 pt-2 px-2">
+                         <span className="text-gray-800 text-sm">
+                            <b>{item?.property}</b>
+                          </span>
                         <div className="flex justify-between">
                           <span className="text-gray-800 text-sm">
                             Listed: <b>${item.price}</b>
                           </span>
                           <span className="text-gray-500 text-sm">
-                            {item.minutes} minutes ago
+                            {formatDate(item.createdAt)}
                           </span>
                         </div>
-                        <span className="text-gray-800 text-sm">
+                        <span className="text-gray-800 text-sm truncate ">
                           {item.address}
                         </span>
                         <div className="flex row gap-2 text-sm py-2">
                           <span className="flex row gap-2">
-                            <IoBedSharp size={20} /> {item.bed}
+                            <IoBedSharp size={20} /> {item?.details?.bedrooms}
                           </span>
                           <span className="flex row gap-2">
-                            <FaBath size={16} /> {item.bath}
+                            <FaBath size={16} /> {item?.details?.fullBathrooms}
                           </span>
                           <span className="flex row gap-2">
-                            <PiGarageFill size={20} /> {item.garage}
+                            <PiGarageFill size={20} /> {item?.keyFacts?.parking}
                           </span>
                         </div>
                       </div>
                       <div className="px-2">
-                        <hr className="border-gray-400" />
+                        {/* <hr className="border-gray-400" /> */}
                         <span className="text-gray-500 text-sm pt-2">
                           {item.des}
                         </span>

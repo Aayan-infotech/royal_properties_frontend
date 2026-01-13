@@ -118,7 +118,7 @@ export default function BuyerHeader() {
       </NavbarContent>
 
       {/* Mobile Menu */}
-      <NavbarMenu className="bg-[#132141] pt-8">
+      <NavbarMenu className="bg-[#132141] pt-8 " style={{zIndex:999}}>
         {menuItems.map((item) => (
           <NavbarMenuItem key={item.name}>
             <Link className="block text-white py-4 px-4" to={item.path}>

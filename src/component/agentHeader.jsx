@@ -115,7 +115,7 @@ export default function AgentHeader() {
       </NavbarContent>
 
       {/* Mobile Menu */}
-      <NavbarMenu className="bg-[#132141] pt-8">
+      <NavbarMenu className="bg-[#132141] pt-8"  style={{zIndex:999}}>
         {menuItems.map((item) => (
           <NavbarMenuItem key={item.name}>
             <Link
