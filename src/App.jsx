@@ -136,7 +136,23 @@ function App() {
           <Route path="/blog/:id" element={<ValidUserRoute><Blog /></ValidUserRoute>} />
           <Route path="/home-valuation" element={<ValidUserRoute><HomeValuation /></ValidUserRoute>} />
           <Route path="/agents" element={<ValidUserRoute><Agents /></ValidUserRoute>} />
+          <Route
+            path="property-listing"
+            element={
+              <ValidUserRoute>
+                <PropertyListing />
+              </ValidUserRoute>
+            }
+          />
 
+            <Route
+            path="category-listing"
+            element={
+              <ValidUserRoute>
+                <CategoryListing />
+              </ValidUserRoute>
+            }
+          />
           {/* Add validation for RoleSelection too */}
           <Route path="/role/:userType" element={<RoleSelection />} />
 
@@ -234,7 +250,7 @@ function App() {
             }
           />
 
-            <Route
+          <Route
             path="category-listing"
             element={
               <BuyerOnlyRoute>
@@ -261,7 +277,7 @@ function App() {
             }
           />
 
-           <Route
+          <Route
             path="property-listing"
             element={
               <BuyerOnlyRoute>
@@ -326,7 +342,7 @@ function App() {
             }
           />
 
-           <Route
+          <Route
             path="map"
             element={
               <AgentOnlyRoute>

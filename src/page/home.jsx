@@ -12,6 +12,7 @@ import data from "../data/home.json";
 import Chart from "react-apexcharts";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
+import { NearbyPlace } from '../utils/constant';
 
 export default function Home() {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -393,9 +394,8 @@ export default function Home() {
             >
               <motion.div variants={cardVariants} style={{ originY: 0 }}>
                 <Card
-                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full ${
-                    item?.login && `blur-[1.5px]`
-                  }`}
+                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full ${item?.login && `blur-[1.5px]`
+                    }`}
                 >
                   <CardBody className="overflow-visible pb-2">
                     <motion.div
@@ -550,9 +550,8 @@ export default function Home() {
             >
               <motion.div variants={cardVariants}>
                 <Card
-                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full ${
-                    item?.login && `blur-[1.5px]`
-                  }`}
+                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full ${item?.login && `blur-[1.5px]`
+                    }`}
                 >
                   <CardBody className="overflow-visible pb-2">
                     <motion.div
@@ -651,7 +650,7 @@ export default function Home() {
           </motion.div>
         </motion.div>
         <motion.div
-  className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"          variants={containerVariants}
+          className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" variants={containerVariants}
         >
           {data.slice(0, 4).map((item, index) => (
             <motion.div
@@ -663,9 +662,8 @@ export default function Home() {
             >
               <motion.div variants={cardVariants}>
                 <Card
-                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full ${
-                    item?.login && `blur-[1.5px]`
-                  }`}
+                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full ${item?.login && `blur-[1.5px]`
+                    }`}
                 >
                   <CardBody className="overflow-visible pb-2">
                     <motion.div
@@ -747,6 +745,71 @@ export default function Home() {
         </motion.div>
       </motion.div>
 
+
+      <motion.div
+        className="max-w-7xl mx-auto py-4"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+      >
+        <motion.div className="flex justify-between" variants={itemVariants}>
+          <h5>Nearby</h5>
+          <motion.div whileHover={{ x: 5 }}>
+            <Link to="/category-listing" className="text-primary font-semibold hover:underline">
+              See All
+            </Link>
+          </motion.div>
+        </motion.div>
+        <motion.div
+          className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          variants={containerVariants}
+        >
+          {Object.entries(NearbyPlace)
+            .slice(0, 4)
+            .map(([key, item], index) => (
+              <motion.div
+                key={index}
+                className="relative"
+                variants={itemVariants}
+                whileHover="hover"
+                initial="initial"
+              >
+                <Link to={`/property-listing?nearbyPlaces=${item.label}`}>
+                  <motion.div variants={cardVariants}>
+                    <Card
+                      className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full`}
+                    >
+                      <CardBody className="overflow-visible pb-2">
+                        <motion.img
+                          alt="Card background"
+                          className="object-cover"
+                          src={Building}
+                          width="100%"
+                          height="100%"
+                          style={{ borderRadius: "15px 15px 0 0" }}
+                        />
+
+                        {/* Rest of card content remains the same */}
+                        <div className="flex flex-col gap-1 px-3 pt-2 px-2">
+                          <h2 className="text-gray-800 text-md text-center">{item.label}</h2>
+                          <motion.button
+                            type="submit"
+                            className="flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            View Details
+                          </motion.button>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </motion.div>{" "}
+                </Link>
+              </motion.div>
+            ))}
+        </motion.div>
+      </motion.div>
       {/* Chart Section */}
       <motion.div
         className="my-3 mb-4"

@@ -114,7 +114,7 @@ const NoDataFound = () => (
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 200 }}
             >
-               
+
             </motion.div>
             <h3 className="text-xl font-semibold text-gray-800 mb-2">
                 No Properties Found
@@ -152,9 +152,9 @@ export default function PropertyListing() {
 
     const getData = async (page) => {
         try {
-            const response = await axiosInstance.get(
-                `/properties/approved?page=${page}&limit=12&nearbyPlaces=${nearbyPlaces}`
-            );
+            const url = `/properties/approved?page=${page}&limit=12${nearbyPlaces ? `&nearbyPlaces=${nearbyPlaces}` : ''}`;
+
+            const response = await axiosInstance.get(url);
             setData(response.data.data.data);
             setPagination(response.data.data.pagination);
             setCurrentPage(page);
