@@ -37,6 +37,7 @@ import AgentLayout from "./layouts/agentLayout";
 import Mapper from "./page/map";
 import AgentProperty from "./page/agent/agentProperty";
 import HomeValuation from "./page/homeValuation";
+import PropertyListing from "./page/buyer/propertyListing";
 
 // Create a wrapper component that validates userType
 const checkAuthToken = () => {
@@ -128,12 +129,12 @@ function App() {
         <Route element={<MainLayout />}>
 
           <Route path="/" element={<ValidUserRoute><Home /></ValidUserRoute>} />
-          <Route path="/map" element={<Mapper />} />
-          <Route path="/propertydetail/:id" element={<PropertyDetail />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/blog/:id" element={<Blog />} />
-          <Route path="/home-valuation" element={<HomeValuation />} />
-          <Route path="/agents" element={<Agents />} />
+          <Route path="/map" element={<ValidUserRoute><Mapper /></ValidUserRoute>} />
+          <Route path="/propertydetail/:id" element={<ValidUserRoute><PropertyDetail /></ValidUserRoute>} />
+          <Route path="/blogs" element={<ValidUserRoute><Blogs /></ValidUserRoute>} />
+          <Route path="/blog/:id" element={<ValidUserRoute><Blog /></ValidUserRoute>} />
+          <Route path="/home-valuation" element={<ValidUserRoute><HomeValuation /></ValidUserRoute>} />
+          <Route path="/agents" element={<ValidUserRoute><Agents /></ValidUserRoute>} />
 
           {/* Add validation for RoleSelection too */}
           <Route path="/role/:userType" element={<RoleSelection />} />
@@ -246,6 +247,15 @@ function App() {
             element={
               <BuyerOnlyRoute>
                 <Mapper />
+              </BuyerOnlyRoute>
+            }
+          />
+
+           <Route
+            path="property-listing"
+            element={
+              <BuyerOnlyRoute>
+                <PropertyListing />
               </BuyerOnlyRoute>
             }
           />

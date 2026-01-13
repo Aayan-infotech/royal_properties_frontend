@@ -310,7 +310,7 @@ export default function BuyerHome() {
   }, []);
 
   const handlePropertyClick = (property) => {
-    console.log("button clicking" , property);
+    console.log("button clicking", property);
     navigate(`/buyers/property-detail/${property._id}`, { state: { property } });
     // navigate(`/buyers/property-detail/${property.id}`, { state: { property } });
   };
@@ -398,7 +398,7 @@ export default function BuyerHome() {
         <motion.div className="flex justify-between" variants={itemVariants}>
           <h5>Featured Listing</h5>
           <motion.div whileHover={{ x: 5 }}>
-            <Link to="/" className="text-primary font-semibold hover:underline">
+            <Link to="/buyers/property-listing" className="text-primary font-semibold hover:underline">
               See All
             </Link>
           </motion.div>
@@ -462,33 +462,33 @@ export default function BuyerHome() {
                       </AnimatePresence>
                     </motion.div>
 
-                   <div className="flex flex-col gap-1 px-3 pt-2 px-2">
-                         <span className="text-gray-800 text-sm">
-                            <b>{item?.property}</b>
-                          </span>
-                        <div className="flex justify-between">
-                          <span className="text-gray-800 text-sm">
-                            Listed: <b>${item.price}</b>
-                          </span>
-                          <span className="text-gray-500 text-sm">
-                            {formatDate(item.createdAt)}
-                          </span>
-                        </div>
-                        <span className="text-gray-800 text-sm truncate ">
-                          {item.address}
+                    <div className="flex flex-col gap-1 px-3 pt-2 px-2">
+                      <span className="text-gray-800 text-sm">
+                        <b>{item?.property}</b>
+                      </span>
+                      <div className="flex justify-between">
+                        <span className="text-gray-800 text-sm">
+                          Listed: <b>${item.price}</b>
                         </span>
-                        <div className="flex row gap-2 text-sm py-2">
-                          <span className="flex row gap-2">
-                            <IoBedSharp size={20} /> {item?.details?.bedrooms}
-                          </span>
-                          <span className="flex row gap-2">
-                            <FaBath size={16} /> {item?.details?.fullBathrooms}
-                          </span>
-                          <span className="flex row gap-2">
-                            <PiGarageFill size={20} /> {item?.keyFacts?.parking}
-                          </span>
-                        </div>
+                        <span className="text-gray-500 text-sm">
+                          {formatDate(item.createdAt)}
+                        </span>
                       </div>
+                      <span className="text-gray-800 text-sm truncate ">
+                        {item.address}
+                      </span>
+                      <div className="flex row gap-2 text-sm py-2">
+                        <span className="flex row gap-2">
+                          <IoBedSharp size={20} /> {item?.details?.bedrooms}
+                        </span>
+                        <span className="flex row gap-2">
+                          <FaBath size={16} /> {item?.details?.fullBathrooms}
+                        </span>
+                        <span className="flex row gap-2">
+                          <PiGarageFill size={20} /> {item?.keyFacts?.parking}
+                        </span>
+                      </div>
+                    </div>
 
                     <motion.div
                       className="px-2"
@@ -496,7 +496,7 @@ export default function BuyerHome() {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.4 }}
                     >
-                    
+
                       <span className="text-gray-500 text-sm pt-2">
                         {item.des}
                       </span>
@@ -537,7 +537,7 @@ export default function BuyerHome() {
         <motion.div className="flex justify-between" variants={itemVariants}>
           <h5>Just Sold in British Columbia</h5>
           <motion.div whileHover={{ x: 5 }}>
-            <Link to="/" className="text-primary font-semibold hover:underline">
+            <Link to="/buyers/property-listing" className="text-primary font-semibold hover:underline">
               See All
             </Link>
           </motion.div>
@@ -567,8 +567,8 @@ export default function BuyerHome() {
                       >
                         <motion.img
                           alt="Card background"
-                          className="object-cover"
-                          src={Building}
+                          className="object-cover h-[200px]"
+                          src={item?.photos[0]?.url || Building}
                           width="100%"
                           height="100%"
                           style={{ borderRadius: "15px 15px 0 0" }}
@@ -585,9 +585,9 @@ export default function BuyerHome() {
                       </motion.div>
                       {/* Rest of card content remains the same */}
                       <div className="flex flex-col gap-1 px-3 pt-2 px-2">
-                         <span className="text-gray-800 text-sm">
-                            <b>{item?.property}</b>
-                          </span>
+                        <span className="text-gray-800 text-sm">
+                          <b>{item?.property}</b>
+                        </span>
                         <div className="flex justify-between">
                           <span className="text-gray-800 text-sm">
                             Listed: <b>${item.price}</b>
@@ -637,7 +637,7 @@ export default function BuyerHome() {
         <motion.div className="flex justify-between" variants={itemVariants}>
           <h5>Nearby</h5>
           <motion.div whileHover={{ x: 5 }}>
-            <Link to="/" className="text-primary font-semibold hover:underline">
+            <Link to="/buyers/property-listing" className="text-primary font-semibold hover:underline">
               See All
             </Link>
           </motion.div>
@@ -905,9 +905,8 @@ export default function BuyerHome() {
 
       {/* Sidebar - Personalized Listing */}
       <div
-        className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
-          sidebarOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${sidebarOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         <div className="h-full overflow-y-auto">
           {/* Header */}
@@ -976,11 +975,10 @@ export default function BuyerHome() {
                 <div className="flex items-center justify-between">
                   <label className="flex items-center gap-3 cursor-pointer">
                     <div
-                      className={`w-5 h-5 rounded border flex items-center justify-center ${
-                        propertyType.detached
-                          ? "bg-blue-600 border-blue-600"
-                          : "border-gray-300"
-                      }`}
+                      className={`w-5 h-5 rounded border flex items-center justify-center ${propertyType.detached
+                        ? "bg-blue-600 border-blue-600"
+                        : "border-gray-300"
+                        }`}
                       onClick={() => handlePropertyTypeChange("detached")}
                     >
                       {propertyType.detached && (
@@ -992,11 +990,10 @@ export default function BuyerHome() {
                   <label className="flex items-center gap-3 cursor-pointer">
                     <span className="text-gray-700">Semi-Detached</span>
                     <div
-                      className={`w-5 h-5 rounded border flex items-center justify-center ${
-                        propertyType.semiDetached
-                          ? "bg-blue-600 border-blue-600"
-                          : "border-gray-300"
-                      }`}
+                      className={`w-5 h-5 rounded border flex items-center justify-center ${propertyType.semiDetached
+                        ? "bg-blue-600 border-blue-600"
+                        : "border-gray-300"
+                        }`}
                       onClick={() => handlePropertyTypeChange("semiDetached")}
                     >
                       {propertyType.semiDetached && (
@@ -1009,11 +1006,10 @@ export default function BuyerHome() {
                 <div className="flex items-center justify-between">
                   <label className="flex items-center gap-3 cursor-pointer">
                     <div
-                      className={`w-5 h-5 rounded border flex items-center justify-center ${
-                        propertyType.freeholdTownhouse
-                          ? "bg-blue-600 border-blue-600"
-                          : "border-gray-300"
-                      }`}
+                      className={`w-5 h-5 rounded border flex items-center justify-center ${propertyType.freeholdTownhouse
+                        ? "bg-blue-600 border-blue-600"
+                        : "border-gray-300"
+                        }`}
                       onClick={() =>
                         handlePropertyTypeChange("freeholdTownhouse")
                       }
@@ -1027,11 +1023,10 @@ export default function BuyerHome() {
                   <label className="flex items-center gap-3 cursor-pointer">
                     <span className="text-gray-700">Condo Townhouse</span>
                     <div
-                      className={`w-5 h-5 rounded border flex items-center justify-center ${
-                        propertyType.condoTownhouse
-                          ? "bg-blue-600 border-blue-600"
-                          : "border-gray-300"
-                      }`}
+                      className={`w-5 h-5 rounded border flex items-center justify-center ${propertyType.condoTownhouse
+                        ? "bg-blue-600 border-blue-600"
+                        : "border-gray-300"
+                        }`}
                       onClick={() => handlePropertyTypeChange("condoTownhouse")}
                     >
                       {propertyType.condoTownhouse && (
@@ -1052,15 +1047,13 @@ export default function BuyerHome() {
                   Luxury House
                 </h3>
                 <div
-                  className={`w-10 h-5 rounded-full cursor-pointer transition-colors ${
-                    luxuryHouse ? "bg-blue-600" : "bg-gray-300"
-                  }`}
+                  className={`w-10 h-5 rounded-full cursor-pointer transition-colors ${luxuryHouse ? "bg-blue-600" : "bg-gray-300"
+                    }`}
                   onClick={() => setLuxuryHouse(!luxuryHouse)}
                 >
                   <div
-                    className={`w-4 h-4 rounded-full bg-white transform transition-transform ${
-                      luxuryHouse ? "translate-x-6" : "translate-x-1"
-                    } mt-0.5`}
+                    className={`w-4 h-4 rounded-full bg-white transform transition-transform ${luxuryHouse ? "translate-x-6" : "translate-x-1"
+                      } mt-0.5`}
                   />
                 </div>
               </div>
@@ -1124,11 +1117,10 @@ export default function BuyerHome() {
                       className="flex items-center gap-2 cursor-pointer"
                     >
                       <div
-                        className={`w-5 h-5 rounded border flex items-center justify-center ${
-                          selectedCities["GTA-Central"]?.[city]
-                            ? "bg-blue-600 border-blue-600"
-                            : "border-gray-300"
-                        }`}
+                        className={`w-5 h-5 rounded border flex items-center justify-center ${selectedCities["GTA-Central"]?.[city]
+                          ? "bg-blue-600 border-blue-600"
+                          : "border-gray-300"
+                          }`}
                         onClick={() => handleCityChange("GTA-Central", city)}
                       >
                         {selectedCities["GTA-Central"]?.[city] && (
@@ -1159,11 +1151,10 @@ export default function BuyerHome() {
                       className="flex items-center gap-2 cursor-pointer"
                     >
                       <div
-                        className={`w-5 h-5 rounded border flex items-center justify-center ${
-                          selectedCities["GTA-North"]?.[city]
-                            ? "bg-blue-600 border-blue-600"
-                            : "border-gray-300"
-                        }`}
+                        className={`w-5 h-5 rounded border flex items-center justify-center ${selectedCities["GTA-North"]?.[city]
+                          ? "bg-blue-600 border-blue-600"
+                          : "border-gray-300"
+                          }`}
                         onClick={() => handleCityChange("GTA-North", city)}
                       >
                         {selectedCities["GTA-North"]?.[city] && (

@@ -22,7 +22,15 @@ export const formatPrice = (price) => {
 };
 
 export const formatDate = (dateString) => {
+  if (!dateString) return '-'; // Handle null/undefined/empty
+
   const date = new Date(dateString);
+
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    return '-';
+  }
+
   return new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',

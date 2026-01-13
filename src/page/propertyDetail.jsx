@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import ReactImageMagnify from "react-image-magnify";
 import { IoMdClose } from "react-icons/io";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -31,10 +31,11 @@ import { useLocation, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axiosInstance from "../component/axiosInstance";
 import { AlertContext } from "../context/alertContext";
+import { formatDate } from "../utils/constant";
 
 export default function PropertyDetail() {
   const [openEnquiry, setOpenEnquiry] = useState(false);
-
+  const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
@@ -42,7 +43,7 @@ export default function PropertyDetail() {
   const [activeDescTab, setActiveDescTab] = useState("original");
   const [showMore, setShowMore] = useState(false);
   const location = useLocation();
-  const [propertyData, setPropertyData] = useState(location?.state?.property);
+  const [propertyData, setPropertyData] = useState([]);
   const { success, error } = useContext(AlertContext);
   const [loading, setLoading] = useState(false);
   const [agentForm, setAgentForm] = useState({
@@ -53,8 +54,6 @@ export default function PropertyDetail() {
     message: "",
   });
   const [selectedAgent, setSelectedAgent] = useState(null);
-
-  console.log("Location state:", location.state);
   // Sample images - replace with your actual images
   const images = [
     {
@@ -382,6 +381,26 @@ export default function PropertyDetail() {
     }
   };
 
+  const handleGetProperty = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(`/properties/${id}`);
+      if (response) {
+        setPropertyData(response?.data?.data);
+        success(response.data.message || "Property details fetched successfully!");
+      }
+    } catch (err) {
+      console.error("Error fetching property details:", err);
+      error(err.response.data.message)
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    handleGetProperty()
+  }, [id])
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
@@ -475,7 +494,7 @@ export default function PropertyDetail() {
           {/* Main Large Image */}
           <div className="md:col-span-2 md:row-span-2 relative group cursor-pointer overflow-hidden rounded-lg">
             <img
-              src={propertyData?.photos[0].url}
+              src={propertyData?.photos?.[0]?.url}
               alt="property image"
               className="w-full h-full object-cover"
               onClick={() => {
@@ -493,7 +512,7 @@ export default function PropertyDetail() {
 
           {/* Right Side Images */}
           <div className="md:col-span-2 grid grid-cols-2 gap-2">
-            {propertyData?.photos.slice(1, 5).map((img, idx) => (
+            {propertyData?.photos?.slice(1, 5).map((img, idx) => (
               <div
                 key={img._id}
                 className="relative group cursor-pointer overflow-hidden rounded-lg h-[295px]"
@@ -559,7 +578,7 @@ export default function PropertyDetail() {
                 </div>
 
                 {/* Property Features */}
-                <div className="flex justify-between items-center gap-8 mb-6 mt-4 flex-wrap lg:flex-nowrap">
+                <div className="flex justify-between items-center gap-8 mb-6 mt-4 flex-wrap ">
                   <div className="flex  items-center gap-2">
                     <IoBedSharp size={30} />
                     <span className="text-gray-700">
@@ -669,22 +688,6 @@ export default function PropertyDetail() {
                           </tbody>
                         </table>
                       </div>
-
-                      {/* Sign-in Notice */}
-                      <div className="mt-4 flex items-start gap-2 p-4 bg-gray-50 rounded-lg">
-                        <CiLock className="w-4 h-4 text-gray-600 mt-0.5 flex-shrink-0" />
-                        <p className="text-sm text-gray-700">
-                          Real estate boards require you to{" "}
-                          <button className="text-blue-600 hover:underline">
-                            Join
-                          </button>{" "}
-                          or{" "}
-                          <button className="text-blue-600 hover:underline">
-                            Log in
-                          </button>{" "}
-                          to see the full details of this property.
-                        </p>
-                      </div>
                     </TabPanel>
 
                     {/* Price Changes Tab */}
@@ -747,7 +750,7 @@ export default function PropertyDetail() {
                           <div className="grid grid-cols-2 gap-4">
                             <span className="text-sm text-gray-600">Tax:</span>
                             <span className="text-sm text-gray-900">
-                              {keyFactsData.tax}
+                              {propertyData?.keyFacts?.tax}
                             </span>
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -755,7 +758,7 @@ export default function PropertyDetail() {
                               Property Type:
                             </span>
                             <span className="text-sm text-gray-900">
-                              {keyFactsData.propertyType}
+                              {propertyData?.keyFacts?.propertyType}
                             </span>
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -763,13 +766,13 @@ export default function PropertyDetail() {
                               Year Built:
                             </span>
                             <span className="text-sm text-gray-900">
-                              {keyFactsData.yearBuilt}
+                              {propertyData?.keyFacts?.yearBuilt}
                             </span>
                           </div>
                           <div className="grid grid-cols-2 gap-4">
                             <span className="text-sm text-gray-600">Size:</span>
                             <span className="text-sm text-gray-900">
-                              {keyFactsData.size}
+                              {propertyData?.keyFacts?.size}
                             </span>
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -777,7 +780,7 @@ export default function PropertyDetail() {
                               Price/sqft:
                             </span>
                             <span className="text-sm text-gray-900">
-                              {keyFactsData.pricePerSqft}
+                              {propertyData?.keyFacts?.pricePerSqft}
                             </span>
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -785,19 +788,10 @@ export default function PropertyDetail() {
                               Lot Size:
                             </span>
                             <span className="text-sm text-gray-900">
-                              {keyFactsData.lotSize}
+                              {propertyData?.keyFacts?.lotSize}
                             </span>
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
-                            <span className="text-sm text-gray-600">
-                              Parking:
-                            </span>
-                            <div className="flex items-center gap-2">
-                              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                <FaHome className="w-5 h-5 text-blue-600" />
-                              </div>
-                            </div>
-                          </div>
+
                           <div className="grid grid-cols-2 gap-4">
                             <span className="text-sm text-gray-600 flex items-center gap-1">
                               Coop Commission:
@@ -858,7 +852,7 @@ export default function PropertyDetail() {
                               Added to Royal Property:
                             </span>
                             <span className="text-sm text-gray-900">
-                              {detailsData.addedToRoyalProperty}
+                              {formatDate(propertyData?.keyFacts?.addedToRoyalProperties)}
                             </span>
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -866,7 +860,7 @@ export default function PropertyDetail() {
                               Updated on:
                             </span>
                             <span className="text-sm text-gray-900">
-                              {detailsData.updatedOn}
+                              {formatDate(propertyData?.keyFacts?.lastUpdatedOn)}
                             </span>
                           </div>
                         </div>
@@ -984,17 +978,139 @@ export default function PropertyDetail() {
                     </TabPanel>
 
                     {/* Details Panel */}
+                    {/* Details Panel */}
                     <TabPanel className="p-6">
-                      <p className="text-gray-600">
-                        Details content coming soon...
+                      <p className="text-sm text-gray-600 mb-6">
+                        Property details for {propertyData?.address}
                       </p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Left Column */}
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Municipality:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.municipality || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Total Rooms:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.roomsAboveGrade || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Total Bedrooms:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.bedrooms || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Bedrooms Above Grade:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.bedroomsAboveGrade || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Full Bathrooms:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.fullBathrooms || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Half Bathrooms:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.halfBathrooms || "N/A"}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Right Column */}
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Fireplace:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.fireplace ? "Yes" : "No"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Basement:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.basement || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Basement Development:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.basementDevelopment || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Additional Rooms:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.additionalRooms || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Building Age:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.buildingAge || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Construction Type:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.constructionType || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Exterior Feature:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.exteriorFeature || "N/A"}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <span className="text-sm text-gray-600">Parking Features:</span>
+                            <span className="text-sm text-gray-900">
+                              {propertyData?.details?.parkingFeatures || "N/A"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </TabPanel>
 
                     {/* Rooms Panel */}
+                    {/* Rooms Panel */}
                     <TabPanel className="p-6">
-                      <p className="text-gray-600">
-                        Rooms content coming soon...
+                      <p className="text-sm text-gray-600 mb-6">
+                        Room details for {propertyData?.address}
                       </p>
+
+                      {propertyData?.rooms?.items && propertyData.rooms.items.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {propertyData.rooms.items.map((room, index) => (
+                            <div key={index} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                              <h4 className="text-md font-medium text-gray-800 mb-2">
+                                {room.name}
+                              </h4>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Size:</span>
+                                  <span className="text-sm text-gray-900 font-medium">{room.size}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Level:</span>
+                                  <span className="text-sm text-gray-900 font-medium">{room.level}</span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 text-gray-500">
+                          <p>No room information available</p>
+                        </div>
+                      )}
                     </TabPanel>
                   </TabPanels>
                 </TabGroup>
