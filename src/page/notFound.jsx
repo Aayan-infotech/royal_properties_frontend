@@ -11,11 +11,14 @@ function NotFound() {
       <div className="error mb-10 min-h-screen">
         <h1 className="code">404</h1>
         <h2 className="desc">Ops... There's something wrong.</h2>
-        <Link to={`/${decryptedUserType}/home`} style={{ color: "#007bff", textDecoration: "none" }}>
+        {decryptedUserType ? <Link to={`/${decryptedUserType}/home`} style={{ color: "#007bff", textDecoration: "none" }}>
           Go back to home
-        </Link>
+        </Link> : <Link to="/" style={{ color: "#007bff", textDecoration: "none" }}>
+          Go back to home
+        </Link>}
+
       </div>
-     
+
 
     </>
   );
