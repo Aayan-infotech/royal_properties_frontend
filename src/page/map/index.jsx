@@ -39,15 +39,9 @@ const Mapper = () => {
         return isValid;
       });
 
-      console.log(`Valid listings: ${validListings.length} out of ${data.length}`);
       setRealEstateListings(validListings);
     });
   }, []);
-
-  console.log("realEstateListings with coordinates:", realEstateListings.map(l => ({
-    id: l.propertyId,
-    coords: l.letLONG
-  })));
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
@@ -56,7 +50,7 @@ const Mapper = () => {
           <Map
             mapId={"bf51a910020fa25a"}
             defaultZoom={12}
-            // defaultCenter={mapCenter}
+            // defaultCenter={realEstateListings[0]?.letLONG}
             gestureHandling={"greedy"}
             disableDefaultUI
           >
