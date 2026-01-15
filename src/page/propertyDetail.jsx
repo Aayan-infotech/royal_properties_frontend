@@ -225,9 +225,8 @@ export default function PropertyDetail() {
           onClose();
           alert("Enquiry sent successfully!");
         }
-      } catch (error) {
-        console.error("Error sending enquiry:", error);
-        alert("Failed to send enquiry. Please try again.");
+      } catch (err) {
+        error(err?.response?.data?.data[0]?.errors[0]);
       } finally {
         setLocalLoading(false);
       }
@@ -375,7 +374,7 @@ export default function PropertyDetail() {
         success(response.data.message)
       }
     } catch (err) {
-      error(err.response.data.message)
+     error(err?.response?.data?.data[0]?.errors[0]);
     } finally {
       setLoading(false);
     }
@@ -391,7 +390,7 @@ export default function PropertyDetail() {
       }
     } catch (err) {
       console.error("Error fetching property details:", err);
-      error(err.response.data.message)
+     error(err?.response?.data?.data[0]?.errors[0]);
     } finally {
       setLoading(false);
     }

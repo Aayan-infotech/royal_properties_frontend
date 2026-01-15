@@ -565,7 +565,7 @@ const PropertyListingForm = () => {
       }
     } catch (err) {
       console.error("Error creating property:", err);
-      error(err?.response?.data?.message);
+      error(err?.response?.data?.data[0]?.errors[0]);
     } finally {
       setLoading(false);
     }
