@@ -1,45 +1,70 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { useParams , useLocation } from "react-router-dom";
-import React , {useEffect} from "react"
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
+import React, { useEffect, lazy, Suspense } from "react";
 import "./App.css";
+
+// Import layouts immediately (they're needed for route structure)
 import MainLayout from "./layouts/MainLayout";
-import Home from "./page/home";
-import MarketTrends from "./page/homeValuation";
-import Agents from "./page/agents";
-import Login from "./page/auth/login";
-import ForgotPassword from "./page/auth/forgotPassword";
-import SignUp from "./page/auth/signup";
-import Blogs from "./page/blogs";
-import RoleSelection from "./page/auth/role";
-import OTP from "./page/auth/verifyOtp";
-import ConfirmPassword from "./page/auth/confirmPassword";
-import PropertyDetail from "./page/propertyDetail";
-import Blog from "./page/blog";
-import NotFound from "./page/notFound";
-import SellerHome from "./page/seller/home";
-import PropertyListingForm from "./page/seller/properListing";
-import { encrypt, decrypt } from "./utils/constant";
-import UserProfileDashboard from "./component/myProfile";
-import SellerPropertyDetail from "./page/seller/propertyDetail";
-
-// buyer pages
-import BuyerHome from "./page/buyer/home";
-import NearbyProperties from "./page/buyer/nearbyProperties";
-import AgentProfile from "./page/buyer/agentDetail";
-import WatchList from "./page/buyer/watchList";
-
-// agent pages
-import AgentHome from "./page/agent/home";
-
 import BuyerLayout from "./layouts/buyerLayout";
 import SellerLayout from "./layouts/sellerLayout";
 import AgentLayout from "./layouts/agentLayout";
-import Mapper from "./page/map";
-import AgentProperty from "./page/agent/agentProperty";
-import HomeValuation from "./page/homeValuation";
-import PropertyListing from "./page/buyer/propertyListing";
-import CategoryListing from "./page/buyer/categoryListing";
 
+// Lazy load all page components
+const Home = lazy(() => import("./page/home"));
+const Mapper = lazy(() => import("./page/map"));
+const PropertyDetail = lazy(() => import("./page/propertyDetail"));
+const Blogs = lazy(() => import("./page/blogs"));
+const Blog = lazy(() => import("./page/blog"));
+const HomeValuation = lazy(() => import("./page/homeValuation"));
+const Agents = lazy(() => import("./page/agents"));
+const PropertyListing = lazy(() => import("./page/buyer/propertyListing"));
+const CategoryListing = lazy(() => import("./page/buyer/categoryListing"));
+const RoleSelection = lazy(() => import("./page/auth/role"));
+const Login = lazy(() => import("./page/auth/login"));
+const SignUp = lazy(() => import("./page/auth/signup"));
+const ForgotPassword = lazy(() => import("./page/auth/forgotPassword"));
+const OTP = lazy(() => import("./page/auth/verifyOtp"));
+const ConfirmPassword = lazy(() => import("./page/auth/confirmPassword"));
+const NotFound = lazy(() => import("./page/notFound"));
+
+// Seller pages
+const SellerHome = lazy(() => import("./page/seller/home"));
+const PropertyListingForm = lazy(() => import("./page/seller/properListing"));
+
+// Buyer pages
+const BuyerHome = lazy(() => import("./page/buyer/home"));
+const NearbyProperties = lazy(() => import("./page/buyer/nearbyProperties"));
+const AgentProfile = lazy(() => import("./page/buyer/agentDetail"));
+const WatchList = lazy(() => import("./page/buyer/watchList"));
+
+// Agent pages
+const AgentHome = lazy(() => import("./page/agent/home"));
+const AgentProperty = lazy(() => import("./page/agent/agentProperty"));
+
+const UserProfileDashboard = lazy(() => import("./component/myProfile"));
+
+// Import utility functions
+import { encrypt, decrypt } from "./utils/constant";
+import Header from "./component/header";
+import Footer from "./component/footer";
+
+// Loading component
+const LoadingFallback = () => (
+  <>
+    <Header />
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '400px',
+      fontSize: '18px',
+      color: '#666'
+    }}>
+      Loading...
+    </div>
+    <Footer />
+  </>
+);
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -48,39 +73,50 @@ const ScrollToTop = () => {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: "instant" // Use "smooth" for smooth scrolling
+      behavior: "instant"
     });
   }, [pathname]);
 
   return null;
 };
 
+// Memoize auth check to avoid repeated localStorage access
+const getAuthState = (() => {
+  let cached = null;
+  let lastCheck = 0;
+  const CACHE_DURATION = 1000; // 1 second cache
 
-// Create a wrapper component that validates userType
-const checkAuthToken = () => {
-  const token = localStorage.getItem("token");
-  const userRole = decrypt(localStorage.getItem("userRole") || "");
+  return () => {
+    const now = Date.now();
+    if (cached && (now - lastCheck) < CACHE_DURATION) {
+      return cached;
+    }
 
-  // Return true if both token and role exist
-  return !!(token && userRole);
-};
+    const token = localStorage.getItem("token");
+    const userRole = decrypt(localStorage.getItem("userRole") || "");
+
+    cached = {
+      isLoggedIn: !!(token && userRole),
+      userRole
+    };
+    lastCheck = now;
+
+    return cached;
+  };
+})();
+
 const ValidUserRoute = ({ children }) => {
   const { userType } = useParams();
   const allowedUserTypes = ["buyers", "sellers", "agents"];
-  const isLoggedIn = checkAuthToken();
+  const { isLoggedIn, userRole } = getAuthState();
 
-  // If user is logged in, redirect to NotFound
   if (isLoggedIn) {
-    return <NotFound />;
+    return <Navigate to={`/${userRole}/home`} replace />;
   }
 
-  // Check if this is being used on the home page (no userType param)
   if (!userType) {
     return children;
   }
-
-  // For routes with userType param, validate it
-  const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
 
   if (allowedUserTypes.includes(userType)) {
     return children;
@@ -88,7 +124,6 @@ const ValidUserRoute = ({ children }) => {
 
   return <NotFound />;
 };
-
 
 const ValidatedRoute = ({ children }) => {
   const { userType } = useParams();
@@ -101,14 +136,11 @@ const ValidatedRoute = ({ children }) => {
   return children;
 };
 
-// Create a specific wrapper for seller-only routes
 const SellerOnlyRoute = ({ children }) => {
   const { userType } = useParams();
-  console.log("User Type in SellerOnlyRoute:", userType);
-  const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
-  console.log("Decrypted User Type in SellerOnlyRoute:", decryptedUserType);
+  const { userRole } = getAuthState();
 
-  if (userType !== "sellers" && decryptedUserType !== "sellers") {
+  if (userType !== "sellers" && userRole !== "sellers") {
     return <NotFound />;
   }
 
@@ -117,10 +149,9 @@ const SellerOnlyRoute = ({ children }) => {
 
 const BuyerOnlyRoute = ({ children }) => {
   const { userType } = useParams();
-  console.log("User Type in BuyerOnlyRoute:", userType);
-  const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
-  console.log("Decrypted User Type in BuyerOnlyRoute:", decryptedUserType);
-  if (userType !== "buyers" && decryptedUserType !== "buyers") {
+  const { userRole } = getAuthState();
+
+  if (userType !== "buyers" && userRole !== "buyers") {
     return <NotFound />;
   }
 
@@ -129,10 +160,9 @@ const BuyerOnlyRoute = ({ children }) => {
 
 const AgentOnlyRoute = ({ children }) => {
   const { userType } = useParams();
-  console.log("User Type in AgentOnlyRoute:", userType);
-  const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
-  console.log("Decrypted User Type in AgentOnlyRoute:", decryptedUserType);
-  if (userType !== "agents" && decryptedUserType !== "agents") {
+  const { userRole } = getAuthState();
+
+  if (userType !== "agents" && userRole !== "agents") {
     return <NotFound />;
   }
 
@@ -142,261 +172,58 @@ const AgentOnlyRoute = ({ children }) => {
 function App() {
   return (
     <BrowserRouter>
-    <ScrollToTop />
-      <Routes>
-        <Route element={<MainLayout />}>
+      <ScrollToTop />
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<ValidUserRoute><Home /></ValidUserRoute>} />
+            <Route path="/map" element={<ValidUserRoute><Mapper /></ValidUserRoute>} />
+            <Route path="/propertydetail/:id" element={<ValidUserRoute><PropertyDetail /></ValidUserRoute>} />
+            <Route path="/blogs" element={<ValidUserRoute><Blogs /></ValidUserRoute>} />
+            <Route path="/blog/:id" element={<ValidUserRoute><Blog /></ValidUserRoute>} />
+            <Route path="/home-valuation" element={<ValidUserRoute><HomeValuation /></ValidUserRoute>} />
+            <Route path="/agents" element={<ValidUserRoute><Agents /></ValidUserRoute>} />
+            <Route path="property-listing" element={<ValidUserRoute><PropertyListing /></ValidUserRoute>} />
+            <Route path="category-listing" element={<ValidUserRoute><CategoryListing /></ValidUserRoute>} />
+            <Route path="/role/:userType" element={<RoleSelection />} />
+            <Route path="/:userType/login" element={<ValidatedRoute><Login /></ValidatedRoute>} />
+            <Route path="/:userType/signup" element={<ValidatedRoute><SignUp /></ValidatedRoute>} />
+            <Route path="/:userType/forgot-password" element={<ValidatedRoute><ForgotPassword /></ValidatedRoute>} />
+            <Route path="/:userType/verify-otp" element={<ValidatedRoute><OTP /></ValidatedRoute>} />
+            <Route path="/:userType/confirm-password" element={<ValidatedRoute><ConfirmPassword /></ValidatedRoute>} />
+          </Route>
 
-          <Route path="/" element={<ValidUserRoute><Home /></ValidUserRoute>} />
-          <Route path="/map" element={<ValidUserRoute><Mapper /></ValidUserRoute>} />
-          <Route path="/propertydetail/:id" element={<ValidUserRoute><PropertyDetail /></ValidUserRoute>} />
-          <Route path="/blogs" element={<ValidUserRoute><Blogs /></ValidUserRoute>} />
-          <Route path="/blog/:id" element={<ValidUserRoute><Blog /></ValidUserRoute>} />
-          <Route path="/home-valuation" element={<ValidUserRoute><HomeValuation /></ValidUserRoute>} />
-          <Route path="/agents" element={<ValidUserRoute><Agents /></ValidUserRoute>} />
-          <Route
-            path="property-listing"
-            element={
-              <ValidUserRoute>
-                <PropertyListing />
-              </ValidUserRoute>
-            }
-          />
+          <Route path="/sellers" element={<SellerLayout />}>
+            <Route path="home" element={<SellerOnlyRoute><SellerHome /></SellerOnlyRoute>} />
+            <Route path="property-listing" element={<SellerOnlyRoute><PropertyListingForm /></SellerOnlyRoute>} />
+            <Route path="property-detail/:id" element={<SellerOnlyRoute><PropertyDetail /></SellerOnlyRoute>} />
+            <Route path="user-profile" element={<SellerOnlyRoute><UserProfileDashboard /></SellerOnlyRoute>} />
+          </Route>
 
-            <Route
-            path="category-listing"
-            element={
-              <ValidUserRoute>
-                <CategoryListing />
-              </ValidUserRoute>
-            }
-          />
-          {/* Add validation for RoleSelection too */}
-          <Route path="/role/:userType" element={<RoleSelection />} />
+          <Route path="/buyers" element={<BuyerLayout />}>
+            <Route path="home" element={<BuyerOnlyRoute><BuyerHome /></BuyerOnlyRoute>} />
+            <Route path="category-listing" element={<BuyerOnlyRoute><CategoryListing /></BuyerOnlyRoute>} />
+            <Route path="agents" element={<BuyerOnlyRoute><Agents /></BuyerOnlyRoute>} />
+            <Route path="map" element={<BuyerOnlyRoute><Mapper /></BuyerOnlyRoute>} />
+            <Route path="property-listing" element={<BuyerOnlyRoute><PropertyListing /></BuyerOnlyRoute>} />
+            <Route path="property-detail/:id" element={<BuyerOnlyRoute><PropertyDetail /></BuyerOnlyRoute>} />
+            <Route path="nearby-properties" element={<BuyerOnlyRoute><NearbyProperties /></BuyerOnlyRoute>} />
+            <Route path="user-profile" element={<BuyerOnlyRoute><UserProfileDashboard /></BuyerOnlyRoute>} />
+            <Route path="watchlist" element={<BuyerOnlyRoute><WatchList /></BuyerOnlyRoute>} />
+            <Route path="agent-detail/:id" element={<BuyerOnlyRoute><AgentProfile /></BuyerOnlyRoute>} />
+          </Route>
 
-          <Route
-            path="/:userType/login"
-            element={
-              <ValidatedRoute>
-                <Login />
-              </ValidatedRoute>
-            }
-          />
+          <Route path="/agents" element={<AgentLayout />}>
+            <Route path="home" element={<AgentOnlyRoute><AgentHome /></AgentOnlyRoute>} />
+            <Route path="map" element={<AgentOnlyRoute><Mapper /></AgentOnlyRoute>} />
+            <Route path="agent-property" element={<AgentOnlyRoute><AgentProperty /></AgentOnlyRoute>} />
+            <Route path="property-detail/:id" element={<AgentOnlyRoute><PropertyDetail /></AgentOnlyRoute>} />
+            <Route path="user-profile" element={<AgentOnlyRoute><UserProfileDashboard /></AgentOnlyRoute>} />
+          </Route>
 
-          <Route
-            path="/:userType/signup"
-            element={
-              <ValidatedRoute>
-                <SignUp />
-              </ValidatedRoute>
-            }
-          />
-
-          <Route
-            path="/:userType/forgot-password"
-            element={
-              <ValidatedRoute>
-                <ForgotPassword />
-              </ValidatedRoute>
-            }
-          />
-
-          <Route
-            path="/:userType/verify-otp"
-            element={
-              <ValidatedRoute>
-                <OTP />
-              </ValidatedRoute>
-            }
-          />
-
-          <Route
-            path="/:userType/confirm-password"
-            element={
-              <ValidatedRoute>
-                <ConfirmPassword />
-              </ValidatedRoute>
-            }
-          />
-        </Route>
-
-        {/* Seller routes with explicit path */}
-        <Route path="/sellers" element={<SellerLayout />}>
-          <Route
-            path="home"
-            element={
-              <SellerOnlyRoute>
-                <SellerHome />
-              </SellerOnlyRoute>
-            }
-          />
-          <Route
-            path="property-listing"
-            element={
-              <SellerOnlyRoute>
-                <PropertyListingForm />
-              </SellerOnlyRoute>
-            }
-          />
-
-          <Route
-            path="property-detail/:id"
-            element={
-              <SellerOnlyRoute>
-                <PropertyDetail />
-              </SellerOnlyRoute>
-            }
-          />
-
-          <Route
-            path="user-profile"
-            element={
-              <SellerOnlyRoute>
-                <UserProfileDashboard />
-              </SellerOnlyRoute>
-            }
-          />
-        </Route>
-
-        <Route path="/buyers" element={<BuyerLayout />}>
-          <Route
-            path="home"
-            element={
-              <BuyerOnlyRoute>
-                <BuyerHome />
-              </BuyerOnlyRoute>
-            }
-          />
-
-          <Route
-            path="category-listing"
-            element={
-              <BuyerOnlyRoute>
-                <CategoryListing />
-              </BuyerOnlyRoute>
-            }
-          />
-
-          <Route
-            path="agents"
-            element={
-              <BuyerOnlyRoute>
-                <Agents />
-              </BuyerOnlyRoute>
-            }
-          />
-
-          <Route
-            path="map"
-            element={
-              <BuyerOnlyRoute>
-                <Mapper />
-              </BuyerOnlyRoute>
-            }
-          />
-
-          <Route
-            path="property-listing"
-            element={
-              <BuyerOnlyRoute>
-                <PropertyListing />
-              </BuyerOnlyRoute>
-            }
-          />
-
-          <Route
-            path="property-detail/:id"
-            element={
-              <BuyerOnlyRoute>
-                <PropertyDetail />
-              </BuyerOnlyRoute>
-            }
-          />
-          <Route
-            path="nearby-properties"
-            element={
-              <BuyerOnlyRoute>
-                <NearbyProperties />
-              </BuyerOnlyRoute>
-            }
-          />
-
-          <Route
-            path="user-profile"
-            element={
-              <BuyerOnlyRoute>
-                <UserProfileDashboard />
-              </BuyerOnlyRoute>
-            }
-          />
-
-          <Route
-            path="watchlist"
-            element={
-              <BuyerOnlyRoute>
-                <WatchList />
-              </BuyerOnlyRoute>
-            }
-          />
-
-
-          <Route
-            path="agent-detail/:id"
-            element={
-              <BuyerOnlyRoute>
-                <AgentProfile />
-              </BuyerOnlyRoute>
-            }
-          />
-        </Route>
-
-        <Route path="/agents" element={<AgentLayout />}>
-          <Route
-            path="home"
-            element={
-              <AgentOnlyRoute>
-                <AgentHome />
-              </AgentOnlyRoute>
-            }
-          />
-
-          <Route
-            path="map"
-            element={
-              <AgentOnlyRoute>
-                <Mapper />
-              </AgentOnlyRoute>
-            }
-          />
-          <Route
-            path="agent-property"
-            element={
-              <AgentOnlyRoute>
-                <AgentProperty />
-              </AgentOnlyRoute>
-            }
-          />
-
-          <Route
-            path="property-detail/:id"
-            element={
-              <AgentOnlyRoute>
-                <PropertyDetail />
-              </AgentOnlyRoute>
-            }
-          />
-
-          <Route
-            path="user-profile"
-            element={
-              <AgentOnlyRoute>
-                <UserProfileDashboard />
-              </AgentOnlyRoute>
-            }
-          />
-        </Route>
-
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

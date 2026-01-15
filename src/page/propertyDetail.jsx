@@ -53,7 +53,6 @@ export default function PropertyDetail() {
     phone: "",
     message: "",
   });
-  console.log(userType)
   const [selectedAgent, setSelectedAgent] = useState(null);
   // Sample images - replace with your actual images
   const images = [

@@ -416,7 +416,7 @@ const PropertyListingForm = () => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-
+      info("Your Data is submitting . Sometimes it will take time and Don't refresh the page");
       const formDataToSend = new FormData();
 
       formDataToSend.append("sellerId", formData.sellerId);
@@ -753,7 +753,7 @@ const PropertyListingForm = () => {
                     />
 
                     <InputField
-                      label="Rooms Above Grade"
+                      label="Rooms Below Grade"
                       placeholder="e.g. 5"
                       value={formData.details.roomsAboveGrade}
                       onChange={(e) =>
@@ -1019,16 +1019,7 @@ const PropertyListingForm = () => {
                         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                           <MdUpload className="w-8 h-8 text-blue-600" />
                         </div>
-                        <p className="text-gray-600 mb-2">
-                          Drag & drop your images here
-                        </p>
-                        <p className="text-gray-400 text-sm mb-4">or</p>
-                        <button
-                          type="button"
-                          className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-                        >
-                          Browse Images
-                        </button>
+
                       </label>
                     </div>
 
