@@ -3,6 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import React, { useEffect, lazy, Suspense } from "react";
 import "./App.css";
 
+
 // Import layouts immediately (they're needed for route structure)
 import MainLayout from "./layouts/MainLayout";
 import BuyerLayout from "./layouts/buyerLayout";
@@ -52,16 +53,10 @@ import Footer from "./component/footer";
 const LoadingFallback = () => (
   <>
     <Header />
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '400px',
-      fontSize: '18px',
-      color: '#666'
-    }}>
-      Loading...
+    <div role="status" className="my-4 max-w-7xl mx-auto rounded-lg flex items-center justify-center w-full h-56 min-h-screen bg-[#6b686940] rounded-base animate-pulse">
+      <span className="sr-only">Loading...</span>
     </div>
+
     <Footer />
   </>
 );
