@@ -189,6 +189,7 @@ function App() {
           </Route>
 
           <Route path="/sellers" element={<SellerLayout />}>
+           <Route path="map" element={<SellerOnlyRoute><Mapper /></SellerOnlyRoute>} />
             <Route path="home" element={<SellerOnlyRoute><SellerHome /></SellerOnlyRoute>} />
             <Route path="property-listing" element={<SellerOnlyRoute><PropertyListingForm /></SellerOnlyRoute>} />
             <Route path="property-detail/:id" element={<SellerOnlyRoute><PropertyDetail /></SellerOnlyRoute>} />

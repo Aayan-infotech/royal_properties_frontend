@@ -46,7 +46,7 @@ export default function Login() {
         }, 2000);
       }
     } catch (err) {
-      error(err?.response?.data?.message);
+      error(err?.response?.data?.data[0]?.errors[0]);
     } finally {
       setLoading(false);
     }

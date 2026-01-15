@@ -389,20 +389,52 @@ const PropertyListingForm = () => {
     }));
   }, []);
 
-  const handleImageUpload = useCallback((e) => {
+  const handleImageUpload = useCallback(async (e) => {
     const files = Array.from(e.target.files);
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, ...files].slice(0, 20),
-    }));
-  }, []);
+    const validImages = [];
+    const errors = [];
 
-  const handleVideoUpload = useCallback((e) => {
+    for (const file of files) {
+      try {
+        await validateImage(file);
+        validImages.push(file);
+      } catch (err) {
+        errors.push(err);
+      }
+    }
+
+    if (errors.length > 0) {
+      error(errors.join('\n'));
+    }
+
+    if (validImages.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, ...validImages].slice(0, 20),
+      }));
+
+      if (validImages.length > 0) {
+        success(`${validImages.length} image(s) uploaded successfully`);
+      }
+    }
+
+    // Reset input
+    e.target.value = '';
+  }, [error, success]);
+
+  const handleVideoUpload = useCallback(async (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData((prev) => ({ ...prev, video: file }));
+      try {
+        await validateVideo(file);
+        setFormData((prev) => ({ ...prev, video: file }));
+        success('Video uploaded successfully');
+      } catch (err) {
+        error(err);
+        e.target.value = ''; // Reset input
+      }
     }
-  }, []);
+  }, [error, success]);
 
   const removeImage = useCallback((index) => {
     setFormData((prev) => ({
@@ -539,11 +571,59 @@ const PropertyListingForm = () => {
     }
   };
 
+  // Add these validation functions before the PropertyListingForm component
+  const validateImage = (file) => {
+    return new Promise((resolve, reject) => {
+      // Check file size (2MB = 2 * 1024 * 1024 bytes)
+      const maxSize = 2 * 1024 * 1024;
+      if (file.size > maxSize) {
+        reject(`${file.name}: File size exceeds 2MB`);
+        return;
+      }
+
+      // Check image dimensions
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+
+      img.onload = function () {
+        URL.revokeObjectURL(objectUrl);
+        if (this.width < 600 || this.height < 300) {
+          reject(`${file.name}: Image resolution must be at least 600x300 pixels. Current: ${this.width}x${this.height}`);
+        } else {
+          resolve(file);
+        }
+      };
+
+      img.onerror = function () {
+        URL.revokeObjectURL(objectUrl);
+        reject(`${file.name}: Invalid image file`);
+      };
+
+      img.src = objectUrl;
+    });
+  };
+
+  const validateVideo = (file) => {
+    return new Promise((resolve, reject) => {
+      // Check file size (10MB = 10 * 1024 * 1024 bytes)
+      const maxSize = 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        reject(`${file.name}: Video size exceeds 10MB`);
+        return;
+      }
+      resolve(file);
+    });
+  };
+
   const fetchPropertyForEdit = async (id) => {
     try {
       setLoading(true);
       const response = await axiosInstance.get(`/properties/${id}`);
+      const responseExtra = await axiosInstance.get(`/property-extras/${id}`);
+
       const propertyData = response.data.data;
+      const propertyExtrasData = responseExtra.data.data;
+      console.log(propertyExtrasData);
 
       // Populate form with existing data
       setFormData({
@@ -1179,7 +1259,8 @@ const PropertyListingForm = () => {
                         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                           <MdUpload className="w-8 h-8 text-blue-600" />
                         </div>
-
+                        <p className="text-gray-600 mb-2">Click to upload images</p>
+                        <p className="text-gray-400 text-sm">Max 2MB per image, Min 600x300px</p>
                       </label>
                     </div>
 
@@ -1223,7 +1304,7 @@ const PropertyListingForm = () => {
                               <MdUpload className="w-6 h-6 text-green-600" />
                             </div>
                             <p className="text-gray-600 mb-2">Upload Video</p>
-                            <p className="text-gray-400 text-sm">Optional</p>
+                            <p className="text-gray-400 text-sm">Optional - Max 10MB</p>
                           </label>
                         </>
                       )}

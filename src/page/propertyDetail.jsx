@@ -401,6 +401,8 @@ export default function PropertyDetail() {
     handleGetProperty()
   }, [id])
 
+  console.log(userType)
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
@@ -546,11 +548,11 @@ export default function PropertyDetail() {
           </div>
         </div>
 
-        <div className="min-h-screen bg-gray-50 py-4">
+        <div className="min-h-screen bg-gray-50 py-4 ">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left Section - Property Details */}
-              <div className={`${userType === "agents" ?  "lg:col-span-3": "col-span-2" } bg-white rounded-lg shadow-sm p-6`}>
+              <div className={`${userType === "agents" ?  "lg:col-span-3": "lg:col-span-2" } bg-white rounded-lg shadow-sm p-6`}>
                 <div className="flex justify-between flex-wrap lg:flex-nowrap border-b  border-gray-200">
                   <div className=" pb-4">
                     <h1 className="text-xl font-semibold text-gray-900 mb-1">
@@ -1117,7 +1119,8 @@ export default function PropertyDetail() {
                 </TabGroup>
               </div>
 
-              {!userType === "agents" && <>
+              {(userType === "agents" || userType === "sellers") && 
+              <>
                 <div className="lg:col-span-1">
                   <div className="bg-white rounded-lg shadow-sm p-6 px-3 ">
                     <div className="mb-4">

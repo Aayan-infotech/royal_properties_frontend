@@ -25,10 +25,10 @@ export default function SellerHeader() {
   const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
 
   const menuItems = [
-    { name: "Map Search", path: "/home" },
-    { name: "Market Trends", path: "/market-trends" },
-    { name: "Home Valuation", path: "/home" },
-    { name: "Agents", path: "/sellers" },
+    { name: "Map Search", path: "/sellers/map" },
+    { name: "Market Trends", path: "/sellers/market-trends" },
+    { name: "Home Valuation", path: "/sellers/home" },
+    { name: "Agents", path: "/sellers/sellers" },
   ];
 
   return (
@@ -98,7 +98,7 @@ export default function SellerHeader() {
           <div className="flex gap-5 flex-row">
             {menuItems.map((item) => (
               <NavbarItem key={item.name}>
-                <Link className="text-white hover:text-blue-400">
+                <Link className="text-white hover:text-blue-400" to={item.path}>
                   {item.name}
                 </Link>
               </NavbarItem>
