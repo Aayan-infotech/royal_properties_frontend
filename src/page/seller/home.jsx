@@ -102,6 +102,24 @@ const SellerHome = () => {
     return "Inactive • Not available";
   };
 
+  const handleEditProperty = (propertyId) => {
+    navigate(`/sellers/property-listing?edit=${propertyId}`);
+  };
+
+  const handleDeleteProperty = async (propertyId) => {
+    if (window.confirm("Are you sure you want to delete this property?")) {
+      try {
+        await axiosInstance.delete(`/properties/${propertyId}`);
+        // Refresh the list
+        handleFetchProperties(currentPage);
+        alert("Property deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting property:", error);
+        alert("Failed to delete property");
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
       <div className="flex justify-end">
@@ -115,13 +133,12 @@ const SellerHome = () => {
 
       {/* Loading State */}
       {loading ? (
-        <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
+      null
+
       ) : (
         <>
           {/* Properties Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6">
             {data.map((property, index) => (
               <motion.div
                 key={property._id}
@@ -180,7 +197,7 @@ const SellerHome = () => {
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-gray-600 mb-3">
-                      <span className="text-sm">{property.address}</span>
+                      <span className="text-sm truncate">{property.address}</span>
                     </div>
 
                     {/* Status Indicator */}
@@ -217,14 +234,35 @@ const SellerHome = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-3">
+                  {/* Action Buttons */}
+                  <div className="grid grid-cols-3 lg:grid-cols-4 gap-2">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => handleViewDetails(property._id)}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#132141] text-white font-semibold rounded-lg transition-all duration-200 group"
+                      className="lg:col-span-2 flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#132141] text-white font-semibold rounded-lg transition-all duration-200"
                     >
-                      <span>View Details</span>
+
+                      <span>View</span>
+                    </motion.button>
+
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleEditProperty(property._id)}
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#737975] text-white font-semibold rounded-lg transition-all duration-200"
+                    >
+                      <MdEdit className=" h-6" />
+
+                    </motion.button>
+
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleDeleteProperty(property._id)}
+                      className="flex items-center justify-center px-3 py-2 bg-red-600 text-white font-semibold rounded-lg transition-all duration-200"
+                    >
+                      <MdDelete className=" h-6" />
                     </motion.button>
                   </div>
                 </div>
@@ -240,65 +278,62 @@ const SellerHome = () => {
               className="flex items-center justify-center mt-8 gap-2 flex-col"
             >
               <div className="flex items-center gap-2">
-                 <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`flex items-center justify-center w-10 h-10 rounded-lg ${
-                  currentPage === 1
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`flex items-center justify-center w-10 h-10 rounded-lg ${currentPage === 1
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                     : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
-                }`}
-              >
-                <MdChevronLeft className="w-5 h-5" />
-              </button>
+                    }`}
+                >
+                  <MdChevronLeft className="w-5 h-5" />
+                </button>
 
-              {[...Array(pagination.totalPages)].map((_, index) => {
-                const page = index + 1;
-                // Show first page, last page, current page, and pages around current page
-                if (
-                  page === 1 ||
-                  page === pagination.totalPages ||
-                  (page >= currentPage - 1 && page <= currentPage + 1)
-                ) {
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`flex items-center justify-center w-10 h-10 rounded-lg font-medium ${
-                        currentPage === page
+                {[...Array(pagination.totalPages)].map((_, index) => {
+                  const page = index + 1;
+                  // Show first page, last page, current page, and pages around current page
+                  if (
+                    page === 1 ||
+                    page === pagination.totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`flex items-center justify-center w-10 h-10 rounded-lg font-medium ${currentPage === page
                           ? "bg-[#132141] text-white shadow-md"
                           : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  );
-                } else if (
-                  page === currentPage - 2 ||
-                  page === currentPage + 2
-                ) {
-                  return (
-                    <span key={page} className="text-gray-400">
-                      ...
-                    </span>
-                  );
-                }
-                return null;
-              })}
+                          }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  } else if (
+                    page === currentPage - 2 ||
+                    page === currentPage + 2
+                  ) {
+                    return (
+                      <span key={page} className="text-gray-400">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
 
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === pagination.totalPages}
-                className={`flex items-center justify-center w-10 h-10 rounded-lg ${
-                  currentPage === pagination.totalPages
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === pagination.totalPages}
+                  className={`flex items-center justify-center w-10 h-10 rounded-lg ${currentPage === pagination.totalPages
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                     : "bg-white text-gray-700 hover:bg-gray-100 shadow-md"
-                }`}
-              >
-                <MdChevronRight className="w-5 h-5" />
-              </button>
+                    }`}
+                >
+                  <MdChevronRight className="w-5 h-5" />
+                </button>
               </div>
-             
+
 
               <div className="ml-4 text-sm text-gray-600">
                 Showing {(currentPage - 1) * pagination.limit + 1} -{" "}

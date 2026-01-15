@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useContext } from "react";
+import React, { useState, useCallback, useMemo, useContext, useEffect } from "react";
 import {
   MdApartment,
   MdHome,
@@ -31,6 +31,7 @@ import {
 import axiosInstance from "../../component/axiosInstance";
 import { useAlert } from "../../hooks/useApiAlert";
 import { AlertContext } from "../../context/alertContext";
+import { useNavigate } from "react-router-dom";
 
 const InputField = React.memo(
   ({
@@ -109,6 +110,7 @@ const StepIndicator = React.memo(({ currentStep }) => (
 ));
 
 const PropertyListingForm = () => {
+  const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const { success, error, info, warning } = useContext(AlertContext);
@@ -116,6 +118,8 @@ const PropertyListingForm = () => {
   const addressInputRef = React.useRef(null);
   const autocompleteRef = React.useRef(null);
   const [propertyId, setPropertyId] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [editPropertyId, setEditPropertyId] = useState(null);
   const [formData, setFormData] = useState({
     sellerId: "",
     property: "",
@@ -226,8 +230,6 @@ const PropertyListingForm = () => {
 
     loadGoogleMapsScript();
   }, []);
-
-
 
   const propertyTypes = useMemo(
     () => [
@@ -459,7 +461,8 @@ const PropertyListingForm = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (response) {
-        const createdPropertyId = response.data._id;
+        console.log(response?.data)
+        const createdPropertyId = response?.data?.data._id;
         console.log("Property created successfully with ID:", createdPropertyId);
 
         // Set the property ID in state for reference
@@ -536,17 +539,174 @@ const PropertyListingForm = () => {
     }
   };
 
+  const fetchPropertyForEdit = async (id) => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(`/properties/${id}`);
+      const propertyData = response.data.data;
+
+      // Populate form with existing data
+      setFormData({
+        sellerId: propertyData.sellerId || "",
+        property: propertyData.property || "",
+        price: propertyData.price || "",
+        address: propertyData.address || "",
+        keyFacts: {
+          propertyType: propertyData.keyFacts?.propertyType || "Apartment",
+          yearBuilt: propertyData.keyFacts?.yearBuilt || "",
+          size: propertyData.keyFacts?.size || "",
+          pricePerSqft: propertyData.keyFacts?.pricePerSqft || "",
+          lotSize: propertyData.keyFacts?.lotSize || "1",
+          parking: propertyData.keyFacts?.parking || "1",
+          letLONG: propertyData.keyFacts?.letLONG || ["", ""],
+        },
+        details: {
+          municipality: propertyData.details?.municipality || "",
+          roomsAboveGrade: propertyData.details?.roomsAboveGrade || "",
+          bedrooms: propertyData.details?.bedrooms || "",
+          bedroomsAboveGrade: propertyData.details?.bedroomsAboveGrade || "",
+          fullBathrooms: propertyData.details?.fullBathrooms || "",
+          halfBathrooms: propertyData.details?.halfBathrooms || "",
+          fireplace: propertyData.details?.fireplace || "",
+          basement: propertyData.details?.basement || "",
+          basementDevelopment: propertyData.details?.basementDevelopment || "",
+          additionalRooms: propertyData.details?.additionalRooms || "",
+          buildingAge: propertyData.details?.buildingAge || "",
+          constructionType: propertyData.details?.constructionType || "",
+          exteriorFeature: propertyData.details?.exteriorFeature || "",
+          parkingFeatures: propertyData.details?.parkingFeatures || "",
+        },
+        rooms: {
+          items: propertyData.rooms?.items || [{ name: "", size: "", level: "" }],
+        },
+        nearbyProperties: propertyData.nearbyProperties || [],
+        images: [], // Existing images will be shown separately
+        video: null,
+      });
+
+      setEditMode(true);
+      setEditPropertyId(id);
+    } catch (err) {
+      console.error("Error fetching property:", err);
+      error("Failed to load property data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      setLoading(true);
+      info("Updating property data...");
+
+      const formDataToSend = new FormData();
+
+      formDataToSend.append("property", formData.property);
+      formDataToSend.append("price", formData.price);
+      formDataToSend.append("address", formData.address);
+
+      Object.entries(formData.keyFacts).forEach(([key, value]) => {
+        if (key === "letLONG") {
+          value.forEach((coord) => {
+            formDataToSend.append(`keyFacts[letLONG][]`, coord);
+          });
+        } else {
+          formDataToSend.append(`keyFacts[${key}]`, value);
+        }
+      });
+
+      Object.entries(formData.details).forEach(([key, value]) => {
+        formDataToSend.append(`details[${key}]`, value);
+      });
+
+      formData.rooms.items.forEach((room, index) => {
+        if (room.name) {
+          formDataToSend.append(`rooms[items][${index}][name]`, room.name);
+          formDataToSend.append(`rooms[items][${index}][size]`, room.size);
+          formDataToSend.append(`rooms[items][${index}][level]`, room.level);
+        }
+      });
+
+      // Only append new images
+      formData.images.forEach((image) => {
+        formDataToSend.append("images", image);
+      });
+
+      if (formData.video) {
+        formDataToSend.append("video", formData.video);
+      }
+
+      // Update property
+      const response = await axiosInstance.patch(
+        `/properties/${editPropertyId}`,
+        formDataToSend,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response) {
+        // Update property-extras if nearbyProperties changed
+        const propertyExtrasData = {
+          propertyId: editPropertyId,
+          propertyCategory: formData.keyFacts.propertyType,
+          nearbyPlaces: formData.nearbyProperties
+        };
+
+        await axiosInstance.patch(`/property-extras/${editPropertyId}`, propertyExtrasData, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token') || ''}`
+          },
+        });
+
+        success("Property updated successfully!");
+
+        setTimeout(() => {
+          navigate("/sellers");
+        }, 2000);
+      }
+    } catch (err) {
+      console.error("Error updating property:", err);
+      error(err?.response?.data?.message || "Failed to update property");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteMedia = async (mediaId) => {
+    try {
+      await axiosInstance.delete(`/properties/${editPropertyId}/media/${mediaId}`);
+      success("Media deleted successfully!");
+      // Refresh property data
+      fetchPropertyForEdit(editPropertyId);
+    } catch (err) {
+      console.error("Error deleting media:", err);
+      error("Failed to delete media");
+    }
+  };
+
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const editId = urlParams.get('edit');
+
+    if (editId) {
+      fetchPropertyForEdit(editId);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-lg shadow-sm p-8">
           <div className="mb-8">
             <h1 className="text-2xl font-bold mb-1">
-              {currentStep === 0
-                ? "Add New Property"
-                : ["Basic Information", "Property Details", "Media Uploads"][
-                currentStep
-                ]}
+              {editMode
+                ? "Edit Property"
+                : currentStep === 0
+                  ? "Add New Property"
+                  : ["Basic Information", "Property Details", "Media Uploads"][currentStep]
+              }
             </h1>
             <p className="text-sm text-gray-500">Step {currentStep + 1} of 3</p>
           </div>
@@ -643,12 +803,12 @@ const PropertyListingForm = () => {
                   <div className="grid grid-cols-6 gap-4">
                     {nearbyPropertyTypes.map((type) => {
                       const Icon = type.icon;
-                      const isSelected = formData.nearbyProperties.includes(type.value);
+                      const isSelected = formData.nearbyProperties.includes(type.name);
                       return (
                         <button
                           key={type.value}
                           type="button"
-                          onClick={() => handleNearbyPropertyToggle(type.value)}
+                          onClick={() => handleNearbyPropertyToggle(type.name)}
                           className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all ${isSelected
                             ? "border-blue-900 bg-blue-50"
                             : "border-gray-200 bg-white hover:border-gray-300"
@@ -753,7 +913,7 @@ const PropertyListingForm = () => {
                     />
 
                     <InputField
-                      label="Rooms Below Grade"
+                      label="Rooms Above Grade"
                       placeholder="e.g. 5"
                       value={formData.details.roomsAboveGrade}
                       onChange={(e) =>
@@ -775,7 +935,7 @@ const PropertyListingForm = () => {
                     />
 
                     <InputField
-                      label="Bedrooms Above Grade"
+                      label="Bedrooms Below Grade"
                       placeholder="e.g. 3"
                       value={formData.details.bedroomsAboveGrade}
                       onChange={(e) =>
@@ -1143,16 +1303,16 @@ const PropertyListingForm = () => {
                 if (currentStep < 2) {
                   setCurrentStep((prev) => prev + 1);
                 } else {
-                  handleSubmit();
+                  editMode ? handleUpdate() : handleSubmit();
                 }
               }}
               disabled={loading}
               className="px-8 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading
-                ? "Submitting..."
+                ? editMode ? "Updating..." : "Submitting..."
                 : currentStep === 2
-                  ? "Submit Property"
+                  ? editMode ? "Update Property" : "Submit Property"
                   : "Next"}
             </button>
           </div>

@@ -396,9 +396,9 @@ export default function SellerPropertyDetail() {
 
         <div className="min-h-screen bg-gray-50 py-4">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className=" gap-6">
               {/* Left Section - Property Details */}
-              <div className="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
+              <div className="bg-white rounded-lg shadow-sm p-6">
                 <div className="flex justify-between border-b border-gray-200">
                   <div className="pb-4">
                     <h1 className="text-xl font-semibold text-gray-900 mb-1">
