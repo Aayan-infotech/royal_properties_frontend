@@ -2,6 +2,7 @@ import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import { useParams, useLocation } from "react-router-dom";
 import React, { useEffect, lazy, Suspense } from "react";
 import "./App.css";
+import Mapps from "./page/mapps";
 
 
 // Import layouts immediately (they're needed for route structure)
@@ -189,7 +190,7 @@ function App() {
           </Route>
 
           <Route path="/sellers" element={<SellerLayout />}>
-           <Route path="map" element={<SellerOnlyRoute><Mapper /></SellerOnlyRoute>} />
+           <Route path="map" element={<SellerOnlyRoute><Mapps /></SellerOnlyRoute>} />
             <Route path="home" element={<SellerOnlyRoute><SellerHome /></SellerOnlyRoute>} />
             <Route path="property-listing" element={<SellerOnlyRoute><PropertyListingForm /></SellerOnlyRoute>} />
             <Route path="property-detail/:id" element={<SellerOnlyRoute><PropertyDetail /></SellerOnlyRoute>} />

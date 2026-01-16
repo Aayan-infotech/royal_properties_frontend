@@ -25,7 +25,7 @@ import {
 import { MdLocationOn, MdPeople, MdBusiness } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../component/axiosInstance";
-import { formatDate, NearbyPlace } from "../../utils/constant";
+import { formatDate, NearbyPlace , locationOptions } from "../../utils/constant";
 
 export default function BuyerHome() {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -54,18 +54,6 @@ export default function BuyerHome() {
     totalPages: 1,
   });
   const [currentPage, setCurrentPage] = React.useState(1);
-
-  // Location options for dropdown
-  const locationOptions = [
-    "All Locations",
-    "GTA-Central",
-    "GTA-North",
-    "City 1",
-    "City 2",
-    "City 3",
-    "City 4",
-    "City 5",
-  ];
 
   // City options
   const cityOptions = {

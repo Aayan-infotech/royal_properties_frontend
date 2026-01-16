@@ -45,6 +45,57 @@ export const NearbyPlace = {
 }
 
 
+export const locationOptions = [
+  "All Locations",
+  "GTA-Central",
+  "GTA-North",
+  "City 1",
+  "City 2",
+  "City 3",
+  "City 4",
+  "City 5",
+];
+
+export const PriceOptions = [
+  "under $300,000",
+  "$300,000",
+  "$400,000",
+  "$500,000",
+  "$600,000",
+  "$700,000",
+  "$800,000",
+  "$900,000",
+  "above $900,000"
+];
+
+export const HomeOptions = [
+  "Detached",
+  "Bungalow",
+  "Semi-detached",
+  "Attached/Townhouse",
+  "Apartment/Condo",
+  "Link",
+  "Stacked",
+  "Duplex",
+  "Triplex",
+  "Fourplex",
+  "Garden Home",
+  "Mobile Home",
+  "Manufactured Home/Mobile",
+  "Special Purpose",
+  "Residential Commercial Mix",
+  "Manufactured Home",
+  "Commercial Apartment",
+  "Other",
+];
+
+export const SaleOptions = [
+  "Sale",
+  "Rent",
+  "Rented",
+  "Sold",
+
+];
 export const encrypt = (text) => {
   return CryptoJS.AES.encrypt(text, secretKey).toString();
 };
