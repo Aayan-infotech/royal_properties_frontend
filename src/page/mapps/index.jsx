@@ -311,10 +311,7 @@ function MapContent() {
             >
                 {filteredTrees && <ClusteredTreeMarkers trees={filteredTrees} />}
             </Map>
-            <ControlPanel
-                categories={categories}
-                onCategoryChange={setSelectedCategory}
-            />
+        
         </>
     );
 }
