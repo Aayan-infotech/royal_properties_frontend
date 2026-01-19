@@ -135,6 +135,7 @@ export default function PropertyListing() {
     const location = useLocation()
     const queryParams = new URLSearchParams(location.search);
     const nearbyPlaces = queryParams.get('nearbyPlaces');
+    const address = queryParams.get('address');
 
     const [pagination, setPagination] = React.useState({
         total: 0,
@@ -152,7 +153,7 @@ export default function PropertyListing() {
 
     const getData = async (page) => {
         try {
-            const url = `/properties/approved?page=${page}&limit=12${nearbyPlaces ? `&nearbyPlaces=${nearbyPlaces}` : ''}`;
+            const url = `/properties/approved?page=${page}&limit=12${nearbyPlaces ? `&nearbyPlaces=${nearbyPlaces}` : ''}${address ? `&address=${address}` : ''}`;
 
             const response = await axiosInstance.get(url);
             setData(response.data.data.data);

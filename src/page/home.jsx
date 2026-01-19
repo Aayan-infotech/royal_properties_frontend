@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import banner from "../assets/banner.jpg";
 import { Input } from "@heroui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/react";
 import { Image } from "@heroui/image";
 import { IoBedSharp } from "react-icons/io5";
@@ -15,8 +15,6 @@ import { FaSearch } from "react-icons/fa";
 import { NearbyPlace } from '../utils/constant';
 import { APIProvider, Map, useMapsLibrary, useMap } from '@vis.gl/react-google-maps';
 
-
-
 export default function Home() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,7 +22,17 @@ export default function Home() {
   const API_KEY = "AIzaSyCImFnps9l5WZ-Sxm5ZZX-yowF_vWunS2c";
   const addressInputRef = React.useRef(null);
   const autocompleteRef = React.useRef(null);
+  const navigate = useNavigate()
 
+  const handleSearch = (query, location = null) => {
+    console.log("Searching for:", query);
+    
+      navigate(`/property-listing?address=${encodeURIComponent(query)}`);
+    
+    // Add your search navigation logic here
+    // For example: navigate to search results page
+    // 
+  };
   const initAutocomplete = () => {
     if (!inputRef.current || !window.google) {
       console.log("Google Maps not loaded or input ref not available");
@@ -41,7 +49,7 @@ export default function Home() {
       inputRef.current,
       {
         types: ["geocode", "establishment"],
-        componentRestrictions: { country: "ca" }, // Change to "ca" for Canada
+        componentRestrictions: { country: "in" }, // Change to "ca" for Canada
       }
     );
 
@@ -65,10 +73,10 @@ export default function Home() {
       });
 
       // You can add your search logic here
-      handleSearch(address, {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng(),
-      });
+      // handleSearch(address, {
+      //   lat: place.geometry.location.lat(),
+      //   lng: place.geometry.location.lng(),
+      // });
     });
   };
 
@@ -114,19 +122,10 @@ export default function Home() {
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      handleSearch(searchQuery);
+      // handleSearch(searchQuery);
     }
   };
 
-  const handleSearch = (query, location = null) => {
-    console.log("Searching for:", query);
-    if (location) {
-      console.log("Location:", location);
-    }
-    // Add your search navigation logic here
-    // For example: navigate to search results page
-    // navigate(`/search?q=${encodeURIComponent(query)}`);
-  };
 
 
   const series = [
@@ -481,7 +480,7 @@ export default function Home() {
               /> */}
             {/* Replace the existing search input section with this code */}
             <motion.div
-              className="relative mt-3 w-full"
+              className="relative mt-3 w-full flex flex-row gap-2"
               style={{ maxWidth: "600px" }}
               variants={itemVariants}
             >
@@ -499,8 +498,25 @@ export default function Home() {
                 <FaSearch
                   className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
                   size={20}
-                  onClick={() => handleSearch(searchQuery)}
+
                 />
+              </motion.div>
+              <motion.div
+                className="flex items-center justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.button
+                  type="submit"
+                  className="flex-none rounded-md bg-[#132141] lg:min-w-[120px] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  disabled={!searchQuery}
+                  onClick={() => handleSearch(searchQuery)}
+                >
+                  Search
+                </motion.button>
               </motion.div>
             </motion.div>
           </motion.div>
