@@ -26,9 +26,9 @@ export default function Home() {
 
   const handleSearch = (query, location = null) => {
     console.log("Searching for:", query);
-    
-      navigate(`/property-listing?address=${encodeURIComponent(query)}`);
-    
+
+    navigate(`/property-listing?address=${encodeURIComponent(query)}`);
+
     // Add your search navigation logic here
     // For example: navigate to search results page
     // 
@@ -125,6 +125,10 @@ export default function Home() {
       // handleSearch(searchQuery);
     }
   };
+
+  const handleLogin = () => {
+    navigate('/role/login')
+  }
 
 
 
@@ -671,6 +675,7 @@ export default function Home() {
                     className="flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={handleLogin}
                   >
                     Login required
                   </motion.button>
@@ -784,6 +789,7 @@ export default function Home() {
                     className="flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={handleLogin}
                   >
                     Login required
                   </motion.button>
@@ -896,6 +902,7 @@ export default function Home() {
                     className="flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={handleLogin}
                   >
                     Login required
                   </motion.button>
