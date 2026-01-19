@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import banner from "../assets/banner.jpg";
 import { Input } from "@heroui/react";
 import { Link } from "react-router-dom";
@@ -13,9 +13,121 @@ import Chart from "react-apexcharts";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
 import { NearbyPlace } from '../utils/constant';
+import { APIProvider, Map, useMapsLibrary, useMap } from '@vis.gl/react-google-maps';
+
+
 
 export default function Home() {
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const inputRef = useRef(null);
+  const API_KEY = "AIzaSyCImFnps9l5WZ-Sxm5ZZX-yowF_vWunS2c";
+  const addressInputRef = React.useRef(null);
+  const autocompleteRef = React.useRef(null);
+
+  const initAutocomplete = () => {
+    if (!inputRef.current || !window.google) {
+      console.log("Google Maps not loaded or input ref not available");
+      return;
+    }
+
+    // Clear any existing autocomplete instance
+    if (autocompleteRef.current) {
+      window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+    }
+
+    // Initialize autocomplete
+    autocompleteRef.current = new window.google.maps.places.Autocomplete(
+      inputRef.current,
+      {
+        types: ["geocode", "establishment"],
+        componentRestrictions: { country: "ca" }, // Change to "ca" for Canada
+      }
+    );
+
+    // Add listener for place selection
+    autocompleteRef.current.addListener("place_changed", () => {
+      const place = autocompleteRef.current.getPlace();
+
+      if (!place.geometry) {
+        console.log("No details available for input: '" + place.name + "'");
+        return;
+      }
+
+      // Update search query with selected address
+      const address = place.formatted_address || place.name || "";
+      setSearchQuery(address);
+
+      console.log("Selected place:", {
+        address: address,
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      });
+
+      // You can add your search logic here
+      handleSearch(address, {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      });
+    });
+  };
+
+  useEffect(() => {
+    const loadGoogleMapsScript = () => {
+      // Check if Google Maps is already loaded
+      if (window.google && window.google.maps && window.google.maps.places) {
+        initAutocomplete();
+        return;
+      }
+
+      // Check if script is already being loaded
+      const existingScript = document.querySelector(
+        `script[src*="maps.googleapis.com"]`
+      );
+      if (existingScript) {
+        existingScript.addEventListener("load", initAutocomplete);
+        return;
+      }
+
+      // Create and load the script
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = initAutocomplete;
+      script.onerror = () => {
+        console.error("Failed to load Google Maps script");
+      };
+      document.head.appendChild(script);
+    };
+
+    loadGoogleMapsScript();
+
+    // Cleanup
+    return () => {
+      if (autocompleteRef.current) {
+        window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+      }
+    };
+  }, []);
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSearch(searchQuery);
+    }
+  };
+
+  const handleSearch = (query, location = null) => {
+    console.log("Searching for:", query);
+    if (location) {
+      console.log("Location:", location);
+    }
+    // Add your search navigation logic here
+    // For example: navigate to search results page
+    // navigate(`/search?q=${encodeURIComponent(query)}`);
+  };
+
 
   const series = [
     {
@@ -296,7 +408,22 @@ export default function Home() {
     },
   };
 
+  // const handleKeyPress = (e) => {
+  //   if (e.key === "Enter") {
+  //     e.preventDefault();
+  //     handleSearch();
+  //   }
+  // };
+
+  // const handleSearch = () => {
+  //   console.log("Searching for:", searchQuery);
+  //   // Add your search navigation logic here
+  //   // For example: navigate to search results page
+  //   // navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+  // };
+
   return (
+    // <APIProvider apiKey={API_KEY}>
     <div className="max-w-7xl mx-auto lg:px-6 lg:pt-12">
       <motion.div
         className="dark-bg"
@@ -344,20 +471,38 @@ export default function Home() {
           </motion.p>
           <motion.div
             className="relative mt-3 w-full"
-            style={{ maxWidth: "400px" }}
+            style={{ maxWidth: "600px" }}
+            variants={itemVariants}
           >
-            <motion.input
-              type="text"
-              name="text"
-              required
-              placeholder="Address, Street Name or Listings"
-              className="w-full max-h-[42px] w-full flex-auto rounded-md bg-white px-3.5 border border-gray-300 py-2 text-base text-black placeholder:text-white-500 focus:outline-indigo-500 sm:text-sm/6 pr-10" // Added pr-10 for padding
-              whileFocus={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            />
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-              <FaSearch color="#837d7dff" />
-            </div>
+            {/* <AutocompleteSearchInput
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                onSearch={handleSearch}
+              /> */}
+            {/* Replace the existing search input section with this code */}
+            <motion.div
+              className="relative mt-3 w-full"
+              style={{ maxWidth: "600px" }}
+              variants={itemVariants}
+            >
+              <motion.div className="relative w-full">
+                <motion.input
+                  type="text"
+                  ref={inputRef}
+                  placeholder="Search properties, areas, or keywords..."
+                  className="w-full max-h-[42px] flex-auto rounded-md bg-white px-3.5 border-0 pl-10 py-2 text-base text-black placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm/6 pr-10"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  autoComplete="off"
+                />
+                <FaSearch
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+                  size={20}
+                  onClick={() => handleSearch(searchQuery)}
+                />
+              </motion.div>
+            </motion.div>
           </motion.div>
         </motion.div>
       </motion.div>
@@ -928,5 +1073,6 @@ export default function Home() {
         </div>
       </motion.div>
     </div>
+    // </APIProvider>
   );
 }

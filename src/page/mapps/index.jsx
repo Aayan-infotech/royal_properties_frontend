@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { APIProvider, Map, useMapsLibrary , useMap } from '@vis.gl/react-google-maps';
 import { getCategories, loadTreeDataset } from './trees';
 import { ClusteredTreeMarkers } from './clusterd-tree-markers';
-import { formatDate, NearbyPlace, locationOptions, PriceOptions, HomeOptions, SaleOptions } from "../../utils/constant";
+import { formatDate, NearbyPlace, locationOptions, PriceOptions, HomeOptions, SaleOptions , PropertyOptions} from "../../utils/constant";
 import { RiFilter3Line } from "react-icons/ri";
 import { Button } from '@heroui/button';
 
@@ -129,7 +129,7 @@ function MapContent() {
                                     }
                                 >
                                     <div className="flex items-center gap-3">
-                                        <span className="text-gray-800 font-medium truncate">
+                                        <span className="text-gray-800 font-medium truncate text-sm">
                                             {selectedLocation}
                                         </span>
                                     </div>
@@ -140,10 +140,10 @@ function MapContent() {
                                     id="location-dropdown"
                                     className="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto"
                                 >
-                                    {locationOptions.map((location, index) => (
+                                    {PropertyOptions.map((location, index) => (
                                         <div
                                             key={index}
-                                            className="px-4 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                                            className="px-4 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-sm"
                                             onClick={() => {
                                                 setSelectedLocation(location);
                                                 document
@@ -159,7 +159,7 @@ function MapContent() {
                         </div>
 
                         {/* Search Box with Autocomplete */}
-                        <div className="md:col-span-2 lg:col-span-3">
+                        <div className="md:col-span-2 lg:col-span-3 text-sm">
                             <AutocompleteInput
                                 searchQuery={searchQuery}
                                 setSearchQuery={setSearchQuery}
@@ -180,7 +180,7 @@ function MapContent() {
                                     }
                                 >
                                     <div className="flex items-center gap-3">
-                                        <span className="text-gray-800 font-medium truncate">
+                                        <span className="text-gray-800 font-medium truncate text-sm">
                                             {selectedPrice}
                                         </span>
                                     </div>
@@ -194,7 +194,7 @@ function MapContent() {
                                     {PriceOptions.map((price, index) => (
                                         <div
                                             key={index}
-                                            className="px-4 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                                            className="px-4 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-sm"
                                             onClick={() => {
                                                 setSelectedPrice(price);
                                                 document.getElementById("price-dropdown").classList.add("hidden");
@@ -217,7 +217,7 @@ function MapContent() {
                                     }
                                 >
                                     <div className="flex items-center gap-3">
-                                        <span className="text-gray-800 font-medium truncate">
+                                        <span className="text-gray-800 font-medium truncate text-sm">
                                             {selectedHome}
                                         </span>
                                     </div>
@@ -231,7 +231,7 @@ function MapContent() {
                                     {HomeOptions.map((home, index) => (
                                         <div
                                             key={index}
-                                            className="px-4 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                                            className="px-4 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-sm"
                                             onClick={() => {
                                                 setSelectedHome(home);
                                                 document.getElementById("home-dropdown").classList.add("hidden");
@@ -254,7 +254,7 @@ function MapContent() {
                                     }
                                 >
                                     <div className="flex items-center gap-3">
-                                        <span className="text-gray-800 font-medium truncate">
+                                        <span className="text-gray-800 font-medium truncate text-sm">
                                             {selectedSale}
                                         </span>
                                     </div>
@@ -268,7 +268,7 @@ function MapContent() {
                                     {SaleOptions.map((sale, index) => (
                                         <div
                                             key={index}
-                                            className="px-4 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                                            className="px-4 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-sm"
                                             onClick={() => {
                                                 setSelectedSale(sale);
                                                 document.getElementById("sale-dropdown").classList.add("hidden");

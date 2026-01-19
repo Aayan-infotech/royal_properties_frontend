@@ -43,6 +43,11 @@ export const NearbyPlace = {
   MOSQUE: { label: 'Mosque', icon: FaMosque },
   CHURCH: { label: 'Church', icon: FaChurch }
 }
+export const PropertyOptions = [
+"Residential",
+"Commercial",
+"Pre Construction Condo",
+];
 
 
 export const locationOptions = [
