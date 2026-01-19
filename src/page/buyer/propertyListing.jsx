@@ -2,7 +2,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Building from "../../assets/building.png";
-import { formatDate } from "../../utils/constant";
+import { formatDate, userType } from "../../utils/constant";
 import axiosInstance from "../../component/axiosInstance";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/react";
 import { IoBedSharp } from "react-icons/io5";
@@ -146,9 +146,11 @@ export default function PropertyListing() {
     const [currentPage, setCurrentPage] = React.useState(1);
     const navigate = useNavigate();
     const handlePropertyClick = (property) => {
-        console.log("button clicking", property);
-        navigate(`/buyers/property-detail/${property._id}`, { state: { property } });
-        // navigate(`/buyers/property-detail/${property.id}`, { state: { property } });
+        if (userType) {
+            navigate(`/${userType}/property-detail/${property._id}`, { state: { property } });
+            return
+        }
+        navigate(`/role/login`);
     };
 
     const getData = async (page) => {
