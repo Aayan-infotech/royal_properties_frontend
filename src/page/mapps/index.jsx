@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
-import { APIProvider, Map, useMapsLibrary } from '@vis.gl/react-google-maps';
-import { ControlPanel } from './control-panel';
+import { APIProvider, Map, useMapsLibrary , useMap } from '@vis.gl/react-google-maps';
 import { getCategories, loadTreeDataset } from './trees';
 import { ClusteredTreeMarkers } from './clusterd-tree-markers';
 import { formatDate, NearbyPlace, locationOptions, PriceOptions, HomeOptions, SaleOptions } from "../../utils/constant";
@@ -15,9 +14,10 @@ import {
     FiCheck,
 } from "react-icons/fi";
 
+
 const API_KEY = "AIzaSyCImFnps9l5WZ-Sxm5ZZX-yowF_vWunS2c";
 
-function AutocompleteInput({ searchQuery, setSearchQuery, setSelectedLocation, onSearch }) {
+function AutocompleteInput({ searchQuery, setSearchQuery, onSearch }) {
     const inputRef = useRef(null);
     const autocompleteRef = useRef(null);
     const placesLib = useMapsLibrary('places');
@@ -47,7 +47,7 @@ function AutocompleteInput({ searchQuery, setSearchQuery, setSelectedLocation, o
             }
 
             const address = place.formatted_address || place.name || "";
-            setSelectedLocation(address);
+            // setSelectedLocation(address);
             setSearchQuery(address);
         });
 
@@ -56,7 +56,7 @@ function AutocompleteInput({ searchQuery, setSearchQuery, setSelectedLocation, o
                 google.maps.event.removeListener(listener);
             }
         };
-    }, [placesLib, setSelectedLocation, setSearchQuery]);
+    }, [placesLib, setSearchQuery]);
 
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
@@ -163,7 +163,7 @@ function MapContent() {
                             <AutocompleteInput
                                 searchQuery={searchQuery}
                                 setSearchQuery={setSearchQuery}
-                                setSelectedLocation={setSelectedLocation}
+                                // setSelectedLocation={setSelectedLocation}
                                 onSearch={handleSearch}
                             />
                         </div>
@@ -308,6 +308,7 @@ function MapContent() {
                 defaultZoom={10}
                 gestureHandling="greedy"
                 disableDefaultUI={false}
+                zoomControl={false}
             >
                 {filteredTrees && <ClusteredTreeMarkers trees={filteredTrees} />}
             </Map>
