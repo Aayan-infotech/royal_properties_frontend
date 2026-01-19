@@ -173,7 +173,7 @@ function App() {
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<ValidUserRoute><Home /></ValidUserRoute>} />
-            <Route path="/map" element={<ValidUserRoute><Mapper /></ValidUserRoute>} />
+            <Route path="/map" element={<ValidUserRoute><Mapps /></ValidUserRoute>} />
             <Route path="/propertydetail/:id" element={<ValidUserRoute><PropertyDetail /></ValidUserRoute>} />
             <Route path="/blogs" element={<ValidUserRoute><Blogs /></ValidUserRoute>} />
             <Route path="/blog/:id" element={<ValidUserRoute><Blog /></ValidUserRoute>} />
@@ -201,7 +201,7 @@ function App() {
             <Route path="home" element={<BuyerOnlyRoute><BuyerHome /></BuyerOnlyRoute>} />
             <Route path="category-listing" element={<BuyerOnlyRoute><CategoryListing /></BuyerOnlyRoute>} />
             <Route path="agents" element={<BuyerOnlyRoute><Agents /></BuyerOnlyRoute>} />
-            <Route path="map" element={<BuyerOnlyRoute><Mapper /></BuyerOnlyRoute>} />
+            <Route path="map" element={<BuyerOnlyRoute><Mapps /></BuyerOnlyRoute>} />
             <Route path="property-listing" element={<BuyerOnlyRoute><PropertyListing /></BuyerOnlyRoute>} />
             <Route path="property-detail/:id" element={<BuyerOnlyRoute><PropertyDetail /></BuyerOnlyRoute>} />
             <Route path="nearby-properties" element={<BuyerOnlyRoute><NearbyProperties /></BuyerOnlyRoute>} />
@@ -212,7 +212,7 @@ function App() {
 
           <Route path="/agents" element={<AgentLayout />}>
             <Route path="home" element={<AgentOnlyRoute><AgentHome /></AgentOnlyRoute>} />
-            <Route path="map" element={<AgentOnlyRoute><Mapper /></AgentOnlyRoute>} />
+            <Route path="map" element={<AgentOnlyRoute><Mapps /></AgentOnlyRoute>} />
             <Route path="agent-property" element={<AgentOnlyRoute><AgentProperty /></AgentOnlyRoute>} />
             <Route path="property-detail/:id" element={<AgentOnlyRoute><PropertyDetail /></AgentOnlyRoute>} />
             <Route path="user-profile" element={<AgentOnlyRoute><UserProfileDashboard /></AgentOnlyRoute>} />
