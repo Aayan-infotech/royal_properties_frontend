@@ -246,9 +246,9 @@ export default function PropertyDetail() {
 
         {/* Modal */}
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
+          // initial={{ y: 100, opacity: 0 }}
+          // animate={{ y: 0, opacity: 1 }}
+          // exit={{ y: 100, opacity: 0 }}
           className="relative bg-white w-full sm:max-w-[800px] rounded-t-2xl sm:rounded-2xl p-6"
           onClick={(e) => e.stopPropagation()}
         >
