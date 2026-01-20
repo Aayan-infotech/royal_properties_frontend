@@ -490,7 +490,7 @@ const UserProfileDashboard = () => {
   const [userQuestions, setUserQuestions] = useState([]);
   const { success, error } = useContext(AlertContext);
   const [profile, setProfile] = useState({
-    photo: "https://via.placeholder.com/150",
+    photo: "",
     name: "",
     email: "",
     phone: "",
