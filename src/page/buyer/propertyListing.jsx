@@ -8,6 +8,7 @@ import { Card, CardHeader, CardBody, CardFooter } from "@heroui/react";
 import { IoBedSharp } from "react-icons/io5";
 import { FaBath } from "react-icons/fa";
 import { PiGarageFill } from "react-icons/pi";
+import CardLoader from "../../loaders/cardLoader"
 const cardVariants = {
     initial: { scale: 1, y: 0 },
     hover: {
@@ -154,6 +155,7 @@ export default function PropertyListing() {
     };
 
     const getData = async (page) => {
+        setLoading(true);
         try {
             const url = `/properties/approved?page=${page}&limit=12${nearbyPlaces ? `&nearbyPlaces=${nearbyPlaces}` : ''}${address ? `&address=${address}` : ''}`;
 
@@ -163,6 +165,9 @@ export default function PropertyListing() {
             setCurrentPage(page);
         } catch (error) {
             console.error(error);
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -197,7 +202,7 @@ export default function PropertyListing() {
                 >
 
                     {loading ? (
-                        <LoadingSkeleton />
+                        <CardLoader count={4} />
                     ) : data.length === 0 ? (
                         <NoDataFound />
                     )

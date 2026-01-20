@@ -110,6 +110,11 @@ export const decrypt = (cipherText) => {
   return bytes.toString(CryptoJS.enc.Utf8);
 };
 
+export const getUserType = () => {
+  const encrypted = localStorage.getItem("userRole");
+  return encrypted ? decrypt(encrypted) : "";
+};
+
 export const formatPrice = (price) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',

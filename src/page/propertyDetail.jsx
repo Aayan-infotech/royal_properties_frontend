@@ -31,7 +31,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axiosInstance from "../component/axiosInstance";
 import { AlertContext } from "../context/alertContext";
-import { formatDate, userType } from "../utils/constant";
+import { formatDate, userType , getUserType } from "../utils/constant";
 
 export default function PropertyDetail() {
   const [openEnquiry, setOpenEnquiry] = useState(false);
@@ -46,6 +46,8 @@ export default function PropertyDetail() {
   const [propertyData, setPropertyData] = useState([]);
   const { success, error } = useContext(AlertContext);
   const [loading, setLoading] = useState(false);
+  const currentUser = getUserType();
+  console.log("current" , currentUser);
   const [agentForm, setAgentForm] = useState({
     name: "",
     enquiry: "General Inquiry",
@@ -405,82 +407,7 @@ export default function PropertyDetail() {
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Navigation Tabs */}
-        {/* <div className="bg-white mb-4">
-          <div className="flex justify-between items-end w-full">
-            <div className="flex space-x-8 px-6">
-              {[
-                "Overview",
-                "Listing History",
-                "Estimates",
-                "Comparables",
-                "Schools",
-                "Community",
-              ].map((tab) => (
-                <button
-                  key={tab}
-                  className={`py-4 text-sm font-medium border-b-2 ${
-                    tab === "Overview"
-                      ? "border-blue-600 text-blue-600"
-                      : "border-transparent text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-            <div className="flex space-x-3 px-6 mb-1">
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                  />
-                </svg>
-                Sold Watch
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                  />
-                </svg>
-                Share
-              </button>
-              <button className="px-2 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div> */}
-        {userType === "buyers" && <div className="flex w-full justify-end">
+        {currentUser === "buyers" && <div className="flex w-full justify-end">
           <button disabled={loading}
             onClick={handleWatchList}
             className={`cursor-pointer ${loading && "circular"} flex justify-end mb-4 items-center gap-2 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50`}>
@@ -551,7 +478,7 @@ export default function PropertyDetail() {
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left Section - Property Details */}
-              <div className={`${userType === "agents" ?  "lg:col-span-3": "lg:col-span-2" } bg-white rounded-lg shadow-sm p-6`}>
+              <div className={`${currentUser === "agents" ?  "lg:col-span-3": "lg:col-span-2" } bg-white rounded-lg shadow-sm p-6`}>
                 <div className="flex justify-between flex-wrap lg:flex-nowrap border-b  border-gray-200">
                   <div className=" pb-4">
                     <h1 className="text-xl font-semibold text-gray-900 mb-1">
@@ -1118,7 +1045,7 @@ export default function PropertyDetail() {
                 </TabGroup>
               </div>
 
-              {(userType === "agents" || userType === "sellers") && 
+              {currentUser !== "agents" && 
               <>
                 <div className="lg:col-span-1">
                   <div className="bg-white rounded-lg shadow-sm p-6 px-3 ">

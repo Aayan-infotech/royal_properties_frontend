@@ -26,6 +26,7 @@ import { MdLocationOn, MdPeople, MdBusiness } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../component/axiosInstance";
 import { formatDate, NearbyPlace , locationOptions } from "../../utils/constant";
+import CardLoader from "../../loaders/cardLoader";
 
 export default function BuyerHome() {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -54,6 +55,7 @@ export default function BuyerHome() {
     totalPages: 1,
   });
   const [currentPage, setCurrentPage] = React.useState(1);
+  const [loading , setLoading] = useState(false);
 
   // City options
   const cityOptions = {
@@ -275,6 +277,7 @@ export default function BuyerHome() {
   ];
 
   const getData = async (page) => {
+    setLoading(true);
     try {
       const response = await axiosInstance.get(
         `/properties/approved?page=${page}&limit=4`
@@ -284,6 +287,8 @@ export default function BuyerHome() {
       setCurrentPage(page);
     } catch (error) {
       console.error(error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -296,6 +301,8 @@ export default function BuyerHome() {
   React.useEffect(() => {
     getData(1);
   }, []);
+
+
 
   const handlePropertyClick = (property) => {
     console.log("button clicking", property);
@@ -395,6 +402,7 @@ export default function BuyerHome() {
           className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           variants={containerVariants}
         >
+          {loading && <CardLoader count={4} />}
           {data.map((item, index) => (
             <motion.div
               key={index}
@@ -534,6 +542,7 @@ export default function BuyerHome() {
           className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           variants={containerVariants}
         >
+           {loading && <CardLoader count={4} />}
           {data.slice(0, 4).map((item, index) => (
             <motion.div
               key={index}
