@@ -209,7 +209,7 @@ export default function PropertyDetail() {
           propertyId: propertyData?._id,
           agentId: agentId,
           name: localForm?.name,
-          enquiry: localForm?.enquiry,
+          enquiryType: localForm?.enquiry,
           email: localForm?.email,
           phoneNumber: localForm?.phone,
           message: localForm?.message,
@@ -219,7 +219,7 @@ export default function PropertyDetail() {
           console.log("Enquiry sent successfully:", response.data);
           setLocalForm({
             name: "",
-            enquiry: "General Inquiry",
+            enquiryType: "General Inquiry",
             email: "",
             phone: "",
             message: "",
@@ -284,10 +284,10 @@ export default function PropertyDetail() {
                 <label className="text-sm font-medium">Enquiry Type</label>
                 <select
                   className="w-full mt-2 border border-gray-500 rounded-lg px-3 py-2 outline-none"
-                  name="enquiry"
-                  value={localForm.enquiry}
+                  name="enquiryType"
+                  value={localForm.enquiryType}
                   onChange={(e) =>
-                    setLocalForm({ ...localForm, enquiry: e.target.value })
+                    setLocalForm({ ...localForm, enquiryType: e.target.value })
                   }
                 >
                   {[
