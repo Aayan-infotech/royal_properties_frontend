@@ -44,7 +44,7 @@ export default function PropertyDetail() {
   const [showMore, setShowMore] = useState(false);
   const location = useLocation();
   const [propertyData, setPropertyData] = useState([]);
-  const { success, error } = useContext(AlertContext);
+  const { success, error , info } = useContext(AlertContext);
   const [loading, setLoading] = useState(false);
   const currentUser = getUserType();
   console.log("current" , currentUser);
@@ -384,6 +384,7 @@ export default function PropertyDetail() {
 
   const handleGetProperty = async () => {
     setLoading(true);
+    info("Fetching property details...");
     try {
       const response = await axiosInstance.get(`/properties/${id}`);
       if (response) {

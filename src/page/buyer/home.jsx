@@ -25,7 +25,7 @@ import {
 import { MdLocationOn, MdPeople, MdBusiness } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../component/axiosInstance";
-import { formatDate, NearbyPlace , locationOptions } from "../../utils/constant";
+import { formatDate, NearbyPlace, locationOptions } from "../../utils/constant";
 import CardLoader from "../../loaders/cardLoader";
 
 export default function BuyerHome() {
@@ -55,7 +55,7 @@ export default function BuyerHome() {
     totalPages: 1,
   });
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // City options
   const cityOptions = {
@@ -287,7 +287,7 @@ export default function BuyerHome() {
       setCurrentPage(page);
     } catch (error) {
       console.error(error);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -542,7 +542,7 @@ export default function BuyerHome() {
           className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           variants={containerVariants}
         >
-           {loading && <CardLoader count={4} />}
+          {loading && <CardLoader count={4} />}
           {data.slice(0, 4).map((item, index) => (
             <motion.div
               key={index}
@@ -551,73 +551,71 @@ export default function BuyerHome() {
               whileHover="hover"
               initial="initial"
             >
-              <Link to="/buyers/property-detail/123">
-                <motion.div variants={cardVariants}>
-                  <Card
-                    className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full `}
-                  >
-                    <CardBody className="overflow-visible pb-2">
-                      <motion.div
-                        className="relative"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <motion.img
-                          alt="Card background"
-                          className="object-cover h-[200px]"
-                          src={item?.photos[0]?.url || Building}
-                          width="100%"
-                          height="100%"
-                          style={{ borderRadius: "15px 15px 0 0" }}
-                        />
-                        {item.sold > 0 && (
-                          <motion.span
-                            className="absolute bottom-2 left-2 bg-[#FF6F1E] text-dark px-2 py-1 rounded-sm text-sm"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                          >
-                            Sold
-                          </motion.span>
-                        )}
-                      </motion.div>
-                      {/* Rest of card content remains the same */}
-                      <div className="flex flex-col gap-1 px-3 pt-2 px-2">
+              <motion.div variants={cardVariants}>
+                <Card
+                  className={`my-4 rounded-[15px] shadow-lg bg-[#E9F6F7] w-full `}
+                >
+                  <CardBody className="overflow-visible pb-2" onClick={() => handlePropertyClick(item)}>
+                    <motion.div
+                      className="relative"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <motion.img
+                        alt="Card background"
+                        className="object-cover h-[200px]"
+                        src={item?.photos[0]?.url || Building}
+                        width="100%"
+                        height="100%"
+                        style={{ borderRadius: "15px 15px 0 0" }}
+                      />
+                      {item.sold > 0 && (
+                        <motion.span
+                          className="absolute bottom-2 left-2 bg-[#FF6F1E] text-dark px-2 py-1 rounded-sm text-sm"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                        >
+                          Sold
+                        </motion.span>
+                      )}
+                    </motion.div>
+                    {/* Rest of card content remains the same */}
+                    <div className="flex flex-col gap-1 px-3 pt-2 px-2">
+                      <span className="text-gray-800 text-sm">
+                        <b>{item?.property}</b>
+                      </span>
+                      <div className="flex justify-between">
                         <span className="text-gray-800 text-sm">
-                          <b>{item?.property}</b>
+                          Listed: <b>${item.price}</b>
                         </span>
-                        <div className="flex justify-between">
-                          <span className="text-gray-800 text-sm">
-                            Listed: <b>${item.price}</b>
-                          </span>
-                          <span className="text-gray-500 text-sm">
-                            {formatDate(item.createdAt)}
-                          </span>
-                        </div>
-                        <span className="text-gray-800 text-sm truncate ">
-                          {item.address}
-                        </span>
-                        <div className="flex row gap-2 text-sm py-2">
-                          <span className="flex row gap-2">
-                            <IoBedSharp size={20} /> {item?.details?.bedrooms}
-                          </span>
-                          <span className="flex row gap-2">
-                            <FaBath size={16} /> {item?.details?.fullBathrooms}
-                          </span>
-                          <span className="flex row gap-2">
-                            <PiGarageFill size={20} /> {item?.keyFacts?.parking}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="px-2">
-                        {/* <hr className="border-gray-400" /> */}
-                        <span className="text-gray-500 text-sm pt-2">
-                          {item.des}
+                        <span className="text-gray-500 text-sm">
+                          {formatDate(item.createdAt)}
                         </span>
                       </div>
-                    </CardBody>
-                  </Card>
-                </motion.div>
-              </Link>
+                      <span className="text-gray-800 text-sm truncate ">
+                        {item.address}
+                      </span>
+                      <div className="flex row gap-2 text-sm py-2">
+                        <span className="flex row gap-2">
+                          <IoBedSharp size={20} /> {item?.details?.bedrooms}
+                        </span>
+                        <span className="flex row gap-2">
+                          <FaBath size={16} /> {item?.details?.fullBathrooms}
+                        </span>
+                        <span className="flex row gap-2">
+                          <PiGarageFill size={20} /> {item?.keyFacts?.parking}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="px-2">
+                      {/* <hr className="border-gray-400" /> */}
+                      <span className="text-gray-500 text-sm pt-2">
+                        {item.des}
+                      </span>
+                    </div>
+                  </CardBody>
+                </Card>
+              </motion.div>
             </motion.div>
           ))}
         </motion.div>
