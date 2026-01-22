@@ -27,8 +27,8 @@ export default function SellerHeader() {
   const menuItems = [
     { name: "Map Search", path: "/sellers/map" },
     { name: "Market Trends", path: "/sellers/market-trends" },
-    { name: "Home Valuation", path: "/sellers/home" },
-    { name: "Agents", path: "/sellers/sellers" },
+    { name: "Home Valuation", path: "/sellers/home-valuation" },
+    { name: "Agents", path: "/sellers/agents" },
   ];
 
   return (

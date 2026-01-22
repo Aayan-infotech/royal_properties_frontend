@@ -32,7 +32,7 @@ const SellerHome = () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/properties/my-properties?page=${page}&limit=10`
+        `/properties/my-properties?page=${page}&limit=9`
       );
       setData(response.data.data.data);
       setPagination(response.data.data.pagination);

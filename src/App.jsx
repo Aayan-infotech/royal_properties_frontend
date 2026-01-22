@@ -196,6 +196,8 @@ function App() {
             <Route path="property-listing" element={<SellerOnlyRoute><PropertyListingForm /></SellerOnlyRoute>} />
             <Route path="property-detail/:id" element={<SellerOnlyRoute><PropertyDetail /></SellerOnlyRoute>} />
             <Route path="user-profile" element={<SellerOnlyRoute><UserProfileDashboard /></SellerOnlyRoute>} />
+            <Route path="home-valuation" element={<SellerOnlyRoute><HomeValuation /></SellerOnlyRoute>} />
+            <Route path="agents" element={<SellerOnlyRoute><Agents /></SellerOnlyRoute>} />
           </Route>
 
           <Route path="/buyers" element={<BuyerLayout />}>
