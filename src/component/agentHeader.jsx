@@ -25,8 +25,8 @@ export default function AgentHeader() {
   const decryptedUserType = decrypt(localStorage.getItem("userRole") || "");
 
   const menuItems = [
-    { name: "Client management", path: "client-management" },
-    { name: "Appointments", path: "home" },
+    { name: "Enquiries", path: "enquiries" },
+    // { name: "Appointments", path: "home" },
     { name: "Property Listing", path: "agent-property" },
     { name: "Map View", path: "map" },
     { name: "Reports", path: "home" },
