@@ -34,7 +34,7 @@ button[class*="primary"] {
 .dark-bg,
 .dark-bg img {
   position: relative;
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 100px);
   min-height: 400px;
   object-fit: cover;
 }
@@ -134,7 +134,7 @@ button[class*="primary"] {
   .dark-bg,
   .dark-bg img {
     position: relative;
-    max-height: calc(100vh - 120px);
+    max-height: calc(100vh - 100px);
     object-fit: cover;
     min-height: calc(100vh - 63px);
   }

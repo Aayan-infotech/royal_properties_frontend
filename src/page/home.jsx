@@ -427,7 +427,7 @@ export default function Home() {
 
   return (
     // <APIProvider apiKey={API_KEY}>
-    <div className="max-w-7xl mx-auto lg:px-6 lg:pt-12">
+    <div className="max-w-7xl mx-auto lg:px-6 lg:pt-4">
       <motion.div
         className="dark-bg"
         variants={bannerVariants}
