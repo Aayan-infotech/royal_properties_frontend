@@ -20,7 +20,7 @@ import {
   FaPaperPlane,
 } from "react-icons/fa";
 import axiosInstance from "./axiosInstance";
-import { decrypt, userType } from "../utils/constant";
+import { decrypt, getUserType } from "../utils/constant";
 import { AlertContext } from "../context/alertContext";
 import { useNavigate } from "react-router-dom";
 // Component for Logout Modal
@@ -499,6 +499,7 @@ const UserProfileDashboard = () => {
     address: "",
   });
   const [isLoading, setIsLoading] = useState(true);
+  const userType = getUserType();
 
   // Mock functions to replace axiosInstance and AlertContext
   const mockFetchProfile = async () => {

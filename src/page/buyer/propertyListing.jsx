@@ -2,7 +2,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Building from "../../assets/building.png";
-import { formatDate, userType } from "../../utils/constant";
+import { formatDate, getUserType } from "../../utils/constant";
 import axiosInstance from "../../component/axiosInstance";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/react";
 import { IoBedSharp } from "react-icons/io5";
@@ -137,7 +137,7 @@ export default function PropertyListing() {
     const queryParams = new URLSearchParams(location.search);
     const nearbyPlaces = queryParams.get('nearbyPlaces');
     const address = queryParams.get('address');
-
+    const userType = getUserType();
     const [pagination, setPagination] = React.useState({
         total: 0,
         page: 1,
