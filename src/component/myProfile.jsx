@@ -386,7 +386,7 @@ const EditProfile = ({ profile, setProfile, onSave }) => {
       <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
         <div className="relative">
           <img
-            src={profile?.photo || "https://via.placeholder.com/150"}
+            src={profile?.photo}
             alt="Profile"
             className="w-32 h-32 rounded-full object-cover border-4 border-white shadow"
           />
