@@ -374,10 +374,10 @@ export default function BuyerHome() {
           </div>
           <button
             onClick={() => setSidebarOpen(true)}
-            className="w-full flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white md:px-2 lg:px-6 lg:py-2 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="w-full flex items-center gap-2 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white md:px-2 lg:px-6 lg:py-2 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <RiFilter3Line size={20} />
-            <span className="font-sm">Personalize Listing</span>
+            <span className="font-sm">Filter</span>
           </button>
         </div>
       </div>
@@ -892,14 +892,6 @@ export default function BuyerHome() {
         </div>
       </div>
 
-      {/* Mobile Home Button */}
-      <div className="md:hidden mt-6">
-        <button className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
-          <FiHome size={20} />
-          <span>Home</span>
-        </button>
-      </div>
-
       {/* Sidebar - Personalized Listing */}
       <div
         className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${sidebarOpen ? "translate-x-0" : "translate-x-full"
@@ -910,7 +902,7 @@ export default function BuyerHome() {
           <div className="sticky top-0 bg-white border-b border-gray-200 p-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-gray-800">
-                Personalize Listing
+                Filter
               </h2>
               <button
                 onClick={() => setSidebarOpen(false)}

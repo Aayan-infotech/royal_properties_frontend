@@ -117,7 +117,7 @@ export default function AgentHeader() {
       {/* Mobile Menu */}
       <NavbarMenu className="bg-[#132141] pt-8"  style={{zIndex:999}}>
         {menuItems.map((item) => (
-          <NavbarMenuItem key={item.name}>
+          <NavbarMenuItem key={item.name} onClick={() => setIsMenuOpen(false)}>
             <Link
               className="block text-white py-4 px-4"
               to={`/${decryptedUserType}/${item.path}`}

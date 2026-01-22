@@ -22,6 +22,10 @@ main {
   flex: 1;
 }
 
+.truncate{
+  max-width: 280px;
+}
+
 button[class*="primary"] {
   font-weight: 500;
   font-size: 14px;
