@@ -49,6 +49,7 @@ const UserProfileDashboard = lazy(() => import("./component/myProfile"));
 import { encrypt, decrypt } from "./utils/constant";
 import Header from "./component/header";
 import Footer from "./component/footer";
+import ClientManagement from "./page/agent/clientManagement";
 
 // Loading component
 const LoadingFallback = () => (
@@ -190,7 +191,7 @@ function App() {
           </Route>
 
           <Route path="/sellers" element={<SellerLayout />}>
-           <Route path="map" element={<SellerOnlyRoute><Mapps /></SellerOnlyRoute>} />
+            <Route path="map" element={<SellerOnlyRoute><Mapps /></SellerOnlyRoute>} />
             <Route path="home" element={<SellerOnlyRoute><SellerHome /></SellerOnlyRoute>} />
             <Route path="property-listing" element={<SellerOnlyRoute><PropertyListingForm /></SellerOnlyRoute>} />
             <Route path="property-detail/:id" element={<SellerOnlyRoute><PropertyDetail /></SellerOnlyRoute>} />
@@ -213,6 +214,7 @@ function App() {
           <Route path="/agents" element={<AgentLayout />}>
             <Route path="home" element={<AgentOnlyRoute><AgentHome /></AgentOnlyRoute>} />
             <Route path="map" element={<AgentOnlyRoute><Mapps /></AgentOnlyRoute>} />
+            <Route path="client-management" element={<AgentOnlyRoute><ClientManagement /></AgentOnlyRoute>} />
             <Route path="agent-property" element={<AgentOnlyRoute><AgentProperty /></AgentOnlyRoute>} />
             <Route path="property-detail/:id" element={<AgentOnlyRoute><PropertyDetail /></AgentOnlyRoute>} />
             <Route path="user-profile" element={<AgentOnlyRoute><UserProfileDashboard /></AgentOnlyRoute>} />

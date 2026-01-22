@@ -30,8 +30,9 @@ export default function AgentProperty() {
   const handleResponse = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/properties/AgentProperties`);
+      const response = await axiosInstance.get(`/properties/AgentProperties?page=${page}&limit=10`);
       setData(response.data.data.data);
+      setPagination(response.data.data.pagination);
     } catch (error) {
       console.log(error);
     }
