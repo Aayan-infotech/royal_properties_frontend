@@ -89,21 +89,21 @@ const AlertComponent = ({ alert, onClose }) => {
       leaveTo="opacity-0"
       className={`max-w-sm w-full ${config.bgColor} shadow-lg rounded-lg pointer-events-auto border ${config.borderColor} overflow-hidden`}
     >
-      <div className="p-4 w-full mb-4">
+      <div className="py-3 px-2 w-full mb-4">
         <div className="flex items-center">
           <div className="flex-shrink-0">
             <Icon
-              className={`h-6 w-6 ${config.iconColor}`}
+              className={`h-5 w-5 mb-0 ${config.iconColor}`}
               aria-hidden="true"
             />
           </div>
-          <div className="ml-3 w-0 flex-1 pt-0.5 w-full">
+          <div className="ml-3 w-0 flex-1 w-full">
             {title && (
               <p className={`text-sm font-medium ${config.textColor}`}>
                 {title}
               </p>
             )}
-            <p className={`mt-1 text-sm ${config.textColor}`}>
+            <p className={` text-sm ${config.textColor}`}>
               {typeof message === "string" ? message : JSON.stringify(message)}
             </p>
           </div>

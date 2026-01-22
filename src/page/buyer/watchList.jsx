@@ -10,12 +10,14 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/effect-fade'
+import { useNavigate } from "react-router-dom"
 
 export default function WatchList() {
     const { success, error } = useContext(AlertContext)
     const [watchlistItems, setWatchlistItems] = React.useState([])
     const swiperRefs = useRef({})
     const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate()
 
     const {
         confirmationState,
@@ -255,14 +257,14 @@ export default function WatchList() {
                                             <div className="flex gap-3">
                                                 <button
                                                     onClick={() => showRemoveConfirmation(item)}
-                                                    className="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 font-medium flex items-center gap-2 hover:border-red-300 hover:text-red-600"
+                                                    className="px-5 py-2.5 cursor-pointer border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 font-medium flex items-center gap-2 hover:border-red-300 hover:text-red-600"
                                                 >
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                     </svg>
                                                     Remove
                                                 </button>
-                                                <button className="flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                <button className="cursor-pointer flex-none rounded-md bg-[#132141] px-3.5 py-2.5 text-sm text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed" onClick={() => navigate(`/buyers/property-detail/${property?._id}`)}>
 
                                                     View Details
                                                 </button>
