@@ -31,7 +31,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axiosInstance from "../component/axiosInstance";
 import { AlertContext } from "../context/alertContext";
-import { formatDate, userType , getUserType } from "../utils/constant";
+import { formatDate, userType, getUserType } from "../utils/constant";
 
 export default function PropertyDetail() {
   const [openEnquiry, setOpenEnquiry] = useState(false);
@@ -44,10 +44,10 @@ export default function PropertyDetail() {
   const [showMore, setShowMore] = useState(false);
   const location = useLocation();
   const [propertyData, setPropertyData] = useState([]);
-  const { success, error , info } = useContext(AlertContext);
+  const { success, error, info } = useContext(AlertContext);
   const [loading, setLoading] = useState(false);
   const currentUser = getUserType();
-  console.log("current" , currentUser);
+  console.log("current", currentUser);
   const [agentForm, setAgentForm] = useState({
     name: "",
     enquiry: "General Inquiry",
@@ -376,7 +376,7 @@ export default function PropertyDetail() {
         success(response.data.message)
       }
     } catch (err) {
-     error(err?.response?.data?.data[0]?.errors[0]);
+      error(err?.response?.data?.data[0]?.errors[0]);
     } finally {
       setLoading(false);
     }
@@ -393,7 +393,7 @@ export default function PropertyDetail() {
       }
     } catch (err) {
       console.error("Error fetching property details:", err);
-     error(err?.response?.data?.data[0]?.errors[0]);
+      error(err?.response?.data?.data[0]?.errors[0]);
     } finally {
       setLoading(false);
     }
@@ -479,7 +479,7 @@ export default function PropertyDetail() {
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left Section - Property Details */}
-              <div className={`${currentUser === "agents" ?  "lg:col-span-3": "lg:col-span-2" } bg-white rounded-lg shadow-sm p-6`}>
+              <div className={`${currentUser === "agents" ? "lg:col-span-3" : "lg:col-span-2"} bg-white rounded-lg shadow-sm p-6`}>
                 <div className="flex justify-between flex-wrap lg:flex-nowrap border-b  border-gray-200">
                   <div className=" pb-4">
                     <h1 className="text-xl font-semibold text-gray-900 mb-1">
@@ -1046,72 +1046,72 @@ export default function PropertyDetail() {
                 </TabGroup>
               </div>
 
-              {currentUser !== "agents" && 
-              <>
-                <div className="lg:col-span-1">
-                  <div className="bg-white rounded-lg shadow-sm p-6 px-3 ">
-                    <div className="mb-4">
-                      <h3 className="text-lg font-semibold text-gray-500 py-2 ">
-                        Property Agent
-                      </h3>
-                      <div>
-                        <p className="text-xs text-gray-700">
-                          Tour with Royal Property Agent
-                        </p>
+              {currentUser !== "agents" &&
+                <>
+                  <div className="lg:col-span-1">
+                    <div className="bg-white rounded-lg shadow-sm p-6 px-3 ">
+                      <div className="mb-4">
+                        <h3 className="text-lg font-semibold text-gray-500 py-2 ">
+                          Property Agent
+                        </h3>
+                        <div>
+                          <p className="text-xs text-gray-700">
+                            Tour with Royal Property Agent
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="grid lg:grid-cols-2 gap-3">
-                      {propertyData?.agentIds?.map((agentId) => (
-                        <div
-                          key={agentId?._id}
-                          className=" border border-gray-300 rounded-lg mb-4"
-                        >
-                          <div className="flex items-center items-center">
-                            <div className="flex flex-col items-center w-full">
-                              <img
-                                src={
-                                  agentId?.agentImage ||
-                                  "https://imgs.search.brave.com/Ra2YlxZk0tKBLBaMqBBnBfWFCoLbtTRp1bJs36rHAv4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzM2LzEy/LzY0LzM2MTI2NGM3/M2U2OWViNmQyMDRl/MjFiZjlkMTYxNGM4/LmpwZw"
-                                }
-                                alt="Agent"
-                                className="w-30 lg:w-full h-35 object-cover"
-                              />
-                              <p className="text-lg font-semibold text-gray-600">
-                                {agentId?.fullName?.toUpperCase(" ")}
-                              </p>
-                              <div>
-                                {/* <p className="text-xs text-gray-600">
+                      <div className="grid lg:grid-cols-2 gap-3">
+                        {propertyData?.agentIds?.map((agentId) => (
+                          <div
+                            key={agentId?._id}
+                            className=" border border-gray-300 rounded-lg mb-4"
+                          >
+                            <div className="flex items-center items-center">
+                              <div className="flex flex-col items-center w-full">
+                                <img
+                                  src={
+                                    agentId?.agentImage ||
+                                    "https://imgs.search.brave.com/Ra2YlxZk0tKBLBaMqBBnBfWFCoLbtTRp1bJs36rHAv4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzM2LzEy/LzY0LzM2MTI2NGM3/M2U2OWViNmQyMDRl/MjFiZjlkMTYxNGM4/LmpwZw"
+                                  }
+                                  alt="Agent"
+                                  className="w-30 lg:w-full h-35 object-cover"
+                                />
+                                <p className="text-lg font-semibold text-gray-600">
+                                  {agentId?.fullName?.toUpperCase(" ")}
+                                </p>
+                                <div>
+                                  {/* <p className="text-xs text-gray-600">
                               {agentTitle}
                             </p> */}
-                                <div className="flex gap-2 flex-col items-center px-1 pb-3">
-                                  {" "}
-                                  <button
-                                    type="button"
-                                    className="px-4 py-2 text-sm text-white rounded-md bg-[#132141] hover:bg-indigo-400"
-                                    onClick={(e) => {
-                                      e.preventDefault();
+                                  <div className="flex gap-2 flex-col items-center px-1 pb-3">
+                                    {" "}
+                                    <button
+                                      type="button"
+                                      className="px-4 py-2 text-sm text-white rounded-md bg-[#132141] hover:bg-indigo-400"
+                                      onClick={(e) => {
+                                        e.preventDefault();
 
-                                      setSelectedAgent(agentId?._id);
-                                      setOpenEnquiry(true);
-                                    }}
-                                  >
-                                    Schedule Viewing
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="px-4 py-2 text-sm text-white rounded-md bg-gray-500 hover:bg-gray-400 w-full"
-                                  >
-                                    View Profile
-                                  </button>
+                                        setSelectedAgent(agentId?._id);
+                                        setOpenEnquiry(true);
+                                      }}
+                                    >
+                                      Schedule Viewing
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="px-4 py-2 text-sm text-white rounded-md bg-gray-500 hover:bg-gray-400 w-full"
+                                    >
+                                      View Profile
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
 
-                    {/* <form className="space-y-4">
+                      {/* <form className="space-y-4">
                     <div>
                       <input
                         type="text"
@@ -1159,9 +1159,9 @@ export default function PropertyDetail() {
                       Schedule Viewing
                     </button>
                   </form> */}
+                    </div>
                   </div>
-                </div>
-              </>}
+                </>}
 
             </div>
           </div>
@@ -1195,33 +1195,58 @@ export default function PropertyDetail() {
                 </div>
 
                 {/* Main Image Display with Magnify */}
+                {/* Main Image Display with Magnify - UPDATED VERSION */}
                 <div className="relative bg-black rounded-lg overflow-hidden">
-                  <div className="w-full max-w-2xl h-[80vh] flex items-center justify-center p-4">
+                  <div className="w-full h-[80vh] flex items-center justify-start p-4">
                     <ReactImageMagnify
                       {...{
                         smallImage: {
                           alt: "property image",
                           isFluidWidth: true,
-                          src: propertyData?.photos[modalImageIndex].url,
+                          src: propertyData?.photos?.[modalImageIndex]?.url || images[modalImageIndex]?.src,
+                          sizes: '(max-width: 480px) 100vw, (max-width: 1200px) 30vw, 360px',
+                          width: 800,
+                          height: 600,
                         },
                         largeImage: {
-                          src: propertyData?.photos[modalImageIndex]?.url,
-                          width: 1800,
-                          height: 1200,
+                          src: propertyData?.photos?.[modalImageIndex]?.url || images[modalImageIndex]?.src,
+                          width: 2000,
+                          height: 1500,
+                          sizes: '2000px',
+                        },
+                        lensStyle: {
+                          backgroundColor: 'rgba(255,255,255,.4)',
+                          cursor: 'zoom-in'
                         },
                         enlargedImageContainerDimensions: {
-                          width: "150%",
-                          height: "150%",
+                          width: '120%',
+                          height: '120%'
                         },
-                        enlargedImageContainerClassName: "z-[1500]",
-                        isHintEnabled: true,
-                        shouldHideHintAfterFirstActivation: false,
+                        enlargedImageContainerStyle: {
+                          zIndex: 1500,
+                          backgroundColor: 'white',
+                          overflow: 'hidden',
+                          boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
+                        },
+                        enlargedImageStyle: {
+                          objectFit: 'contain',
+                          maxWidth: 'none',
+                          maxHeight: 'none'
+                        },
                         imageStyle: {
-                          objectFit: "contain",
-                          width: "100%",
-                          height: "auto",
-                          maxHeight: "75vh",
+                          width: '100%',
+                          height: 'auto',
+                          maxHeight: '75vh',
+                          objectFit: 'contain',
+                          cursor: 'zoom-in'
                         },
+                        imageClassName: 'magnify-image',
+                        isHintEnabled: true,
+                        hintTextMouse: 'Hover to zoom',
+                        hintTextTouch: 'Touch to zoom',
+                        shouldHideHintAfterFirstActivation: false,
+                        shouldUsePositiveSpaceLens: true,
+                        className: 'image-magnify-container'
                       }}
                     />
                   </div>
