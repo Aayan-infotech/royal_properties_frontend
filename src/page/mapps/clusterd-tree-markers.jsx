@@ -36,26 +36,6 @@ for (let i = 0; i < treesData.length; i++) {
   treesData[i].key = `tree-${i}`;
 }
 
-// Helper functions
-function getCategories(trees) {
-  if (!trees) return [];
-  const countByCategory = {};
-  for (const t of trees) {
-    if (!countByCategory[t.category]) countByCategory[t.category] = 0;
-    countByCategory[t.category]++;
-  }
-  return Object.entries(countByCategory).map(([key, value]) => {
-    const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    return { key, label, count: value };
-  });
-}
-
-async function loadTreeDataset() {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(treesData), 500);
-  });
-}
-
 // TreeMarker Component
 const TreeMarker = ({ tree, onClick, setMarkerRef }) => {
   const handleClick = useCallback(() => onClick(tree), [onClick, tree]);
@@ -63,22 +43,22 @@ const TreeMarker = ({ tree, onClick, setMarkerRef }) => {
     (marker) => setMarkerRef(marker, tree.key),
     [setMarkerRef, tree.key]
   );
+  console.log('Rendering marker for tree:', tree);
 
   return (
-    <AdvancedMarker position={tree.position} ref={ref} onClick={handleClick}>
-      <span style={{ fontSize: '24px' }}>🌳</span>
+    <AdvancedMarker position={tree?.location} ref={ref} onClick={handleClick}>
+      <span style={{ fontSize: '24px' }}>🏡</span>
     </AdvancedMarker>
   );
 };
 
 // ClusteredTreeMarkers Component
-export const ClusteredTreeMarkers = ({ trees }) => {
+export const ClusteredPropertyMarkers = ({ properties }) => {
   const [markers, setMarkers] = useState({});
   const [selectedTreeKey, setSelectedTreeKey] = useState(null);
-
   const selectedTree = useMemo(
-    () => trees && selectedTreeKey ? trees.find(t => t.key === selectedTreeKey) : null,
-    [trees, selectedTreeKey]
+    () => properties && selectedTreeKey ? properties.find(t => t.key === selectedTreeKey) : null,
+    [properties, selectedTreeKey]
   );
 
   const map = useMap();
@@ -116,7 +96,7 @@ export const ClusteredTreeMarkers = ({ trees }) => {
 
   return (
     <>
-      {trees.map(tree => (
+      {properties.map(tree => (
         <TreeMarker
           key={tree.key}
           tree={tree}

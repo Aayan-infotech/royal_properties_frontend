@@ -114,7 +114,7 @@ const OTP = () => {
         }, 2000);
       }
     } catch (err) {
-      error(err?.response?.data?.data[0]?.errors[0]);
+      error(err?.response?.data?.data[0]?.errors[0]) || "OTP verification failed.";
     } finally {
       setLoading(false);
     }
@@ -166,7 +166,7 @@ const OTP = () => {
         }
       }
     } catch (err) {
-      error(err?.response?.data?.data[0]?.errors[0]);
+      error(err?.response?.data?.data[0]?.errors[0] || "Failed to resend OTP.");
     } finally {
       setLoading(false);
     }

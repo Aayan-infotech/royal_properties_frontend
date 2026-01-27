@@ -15,6 +15,7 @@ import {
 import { FaHome, FaChartLine, FaCalendarCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../component/axiosInstance";
+import { AlertContext } from "../../context/alertContext";
 
 const SellerHome = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const SellerHome = () => {
   });
   const [loading, setLoading] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
+  const { success, error, info, warning } = React.useContext(AlertContext);
 
   const handleFetchProperties = async (page = 1) => {
     setLoading(true);
@@ -37,8 +39,9 @@ const SellerHome = () => {
       setData(response.data.data.data);
       setPagination(response.data.data.pagination);
       setCurrentPage(page);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      error(err?.response?.data?.message || "Failed to fetch properties.");
     } finally {
       setLoading(false);
     }
@@ -113,9 +116,9 @@ const SellerHome = () => {
         // Refresh the list
         handleFetchProperties(currentPage);
         alert("Property deleted successfully!");
-      } catch (error) {
-        console.error("Error deleting property:", error);
-        alert("Failed to delete property");
+      } catch (err) {
+        console.error("Error deleting property:", err);
+        error(err?.response?.data?.message || "Failed to delete property.");
       }
     }
   };
@@ -133,7 +136,7 @@ const SellerHome = () => {
 
       {/* Loading State */}
       {loading ? (
-      null
+        null
 
       ) : (
         <>

@@ -47,7 +47,7 @@ export default function Login() {
       }
     } catch (err) {
       console.log(err)
-      error(err?.response?.data?.message);
+      error(err?.response?.data?.message || "An error occurred during login.");
     } finally {
       setLoading(false);
     }

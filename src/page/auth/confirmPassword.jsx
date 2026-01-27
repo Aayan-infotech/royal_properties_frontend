@@ -150,7 +150,7 @@ const ConfirmPassword = () => {
           ? "Failed to reset password. Please try again."
           : "Failed to set password. Please try again.";
 
-      error(err.response?.data?.message || err.message || errorMessage);
+      error(err.response?.data?.message || err.message || errorMessage || "An error occurred.");
     } finally {
       setLoading(false);
     }

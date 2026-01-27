@@ -82,7 +82,7 @@ const SignUp = () => {
         }, 2000);
       }
     } catch (err) {
-      error(err?.response?.data?.data[0]?.errors[0]);
+      error(err?.response?.data?.data[0]?.errors[0] || "An error occurred during registration.");
     } finally {
       setLoading(false);
     }
